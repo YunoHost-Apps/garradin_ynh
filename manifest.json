@@ -36,8 +36,8 @@
                     "en": "Choose a path for Garradin",
                     "fr": "Choisissez un chemin pour Garradin"
                 },
-                "example": "/zerobin",
-                "default": "/zerobin"
+                "example": "/garradin",
+                "default": "/garradin"
             },
             {
                 "name": "is_public",
