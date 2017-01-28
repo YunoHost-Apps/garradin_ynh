@@ -16,6 +16,9 @@ if [[ ! $? -eq 0 ]]; then
     exit 1
 fi
 
+# Install dependency to convert tracks to a readable format for the browser
+sudo apt-get -y -qq install php5-sqlite
+
 # Remove trailing "/" for next commands
 if [[ ! "$path" == "/" ]]; then
     path=${path%/}
