@@ -1,0 +1,14 @@
+GARRADIN_VERSION="0.7.6"
+GARRADIN_SOURCE_URL="http://dev.kd2.org/garradin/files/garradin-${GARRADIN_VERSION}.tar.bz2"
+
+extract_source() {
+  local DESTDIR=$1
+    
+  # retrieve and extract Garradin tarball
+  rc_tarball="${DESTDIR}/garradin.tar.gz"
+  sudo wget -q -O "$rc_tarball" "$GARRADIN_SOURCE_URL" \
+    || ynh_die "Unable to download source tarball"
+  sudo tar -xf "$rc_tarball" -C "$DESTDIR" --strip-components 1 \
+    || ynh_die "Unable to extract source tarball"
+  sudo rm "$rc_tarball"
+}
