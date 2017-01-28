@@ -50,10 +50,8 @@ fi
 # Restore sources & data
 sudo cp -a "./sources" $final_path
 
-# Set permissions
-sudo chown -R root:root $final_path
-sudo chown -R www-data:root $final_path/{data,tmp}
-sudo chmod -R 700 $final_path/{data,tmp}
+sudo chown www-data:www-data $final_path -R
+sudo chmod 755 $final_path -R
 
 # Restore conf files
 sudo cp -a "./conf/nginx.conf" $conf
