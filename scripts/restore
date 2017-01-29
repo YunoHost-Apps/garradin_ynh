@@ -26,25 +26,21 @@ domain=$(sudo ynh_app_setting_set $app domain)
 path=$(sudo ynh_app_setting_set $app path)
 user=$(sudo ynh_app_setting_set $app allowed_users)
 is_public=$(sudo ynh_app_setting_set $app is_public)
+final_path=/var/www/$app
 
 # Check domain/path availability
-sudo yunohost app checkurl $domain$path -a $app
-if [[ ! $? -eq 0 ]]; then
-    echo "There is already an app on this URL : $domain$path" | sudo tee /dev/stderr
-    exit 1
-fi
-
-final_path=/var/www/$app
+sudo yunohost app checkurl "${domain}${path}" -a "$app" \
+    || ynh_die "Path not available: ${domain}${path}"
 
 if [ -d $final_path ]; then
     echo "There is already a directory: $final_path " | sudo tee /dev/stderr
-    exit 1
+    ynh_die
 fi
 
 conf=/etc/nginx/conf.d/$domain.d/$app.conf
 if [ -f $conf ]; then
     echo "There is already a nginx conf file at this path: $conf " | sudo tee /dev/stderr
-    exit 1
+    ynh_die
 fi
 
 # Restore sources & data
