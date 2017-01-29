@@ -23,6 +23,9 @@ if [[ ! "$path" == "/" ]]; then
     path=${path%/}
 fi
 
+# Source YunoHost helpers
+source /usr/share/yunohost/helpers
+
 # Copy files to the right place
 final_path=/var/www/$app
 sudo mkdir -p $final_path
