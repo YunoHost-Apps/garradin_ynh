@@ -2,7 +2,7 @@
 
 app=$YNH_APP_INSTANCE_NAME
 
-domain=$(sudo yunohost app setting $app domain)
+domain=$(sudo ynh_app_setting_set $app domain)
 
 sudo rm -rf /var/www/$app
 sudo rm -f /etc/nginx/conf.d/$domain.d/$app.conf
