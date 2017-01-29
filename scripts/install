@@ -48,7 +48,7 @@ sudo chmod 600 $nginxconf
 sudo yunohost app setting $app is_public -v "$is_public"
 if [ "$is_public" = "Yes" ];
 then
-  sudo yunohost app setting $app unprotected_uris -v "/"
+  ynh_app_setting_set "$app" unprotected_uris "/"
 fi
 
 sudo service nginx reload
