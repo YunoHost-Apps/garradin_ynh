@@ -1,6 +1,5 @@
 #!/bin/bash
 
-source /usr/share/yunohost/helpers
 source ./_common
 set -eu
 
@@ -10,6 +9,9 @@ path=$2
 is_public=$3
 
 app=$YNH_APP_INSTANCE_NAME
+
+# Source app helpers
+source /usr/share/yunohost/helpers
 
 # Check domain/path availability
 sudo yunohost app checkurl "${domain}${path}" -a "$app" \
