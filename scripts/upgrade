@@ -1,14 +1,15 @@
 #!/bin/bash
 
-source /usr/share/yunohost/helpers
 source ./_common
 
 app=$YNH_APP_INSTANCE_NAME
 
-domain=$(sudo yunohost app setting $app domain)
-path=$(sudo yunohost app setting $app path)
-is_public=$(sudo yunohost app setting $app is_public)
+domain=$(sudo ynh_app_setting_set $app domain)
+path=$(sudo ynh_app_setting_set $app path)
+is_public=$(sudo ynh_app_setting_set $app is_public)
 
+# Source app helpers
+source /usr/share/yunohost/helpers
 
 # Remove trailing "/" for next commands
 if [[ ! "$path" == "/" ]]; then
@@ -40,8 +41,8 @@ sudo chmod 600 $nginxconf
 
 if [ "$is_public" = "Yes" ];
 then
-  sudo yunohost app setting $app skipped_uris -d
-  sudo yunohost app setting $app unprotected_uris -v "/"
+  sudo ynh_app_setting_set $app skipped_uris -d
+  sudo ynh_app_setting_set $app unprotected_uris "/"
 fi
 
 sudo service nginx reload
