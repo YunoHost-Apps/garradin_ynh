@@ -2,6 +2,7 @@
 
 source /usr/share/yunohost/helpers
 source ./_common
+set -eu
 
 # Retrieve arguments
 domain=$1
