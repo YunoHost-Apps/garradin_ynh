@@ -2,6 +2,9 @@
 
 app=$YNH_APP_INSTANCE_NAME
 
+# Source app helpers
+source /usr/share/yunohost/helpers
+
 domain=$(sudo ynh_app_setting_set $app domain)
 
 sudo rm -rf /var/www/$app
