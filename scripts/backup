@@ -19,6 +19,9 @@ set -e
 # db names, ...
 app=$YNH_APP_INSTANCE_NAME
 
+# Source YunoHost helpers
+source /usr/share/yunohost/helpers
+
 # Retrieve arguments
 domain=$(sudo yunohost app setting $app domain)
 
