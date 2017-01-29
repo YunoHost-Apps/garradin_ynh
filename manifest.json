@@ -13,7 +13,7 @@
         "name": "frju365",
         "email": "win10@tutanota.com"
     },
-    "multi_instance": "true",
+    "multi_instance": true,
     "services": [
         "nginx",
         "php5-fpm"
