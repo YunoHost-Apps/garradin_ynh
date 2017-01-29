@@ -9,6 +9,7 @@
         "fr": "Logiciel libre de gestion d'association"
     },
     "url": "http://garradin.eu/a-propos/",
+    "license": "GPLv3",
     "maintainer": {
         "name": "frju365",
         "email": "win10@tutanota.com"
