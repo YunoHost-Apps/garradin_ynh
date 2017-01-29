@@ -18,6 +18,7 @@ sudo yunohost app checkurl "${domain}${path}" -a "$app" \
     || ynh_die "Path not available: ${domain}${path}"
 
 # Install dependency to convert tracks to a readable format for the browser
+sudo apt-get update
 sudo apt-get -y -qq install php5-sqlite
 
 # Remove trailing "/" for next commands
@@ -45,7 +46,7 @@ sudo cp ../conf/nginx.conf $nginxconf
 sudo chown root: $nginxconf
 sudo chmod 600 $nginxconf
 
-sudo ynh_app_setting_set "$app" is_public "$is_public"
+ynh_app_setting_set "$app" is_public "$is_public"
 if [ "$is_public" = "Yes" ];
 then
   ynh_app_setting_set "$app" unprotected_uris "/"
