@@ -19,13 +19,13 @@ source /usr/share/yunohost/helpers
 app=$YNH_APP_INSTANCE_NAME
 
 # Retrieve arguments
-domain=$(sudo ynh_app_setting_set $app domain)
+domain=$(ynh_app_setting_set $app domain)
 
 # Get old parameter of the app
-domain=$(sudo ynh_app_setting_set $app domain)
-path=$(sudo ynh_app_setting_set $app path)
-user=$(sudo ynh_app_setting_set $app allowed_users)
-is_public=$(sudo ynh_app_setting_set $app is_public)
+domain=$(ynh_app_setting_set $app domain)
+path=$(ynh_app_setting_set $app path)
+user=$(ynh_app_setting_set $app allowed_users)
+is_public=$(ynh_app_setting_set $app is_public)
 final_path=/var/www/$app
 
 # Check domain/path availability
