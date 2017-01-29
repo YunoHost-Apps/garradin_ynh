@@ -4,9 +4,9 @@ source ./_common
 set -eu
 app=$YNH_APP_INSTANCE_NAME
 
-domain=$(sudo ynh_app_setting_set $app domain)
-path=$(sudo ynh_app_setting_set $app path)
-is_public=$(sudo ynh_app_setting_set $app is_public)
+domain=$(ynh_app_setting_set $app domain)
+path=$(ynh_app_setting_set $app path)
+is_public=$(ynh_app_setting_set $app is_public)
 
 # Source app helpers
 source /usr/share/yunohost/helpers
@@ -41,8 +41,8 @@ sudo chmod 600 $nginxconf
 
 if [ "$is_public" = "Yes" ];
 then
-  sudo ynh_app_setting_set $app skipped_uris -d
-  sudo ynh_app_setting_set $app unprotected_uris "/"
+  ynh_app_setting_set $app skipped_uris -d
+  ynh_app_setting_set $app unprotected_uris "/"
 fi
 
 sudo service nginx reload
