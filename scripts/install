@@ -13,6 +13,10 @@ app=$YNH_APP_INSTANCE_NAME
 # Source app helpers
 source /usr/share/yunohost/helpers
 
+# Check domain/path availability
+sudo yunohost app checkurl "${domain}${path}" -a "$app" \
+    || ynh_die "Path not available: ${domain}${path}"
+
 # Normalize the url path syntax
 # Handle the slash at the beginning of path and its absence at ending
 # Return a normalized url path
@@ -37,10 +41,6 @@ ynh_normalize_url_path () {
 }
 
 ynh_normalize_url_path $path
-
-# Check domain/path availability
-sudo yunohost app checkurl "${domain}${path}" -a "$app" \
-    || ynh_die "Path not available: ${domain}${path}"
 
 # Install dependency to convert tracks to a readable format for the browser
 sudo apt-get update
