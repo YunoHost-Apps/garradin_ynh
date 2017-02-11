@@ -1,0 +1,13 @@
+#!/bin/bash
+
+ynh_normalize_url_path () {
+	path=$1
+	test -n "$path" || ynh_die "ynh_normalize_url_path expect a URL path as first argument and received nothing."
+	if [ "${path:0:1}" != "/" ]; then    # If the first character is not a /
+		path="/$path"    # Add / at begin of path variable
+	fi
+	if [ "${path:${#path}-1}" == "/" ] && [ ${#path} -gt 1 ]; then    # If the last character is a / and that not the only character.
+		path="${path:0:${#path}-1}"	# Delete the last character
+	fi
+    echo $path
+}
