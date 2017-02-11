@@ -24,11 +24,6 @@ ynh_normalize_url_path $path
 sudo apt-get update
 sudo apt-get -y -qq install php5-sqlite
 
-# Remove trailing "/" for next commands
-if [[ ! "$path" == "/" ]]; then
-    path=${path%/}
-fi
-
 # Source YunoHost helpers
 source /usr/share/yunohost/helpers
 
