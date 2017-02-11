@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Source app helpers
+source /usr/share/yunohost/helpers
+
 source ./_common
 set -eu
 app=$YNH_APP_INSTANCE_NAME
@@ -7,9 +10,6 @@ app=$YNH_APP_INSTANCE_NAME
 domain=$(ynh_app_setting_set $app domain)
 path=$(ynh_app_setting_set $app path)
 is_public=$(ynh_app_setting_set $app is_public)
-
-# Source app helpers
-source /usr/share/yunohost/helpers
 
 # Remove trailing "/" for next commands
 if [[ ! "$path" == "/" ]]; then
@@ -25,7 +25,6 @@ sudo mkdir -p $final_path
 sudo rm -rf $final_path/*
 
 # Copy files to the right place
-extract_source $final_path
 
 # Files owned by root, www-data can just read
 sudo chown www-data:www-data $final_path -R
@@ -39,11 +38,12 @@ sudo cp ../conf/nginx.conf $nginxconf
 sudo chown root: $nginxconf
 sudo chmod 600 $nginxconf
 
+ynh_app_setting_set "$app" is_public "$is_public"
 if [ "$is_public" = "Yes" ];
 then
-  ynh_app_setting_set $app skipped_uris -d
-  ynh_app_setting_set $app unprotected_uris "/"
+  ynh_app_setting_set "$app" unprotected_uris "/"
 fi
 
 sudo service nginx reload
 sudo yunohost app ssowatconf
+
