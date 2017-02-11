@@ -58,5 +58,5 @@ sudo service nginx reload
 # Set ssowat config
 if [ "$is_public" = "Yes" ];
 then
-  sudo ynh_app_setting_set $app unprotected_uris "/"
+  ynh_app_setting_set $app unprotected_uris "/"
 fi
