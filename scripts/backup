@@ -21,7 +21,7 @@ app=$YNH_APP_INSTANCE_NAME
 source /usr/share/yunohost/helpers
 
 # Retrieve arguments
-domain=$(ynh_app_setting_set $app domain)
+domain=$(ynh_app_setting_get $app domain)
 
 # Backup directory location for the app from where the script is executed and 
 # which will be compressed afterward
