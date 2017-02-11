@@ -7,9 +7,9 @@ source ./_common
 
 app=$YNH_APP_INSTANCE_NAME
 
-domain=$(ynh_app_setting_set $app domain)
-path=$(ynh_app_setting_set $app path)
-is_public=$(ynh_app_setting_set $app is_public)
+domain=$(ynh_app_setting_get $app domain)
+path=$(ynh_app_setting_get $app path)
+is_public=$(ynh_app_setting_get $app is_public)
 
 # Remove trailing "/" for next commands
 if [[ ! "$path" == "/" ]]; then
