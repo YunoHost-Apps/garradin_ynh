@@ -1,10 +1,10 @@
 #!/bin/bash
 
+set -eu
 # Source app helpers
 source /usr/share/yunohost/helpers
-
 source ./_common
-set -eu
+
 app=$YNH_APP_INSTANCE_NAME
 
 domain=$(ynh_app_setting_set $app domain)
