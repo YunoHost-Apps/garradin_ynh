@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ynh_normalize_url_path () {
-	path=$1
+	path=$2
 	test -n "$path" || ynh_die "ynh_normalize_url_path expect a URL path as first argument and received nothing."
 	if [ "${path:0:1}" != "/" ]; then    # If the first character is not a /
 		path="/$path"    # Add / at begin of path variable
