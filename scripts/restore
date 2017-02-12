@@ -32,6 +32,8 @@ final_path=/var/www/$app
 sudo apt-get update
 sudo apt-get -y -qq install php5-sqlite
 
+conf=/etc/nginx/conf.d/$domain.d/$app.conf
+
 # Check domain/path availability
 sudo yunohost app checkurl "${domain}${path}" -a "$app" \
     || ynh_die "Path not available: ${domain}${path}"
