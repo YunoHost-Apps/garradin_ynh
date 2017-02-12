@@ -14,11 +14,13 @@ app=$YNH_APP_INSTANCE_NAME
 # Source app helpers
 source /usr/share/yunohost/helpers
 
+
+ynh_normalize_url_path $path
+
 # Check domain/path availability
 sudo yunohost app checkurl "${domain}${path}" -a "$app" \
     || ynh_die "Path not available: ${domain}${path}"
 
-ynh_normalize_url_path $path
 
 # Install dependency to convert tracks to a readable format for the browser
 sudo apt-get update
