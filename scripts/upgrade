@@ -16,15 +16,11 @@ if [[ ! "$path" == "/" ]]; then
     path=${path%/}
 fi
 
-# Init final_path, if ever it got deleted somehow
+# Copy files to the right place
 final_path=/var/www/$app
 sudo mkdir -p $final_path
-
-# Clean up
-# This will remove old paste data (otherwise we would need to lower down security)
 sudo rm -rf $final_path/*
-
-# Copy files to the right place
+extract_source $final_path
 
 # Files owned by root, www-data can just read
 sudo chown www-data:www-data $final_path -R
