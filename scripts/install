@@ -4,8 +4,6 @@ source ./_common
 source .fonctions
 set -eu
 
-TRAP_ON	# Active trap pour arrêter le script si une erreur est détectée.
-
 # Retrieve arguments
 domain=$1
 path=$2
