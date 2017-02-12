@@ -36,17 +36,6 @@ sudo apt-get -y -qq install php5-sqlite
 sudo yunohost app checkurl "${domain}${path}" -a "$app" \
     || ynh_die "Path not available: ${domain}${path}"
 
-if [ -d $final_path ]; then
-    echo "There is already a directory: $final_path " | sudo tee /dev/stderr
-    ynh_die
-fi
-
-conf=/etc/nginx/conf.d/$domain.d/$app.conf
-if [ -f $conf ]; then
-    echo "There is already a nginx conf file at this path: $conf " | sudo tee /dev/stderr
-    ynh_die
-fi
-
 # Restore sources & data
 sudo cp -a "./sources" $final_path
 
