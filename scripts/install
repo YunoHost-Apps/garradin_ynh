@@ -4,11 +4,6 @@ source ./_common
 source .fonctions
 set -eu
 
-CLEAN_SETUP () {
-# Nettoyage des résidus d'installation non pris en charge par le script remove.
-# Pas de nettoyage supplémentaire nécessaire ici...
-	echo ""
-}
 TRAP_ON	# Active trap pour arrêter le script si une erreur est détectée.
 
 # Retrieve arguments
