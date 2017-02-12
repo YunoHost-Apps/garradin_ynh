@@ -28,6 +28,10 @@ user=$(ynh_app_setting_get $app allowed_users)
 is_public=$(ynh_app_setting_get $app is_public)
 final_path=/var/www/$app
 
+# Install dependency to convert tracks to a readable format for the browser
+sudo apt-get update
+sudo apt-get -y -qq install php5-sqlite
+
 # Check domain/path availability
 sudo yunohost app checkurl "${domain}${path}" -a "$app" \
     || ynh_die "Path not available: ${domain}${path}"
