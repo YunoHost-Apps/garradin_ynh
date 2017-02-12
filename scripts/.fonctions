@@ -1,13 +1,54 @@
 #!/bin/bash
 
-ynh_normalize_url_path () {
-	path=$2
-	test -n "$path" || ynh_die "ynh_normalize_url_path expect a URL path as first argument and received nothing."
-	if [ "${path:0:1}" != "/" ]; then    # If the first character is not a /
-		path="/$path"    # Add / at begin of path variable
+CHECK_VAR () {	# Vérifie que la variable n'est pas vide.
+# $1 = Variable à vérifier
+# $2 = Texte à afficher en cas d'erreur
+	test -n "$1" || (echo "$2" >&2 && false)
+}
+
+EXIT_PROPERLY () {	# Provoque l'arrêt du script en cas d'erreur. Et nettoye les résidus.
+	exit_code=$?
+	if [ "$exit_code" -eq 0 ]; then
+			exit 0	# Quitte sans erreur si le script se termine correctement.
 	fi
-	if [ "${path:${#path}-1}" == "/" ] && [ ${#path} -gt 1 ]; then    # If the last character is a / and that not the only character.
-		path="${path:0:${#path}-1}"	# Delete the last character
+	trap '' EXIT
+	set +eu
+	echo -e "\e[91m \e[1m"	# Shell in light red bold
+	echo -e "!!\n  $app install's script has encountered an error. Installation was cancelled.\n!!" >&2
+
+	if type -t CLEAN_SETUP > /dev/null; then	# Vérifie l'existance de la fonction avant de l'exécuter.
+		CLEAN_SETUP	# Appel la fonction de nettoyage spécifique du script install.
 	fi
-    echo $path
+
+	# Compense le bug de ssowat qui ne supprime pas l'entrée de l'app en cas d'erreur d'installation.
+	sudo sed -i "\@\"$domain$path/\":@d" /etc/ssowat/conf.json
+
+	ynh_die
+}
+
+TRAP_ON () {	# Activate signal capture
+	set -eu	# Exit if a command fail, and if a variable is used unset.
+	trap EXIT_PROPERLY EXIT	# Capturing exit signals on shell script
+}
+
+CHECK_PATH () {	# Vérifie la présence du / en début de path. Et son absence à la fin.
+	if [ "${path:0:1}" != "/" ]; then    # Si le premier caractère n'est pas un /
+		path="/$path"    # Ajoute un / en début de path
+	fi
+	if [ "${path:${#path}-1}" == "/" ] && [ ${#path} -gt 1 ]; then    # Si le dernier caractère est un / et que ce n'est pas le seul caractère.
+		path="${path:0:${#path}-1}"	# Supprime le dernier caractère
+	fi
+}
+
+CHECK_DOMAINPATH () {	# Vérifie la disponibilité du path et du domaine.
+	sudo yunohost app checkurl $domain$path -a $app
+}
+
+CHECK_FINALPATH () {	# Vérifie que le dossier de destination n'est pas déjà utilisé.
+	final_path=/var/www/$app
+	if [ -e "$final_path" ]
+	then
+		echo "This path already contains a folder" >&2
+		false
+	fi
 }
