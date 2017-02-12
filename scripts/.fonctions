@@ -6,11 +6,6 @@ CHECK_VAR () {	# Vérifie que la variable n'est pas vide.
 	test -n "$1" || (echo "$2" >&2 && false)
 }
 
-TRAP_ON () {	# Activate signal capture
-	set -eu	# Exit if a command fail, and if a variable is used unset.
-	trap EXIT_PROPERLY EXIT	# Capturing exit signals on shell script
-}
-
 CHECK_PATH () {	# Vérifie la présence du / en début de path. Et son absence à la fin.
 	if [ "${path:0:1}" != "/" ]; then    # Si le premier caractère n'est pas un /
 		path="/$path"    # Ajoute un / en début de path
