@@ -7,7 +7,7 @@ site de garradin : http://garradin.eu
 
 
 TODO LIST/ Liste "À faire"
-- Try to integrate LDAP (je pense que ce n'est pas compatible ave garradin)
+- Try to integrate LDAP (je pense que ce n'est pas compatible avec garradin)
 - Reconfigurer SSOWHAT
 - Backup de la base de donnée SQlite (AIDE REQUISE)
 
