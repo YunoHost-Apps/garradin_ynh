@@ -2,7 +2,7 @@
 ## logiciel libre de gestion associative 
 
 ### ONLY FOR TEST/ NE PASZ UTILISER EN PRODUCTION ###
-report issue/raport de bogues: https://github.com/frju365/garradin_ynh/issues
+report issue/rapport de bogues: https://github.com/frju365/garradin_ynh/issues
 site de garradin : http://garradin.eu
 
 
