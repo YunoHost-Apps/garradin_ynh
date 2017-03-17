@@ -5,9 +5,9 @@ source .fonctions
 set -eu
 
 # Retrieve arguments
-domain=$1
-path=$2
-is_public=$3
+domain=$YNH_APP_ARG_DOMAIN
+path=$YNH_APP_ARG_PATH
+is_public=$YNH_APP_ARG_IS_PUBLIC
 
 app=$YNH_APP_INSTANCE_NAME
 
