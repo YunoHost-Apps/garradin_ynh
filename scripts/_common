@@ -1,4 +1,4 @@
-GARRADIN_VERSION="0.7.6"
+GARRADIN_VERSION="0.7.7"
 GARRADIN_SOURCE_URL="http://dev.kd2.org/garradin/files/garradin-${GARRADIN_VERSION}.tar.bz2"
 
 extract_source() {
