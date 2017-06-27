@@ -36,7 +36,7 @@ CHECK_FINALPATH	# Vérifie que le dossier de destination n'est pas déjà utilis
 # STORE SETTINGS FROM MANIFEST
 #=================================================
 
-ynh_app_setting_set $app admin $admin
+ynh_app_setting_set $app path $path
 ynh_app_setting_set $app domain $domain
 ynh_app_setting_set $app is_public $is_public
 
