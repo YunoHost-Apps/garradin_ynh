@@ -1,12 +1,13 @@
 #!/bin/bash
 
+set -eu
+
 #=================================================
 # Retrieve Sources
 #=================================================
 
 source _common.sh
 source /usr/share/yunohost/helpers
-set -eu
 
 #=================================================
 # Retrieve arguments
