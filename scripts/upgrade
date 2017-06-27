@@ -3,7 +3,7 @@
 set -eu
 # Source app helpers
 source /usr/share/yunohost/helpers
-source ./_common
+source ./_common.sh
 
 app=$YNH_APP_INSTANCE_NAME
 
