@@ -29,7 +29,7 @@ CHECK_FINALPATH () {	# Vérifie que le dossier de destination n'est pas déjà u
 }
 
 GARRADIN_VERSION="0.8.2"
-GARRADIN_SOURCE_URL="http://dev.kd2.org/garradin/files/garradin-${GARRADIN_VERSION}.tar.bz2"
+GARRADIN_SOURCE_URL="https://fossil.kd2.org/garradin/uv/garradin-${GARRADIN_VERSION}.tar.bz2"
 
 extract_source() {
   local DESTDIR=$1
