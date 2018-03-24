@@ -11,7 +11,7 @@
     },
      "version": "1.0",
     "url": "http://garradin.eu/a-propos/",
-    "license": "AGPLv3",
+    "license": "GPL-3.0-or-later",
     "maintainer": {
         "name": "frju365",
         "email": "win10@tutanota.com"
