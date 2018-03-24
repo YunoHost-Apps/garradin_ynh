@@ -85,6 +85,13 @@ sudo chmod 755 $final_path -R
 ynh_add_nginx_config
 
 #=================================================
+# PHP-FPM CONFIGURATION
+#=================================================
+
+# Create a dedicated php-fpm config
+ynh_add_fpm_config
+
+#=================================================
 # SETUP SSOWAT
 #=================================================
 
