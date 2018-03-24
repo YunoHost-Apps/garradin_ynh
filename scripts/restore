@@ -1,53 +1,95 @@
 #!/bin/bash
 
-# causes the shell to exit if any subcommand or pipeline returns a non-zero status
-set -eu
+#=================================================
+# GENERIC START
+#=================================================
+# IMPORT GENERIC HELPERS
+#=================================================
 
-# Source app helpers
+if [ ! -e _common.sh ]; then
+	# Get the _common.sh file if it's not in the current directory
+	cp ../settings/scripts/_common.sh ./_common.sh
+	chmod a+rx _common.sh
+fi
+source _common.sh
 source /usr/share/yunohost/helpers
 
-# This is a multi-instance app, meaning it can be installed several times independently
-# The id of the app as stated in the manifest is available as $YNH_APP_ID
-# The instance number is available as $YNH_APP_INSTANCE_NUMBER (equals "1", "2", ...)
-# The app instance name is available as $YNH_APP_INSTANCE_NAME
-#    - the first time the app is installed, YNH_APP_INSTANCE_NAME = ynhexample
-#    - the second time the app is installed, YNH_APP_INSTANCE_NAME = ynhexample__2
-#    - ynhexample__{N} for the subsequent installations, with N=3,4, ...
-# The app instance name is probably what you are interested the most, since this is
-# guaranteed to be unique. This is a good unique identifier to define installation path,
-# db names, ...
+#=================================================
+# MANAGE SCRIPT FAILURE
+#=================================================
+
+# Exit if an error occurs during the execution of the script
+ynh_abort_if_errors
+
+#=================================================
+# LOAD SETTINGS
+#=================================================
+
 app=$YNH_APP_INSTANCE_NAME
 
-# Retrieve arguments
 domain=$(ynh_app_setting_get $app domain)
+path_url=$(ynh_app_setting_get $app path)
+final_path=$(ynh_app_setting_get $app final_path)
+db_name=$(ynh_app_setting_get $app db_name)
 
-# Get old parameter of the app
-domain=$(ynh_app_setting_get $app domain)
-path=$(ynh_app_setting_get $app path)
-user=$(ynh_app_setting_get $app allowed_users)
-is_public=$(ynh_app_setting_get $app is_public)
-final_path=/var/www/$app
+#=================================================
+# CHECK IF THE APP CAN BE RESTORED
+#=================================================
 
-# Install dependency to convert tracks to a readable format for the browser
-sudo apt-get update
-sudo apt-get -y -qq install php5-sqlite
+ynh_webpath_available $domain $path_url \
+	|| ynh_die "Path not available: ${domain}${path_url}"
+test ! -d $final_path \
+	|| ynh_die "There is already a directory: $final_path "
 
-conf=/etc/nginx/conf.d/$domain.d/$app.conf
+#=================================================
+# STANDARD RESTORATION STEPS
+#=================================================
+# RESTORE THE NGINX CONFIGURATION
+#=================================================
 
-# Restore sources & data
-sudo cp -a "./sources" $final_path
+ynh_restore_file "/etc/nginx/conf.d/$domain.d/$app.conf"
 
-sudo chown www-data:www-data $final_path -R
-sudo chmod 755 $final_path -R
+#=================================================
+# RESTORE THE APP MAIN DIR
+#=================================================
 
-# Restore conf files
-sudo cp -a "./conf/nginx.conf" $conf
+ynh_restore_file "$final_path"
 
-# Reload Nginx
-sudo service nginx reload
+#=================================================
+# RECREATE THE DEDICATED USER
+#=================================================
 
-# Set ssowat config
-if [ "$is_public" = "Yes" ];
-then
-  ynh_app_setting_set $app unprotected_uris "/"
-fi
+# Create the dedicated user (if not existing)
+ynh_system_user_create $app
+
+#=================================================
+# RESTORE USER RIGHTS
+#=================================================
+
+# Restore permissions on app files
+chown -R $app:$app $final_path
+
+#=================================================
+# RESTORE THE PHP-FPM CONFIGURATION
+#=================================================
+
+ynh_restore_file "/etc/php5/fpm/pool.d/$app.conf"
+ynh_restore_file "/etc/php5/fpm/conf.d/20-$app.ini"
+
+#=================================================
+# SPECIFIC RESTORATION
+#=================================================
+# REINSTALL DEPENDENCIES
+#=================================================
+
+# Define and install dependencies
+ynh_install_app_dependencies php5-sqlite
+
+#=================================================
+# GENERIC FINALIZATION
+#=================================================
+# RELOAD NGINX AND PHP-FPM
+#=================================================
+
+systemctl reload php5-fpm
+systemctl reload nginx
