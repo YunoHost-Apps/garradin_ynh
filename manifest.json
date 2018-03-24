@@ -6,8 +6,10 @@
         "yunohost": ">> 2.3.15"
     },
     "description": {
+        "de": "Software to manage association"
         "fr": "Logiciel libre de gestion d'association"
     },
+     "version": "1.0",
     "url": "http://garradin.eu/a-propos/",
     "license": "AGPLv3",
     "maintainer": {
