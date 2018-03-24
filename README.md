@@ -19,4 +19,4 @@ site de garradin : http://garradin.eu
   - Le SSO n'est pas implémenté dans l'app originale.
   - Avoir 150+ utilisateurs dans Yunohost n'est pas très pratique, ni très sécurisé, et revient en fin de compte à centraliser les services.
   - Ce formulaire laisse le choix à l'administrateur de choisir les modalités de création de son compte. On pourrait peut-être me reprocher de ne pas avoir intégré ce formulaire dans le formulaire d'installation que l'utilisateur remplit avant l'installation de ce paquet. Il est vrai que j'aurais pu mettre les ~dix champs qui compose le formulaire de Garradin, mais je ne trouvais pas cela très pratique.
-- Cette application n'est traduite qu'en Français (la loi 1901 sur les asso n'étant appliquée qu'en France).
+- Cette application n'est disponible qu'en Français (la loi 1901 sur les asso n'étant appliquée qu'en France).
