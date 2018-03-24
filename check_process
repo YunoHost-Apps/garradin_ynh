@@ -1,5 +1,4 @@
-;; Nom du test
-	auto_remove=1
+;; Test complet
 	; Manifest
 		domain="domain.tld"	(DOMAIN)
 		path="/path"	(PATH)
@@ -14,13 +13,9 @@
 		upgrade=1
 		backup_restore=1
 		multi_instance=1
-		wrong_user=0
-		wrong_path=1
 		incorrect_path=1
-		corrupt_source=0
-		fail_download_source=0
 		port_already_use=0
-		final_path_already_use=0
+		change_url=1
 ;;; Levels
 	Level 1=auto
 	Level 2=auto
