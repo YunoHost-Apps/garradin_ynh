@@ -45,7 +45,7 @@ ynh_webpath_register $app $domain $path_url
 # STORE SETTINGS FROM MANIFEST
 #=================================================
 
-ynh_app_setting_set $app path $path
+ynh_app_setting_set $app path_url $path_url
 ynh_app_setting_set $app domain $domain
 ynh_app_setting_set $app is_public $is_public
 
