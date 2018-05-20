@@ -53,7 +53,12 @@ ynh_app_setting_set $app is_public $is_public
 # Install dependency to convert tracks to a readable format for the browser
 #=================================================
 
-ynh_install_app_dependencies php5-sqlite
+if [ "$(lsb_release --codename --short)" != "jessie" ] 
+then
+	ynh_install_app_dependencies php7.0-sqlite3
+else
+	ynh_install_app_dependencies php5-sqlite
+fi
 
 #=================================================
 # CREATE DEDICATED USER
