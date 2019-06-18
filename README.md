@@ -4,17 +4,18 @@
 
 
 ### State : Testing/Production ###
-report issue/rapport de bogues: https://github.com/frju365/garradin_ynh/issues
+
+report issue/rapport de bogues: https://github.com/Yunohost-Apps/garradin_ynh/issues
 site de garradin : http://garradin.eu
 
 [![Integration level](https://dash.yunohost.org/integration/garradin.svg)](https://ci-apps.yunohost.org/jenkins/job/garradin%20%28Community%29/lastBuild/consoleFull)<br>
 [![Install Garradin with YunoHost](https://install-app.yunohost.org/install-with-yunohost.png)](https://install-app.yunohost.org/?app=garradin)
 
 ## Installation : 
-### CLI
+- CLI
 `sudo yunohost app install https://github.com/Yunohost-Apps/garradin_ynh`
 
-### À travers l'interface d'administration
+- À travers l'interface d'administration
 
 ### TODO list : 
 - Backup de la base de donnée SQlite (AIDE REQUISE) ?
