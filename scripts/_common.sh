@@ -1,9 +1,4 @@
-#!/bin/bash
-
-# ============= FUTURE YUNOHOST HELPER =============
-# Delete a file checksum from the app settings
-#
-# $app should be defined when calling this helper
+hould be defined when calling this helper
 #
 # usage: ynh_remove_file_checksum file
 # | arg: file - The file for which the checksum will be deleted
@@ -16,6 +11,7 @@
 #=================================================
 # COMMON VARIABLES
 #=================================================
+ynh_install_php --phpversion=7.2
 
 YNH_PHP_VERSION="7.2"
 extra_pkg_dependencies="php${YNH_PHP_VERSION}-bz2 php${YNH_PHP_VERSION}-imap php${YNH_PHP_VERSION}-gmp php${YNH_PHP_VERSION}-gd php${YNH_PHP_VERSION}-json php${YNH_PHP_VERSION}-intl php${YNH_PHP_VERSION}-curl php${YNH_PHP_VERSION}-apcu php${YNH_PHP_VERSION}-redis php${YNH_PHP_VERSION}-ldap php${YNH_PHP_VERSION}-zip php${YNH_PHP_VERSION}-mbstring php${YNH_PHP_VERSION}-xml php${YNH_PHP_VERSION}-sqlite3"
@@ -27,15 +23,6 @@ extra_pkg_dependencies="php${YNH_PHP_VERSION}-bz2 php${YNH_PHP_VERSION}-imap php
 ynh_remove_php () {
   # Get the version of php used by this app
   local phpversion=$(ynh_app_setting_get $app phpversion)
-
-  if [ "$phpversion" == "7.0" ] || [ -z "$phpversion" ]
-  then
-    if [ "$phpversion" == "7.0" ]
-    then
-      ynh_print_err "Do not use ynh_remove_php to install php7.0"
-    fi
-    return 0
-  fi
 
   # Remove the line for this app
   sed --in-place "/$YNH_APP_INSTANCE_NAME:$phpversion/d" "/etc/php/ynh_app_version"
