@@ -1,12 +1,3 @@
-hould be defined when calling this helper
-#
-# usage: ynh_remove_file_checksum file
-# | arg: file - The file for which the checksum will be deleted
-# Install another version of php.
-#
-# usage: ynh_install_php --phpversion=phpversion [--package=packages]
-# | arg: -v, --phpversion - Version of php to install.
-# | arg: -p, --package - Additionnal php packages to install
 
 #=================================================
 # COMMON VARIABLES
