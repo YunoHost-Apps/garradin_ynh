@@ -71,10 +71,10 @@ chown -R $app:$app $final_path
 #=================================================
 # RESTORE THE PHP-FPM CONFIGURATION
 #=================================================
-if [ "$(lsb_release --codename --short)" != "jessie" ] 
+if [ "$(lsb_release --codename --short)" != "jessie" ]
 then
-	ynh_restore_file "/etc/php/7.0/fpm/pool.d/$app.conf"
-	ynh_restore_file "/etc/php/7.0/fpm/conf.d/20-$app.ini"
+	ynh_restore_file "/etc/php/7.2/fpm/pool.d/$app.conf"
+	ynh_restore_file "/etc/php/7.2/fpm/conf.d/20-$app.ini"
 else
 	ynh_restore_file "/etc/php5/fpm/pool.d/$app.conf"
 	ynh_restore_file "/etc/php5/fpm/conf.d/20-$app.ini"
@@ -86,9 +86,9 @@ fi
 # REINSTALL DEPENDENCIES
 #=================================================
 
-if [ "$(lsb_release --codename --short)" != "jessie" ] 
+if [ "$(lsb_release --codename --short)" != "jessie" ]
 then
-	ynh_install_app_dependencies php7.0-sqlite3
+	ynh_install_app_dependencies php7.2-sqlite3
 else
 	ynh_install_app_dependencies php5-sqlite
 fi
@@ -98,9 +98,9 @@ fi
 #=================================================
 # RELOAD NGINX AND PHP-FPM
 #=================================================
-if [ "$(lsb_release --codename --short)" != "jessie" ] 
+if [ "$(lsb_release --codename --short)" != "jessie" ]
 then
-	systemctl reload php7.0-fpm
+	systemctl reload php7.2-fpm
 else
 	systemctl reload php5-fpm
 fi
