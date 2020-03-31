@@ -57,9 +57,10 @@ ynh_app_setting_set $app is_public $is_public
 #=================================================
 ynh_script_progression --message="Installing dependencies..." --weight=60
 
+ynh_install_php --phpversion="$YNH_PHP_VERSION" --package="$extra_pkg_dependencies"
+
 ynh_install_app_dependencies $pkg_dependencies
 
-ynh_install_php --phpversion="$YNH_PHP_VERSION" --package="$extra_pkg_dependencies"
 
 #=================================================
 # CREATE A MYSQL DATABASE
