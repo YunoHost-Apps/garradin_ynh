@@ -30,6 +30,14 @@ ynh_script_progression --message="Removing logrotate configuration..."
 ynh_remove_app_dependencies
 
 #=================================================
+# REMOVE THE MYSQL DATABASE
+#=================================================
+ynh_script_progression --message="Removing the MySQL database..." --weight=5
+
+# Remove a database if it exists, along with the associated user
+ynh_mysql_remove_db --db_user=$db_name --db_name=$db_name
+
+#=================================================
 # REMOVE APP MAIN DIR
 #=================================================
 
@@ -49,6 +57,24 @@ ynh_remove_nginx_config
 
 # Remove the dedicated php-fpm config
 ynh_remove_fpm_config
+
+#=================================================
+# REMOVE LOGROTATE CONFIGURATION
+#=================================================
+ynh_script_progression --message="Removing logrotate configuration..."
+
+# Remove the app-specific logrotate config
+ynh_remove_logrotate
+
+#=================================================
+# CLEAN ACL IN HOME DIRECTORIES
+#=================================================
+
+for i in $(ls /home); do
+  # Clean ACL in every directories in /home, except those which start with 'yunohost.'
+  [[ ! $i == yunohost.* ]] \
+    && setfacl --remove g:$app:rwx 2>&1
+done
 
 #=================================================
 # GENERIC FINALIZATION
