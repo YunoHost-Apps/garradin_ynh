@@ -48,8 +48,8 @@ ynh_backup "/etc/nginx/conf.d/$domain.d/$app.conf"
 # BACKUP THE PHP-FPM CONFIGURATION
 #=================================================
 
-ynh_backup "/etc/php/fpm/pool.d/$app.conf"
-ynh_backup "/etc/php/fpm/conf.d/20-$app.ini"
+ynh_backup "/etc/php/7.0/fpm/pool.d/$app.conf"
+ynh_backup "/etc/php/7.0/fpm/conf.d/20-$app.ini"
 
 # Backup directory location for the app from where the script is executed and
 # which will be compressed afterward
