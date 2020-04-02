@@ -10,46 +10,44 @@ source _common.sh
 source /usr/share/yunohost/helpers
 
 #=================================================
-# LOAD SETTINGS
+# MANAGE SCRIPT FAILURE
 #=================================================
+
+# Exit if an error occurs during the execution of the script
+ynh_abort_if_errors
+
+#=================================================
+# Retrieve arguments
+#=================================================
+
+domain=$YNH_APP_ARG_DOMAIN
+path_url=$YNH_APP_ARG_PATH
+is_public=$YNH_APP_ARG_IS_PUBLIC
 
 app=$YNH_APP_INSTANCE_NAME
 
-domain=$(ynh_app_setting_get $app domain)
-path_url=$(ynh_app_setting_get $app path)
-is_public=$(ynh_app_setting_get $app is_public)
-
 #=================================================
-# ENSURE DOWNWARD COMPATIBILITY
+# CHECK IF THE APP CAN BE INSTALLED WITH THESE ARGS
 #=================================================
 
-# Fix is_public as a boolean value
-if [ "$is_public" = "Yes" ]; then
-	ynh_app_setting_set $app is_public 1
-	is_public=1
-elif [ "$is_public" = "No" ]; then
-	ynh_app_setting_set $app is_public 0
-	is_public=0
-fi
+final_path=/var/www/$app
+test ! -e "$final_path" || ynh_die "This path already contains a folder"
 
-# If final_path doesn't exist, create it
-if [ -z $final_path ]; then
-	final_path=/var/www/$app
-	ynh_app_setting_set $app final_path $final_path
-fi
+# Normalize the url path syntax
+path_url=$(ynh_normalize_url_path $path_url)
+
+# Check web path availability
+ynh_webpath_available $domain $path_url
+# Register (book) web path
+ynh_webpath_register $app $domain $path_url
 
 #=================================================
-# BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
+# STORE SETTINGS FROM MANIFEST
 #=================================================
 
-# Backup the current version of the app
-ynh_backup_before_upgrade
-ynh_clean_setup () {
-	# restore it if the upgrade fails
-	ynh_restore_upgradebackup
-}
-# Exit if an error occurs during the execution of the script
-ynh_abort_if_errors
+ynh_app_setting_set $app path_url $path_url
+ynh_app_setting_set $app domain $domain
+ynh_app_setting_set $app is_public $is_public
 
 #=================================================
 # Install dependency to convert tracks to a readable format for the browser
@@ -57,33 +55,10 @@ ynh_abort_if_errors
 
 if [ "$(lsb_release --codename --short)" != "jessie" ]
 then
-	ynh_install_app_dependencies php7.2-sqlite3
+	ynh_install_app_dependencies php-sqlite3
 else
 	ynh_install_app_dependencies php5-sqlite
 fi
-
-#=================================================
-# CHECK THE PATH
-#=================================================
-
-# Normalize the URL path syntax
-path_url=$(ynh_normalize_url_path $path_url)
-
-#=================================================
-# STANDARD UPGRADE STEPS
-#=================================================
-# DOWNLOAD, CHECK AND UNPACK SOURCE
-#=================================================
-
-# Download, check integrity, uncompress and patch the source from app.src
-ynh_setup_source "$final_path"
-
-#=================================================
-# NGINX CONFIGURATION
-#=================================================
-
-# Create a dedicated nginx config
-ynh_add_nginx_config
 
 #=================================================
 # CREATE DEDICATED USER
@@ -93,20 +68,33 @@ ynh_add_nginx_config
 ynh_system_user_create $app
 
 #=================================================
+# DOWNLOAD, CHECK AND UNPACK SOURCE
+#=================================================
+
+ynh_app_setting_set $app final_path $final_path
+# Download, check integrity, uncompress and patch the source from app.src
+ynh_setup_source "$final_path"
+
+#=================================================
+# Files owned by user app
+#=================================================
+
+sudo chown $app:$app $final_path -R
+sudo chmod 755 $final_path -R
+
+#=================================================
+# NGINX CONFIGURATION
+#=================================================
+
+# Create a dedicated nginx config
+ynh_add_nginx_config
+
+#=================================================
 # PHP-FPM CONFIGURATION
 #=================================================
 
 # Create a dedicated php-fpm config
 ynh_add_fpm_config
-
-#=================================================
-# GENERIC FINALIZATION
-#=================================================
-# SECURE FILES AND DIRECTORIES
-#=================================================
-
-# Set right permissions for curl installation
-chown -R $app:$app $final_path
 
 #=================================================
 # SETUP SSOWAT
@@ -119,7 +107,7 @@ fi
 # Make app public if necessary
 if [ $is_public -eq 1 ]
 then
-	# unprotected_uris allows SSO credentials to be passed anyway
+	# unprotected_uris allows SSO credentials to be passed anyway.
 	ynh_app_setting_set $app unprotected_uris "/"
 fi
 

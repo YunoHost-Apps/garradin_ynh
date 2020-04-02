@@ -10,84 +10,109 @@ source _common.sh
 source /usr/share/yunohost/helpers
 
 #=================================================
-# LOAD SETTINGS
+# MANAGE SCRIPT FAILURE
 #=================================================
 
-ynh_script_progression --message="Loading installation settings..." --weight=2
+# Exit if an error occurs during the execution of the script
+ynh_abort_if_errors
+
+#=================================================
+# Retrieve arguments
+#=================================================
+
+domain=$YNH_APP_ARG_DOMAIN
+path_url=$YNH_APP_ARG_PATH
+is_public=$YNH_APP_ARG_IS_PUBLIC
 
 app=$YNH_APP_INSTANCE_NAME
 
-domain=$(ynh_app_setting_get --app=$app --key=domain)
-db_name=$(ynh_app_setting_get --app=$app --key=db_name)
-final_path=$(ynh_app_setting_get --app=$app --key=final_path)
-
 #=================================================
-# REMOVE DEPENDENCIES
+# CHECK IF THE APP CAN BE INSTALLED WITH THESE ARGS
 #=================================================
 
-ynh_script_progression --message="Removing logrotate configuration..."
-# Remove metapackage and its dependencies
-ynh_remove_app_dependencies
+final_path=/var/www/$app
+test ! -e "$final_path" || ynh_die "This path already contains a folder"
+
+# Normalize the url path syntax
+path_url=$(ynh_normalize_url_path $path_url)
+
+# Check web path availability
+ynh_webpath_available $domain $path_url
+# Register (book) web path
+ynh_webpath_register $app $domain $path_url
 
 #=================================================
-# REMOVE THE MYSQL DATABASE
-#=================================================
-ynh_script_progression --message="Removing the MySQL database..." --weight=5
-
-# Remove a database if it exists, along with the associated user
-ynh_mysql_remove_db --db_user=$db_name --db_name=$db_name
-
-#=================================================
-# REMOVE APP MAIN DIR
+# STORE SETTINGS FROM MANIFEST
 #=================================================
 
-# Remove the app directory securely
-ynh_secure_remove "$final_path"
+ynh_app_setting_set $app path_url $path_url
+ynh_app_setting_set $app domain $domain
+ynh_app_setting_set $app is_public $is_public
 
 #=================================================
-# REMOVE NGINX CONFIGURATION
+# Install dependency to convert tracks to a readable format for the browser
 #=================================================
 
-# Remove the dedicated nginx config
-ynh_remove_nginx_config
+if [ "$(lsb_release --codename --short)" != "jessie" ]
+then
+  ynh_install_app_dependencies php-sqlite3
+else
+  ynh_install_app_dependencies php5-sqlite
+fi
 
 #=================================================
-# REMOVE PHP-FPM CONFIGURATION
+# CREATE DEDICATED USER
 #=================================================
 
-# Remove the dedicated php-fpm config
-ynh_remove_fpm_config
+# Create a system user
+ynh_system_user_create $app
 
 #=================================================
-# REMOVE LOGROTATE CONFIGURATION
-#=================================================
-ynh_script_progression --message="Removing logrotate configuration..."
-
-# Remove the app-specific logrotate config
-ynh_remove_logrotate
-
-#=================================================
-# CLEAN ACL IN HOME DIRECTORIES
+# DOWNLOAD, CHECK AND UNPACK SOURCE
 #=================================================
 
-for i in $(ls /home); do
-  # Clean ACL in every directories in /home, except those which start with 'yunohost.'
-  [[ ! $i == yunohost.* ]] \
-    && setfacl --remove g:$app:rwx 2>&1
-done
+ynh_app_setting_set $app final_path $final_path
+# Download, check integrity, uncompress and patch the source from app.src
+ynh_setup_source "$final_path"
 
 #=================================================
-# GENERIC FINALIZATION
-#=================================================
-# REMOVE DEDICATED USER
-#=================================================
-ynh_script_progression --message="Removing the dedicated system user..."
-
-# Delete a system user
-ynh_system_user_delete $app
-
-#=================================================
-# END OF SCRIPT
+# Files owned by user app
 #=================================================
 
-ynh_script_progression --message="Removal of $app completed" --last
+sudo chown $app:$app $final_path -R
+sudo chmod 755 $final_path -R
+
+#=================================================
+# NGINX CONFIGURATION
+#=================================================
+
+# Create a dedicated nginx config
+ynh_add_nginx_config
+
+#=================================================
+# PHP-FPM CONFIGURATION
+#=================================================
+
+# Create a dedicated php-fpm config
+ynh_add_fpm_config
+
+#=================================================
+# SETUP SSOWAT
+#=================================================
+
+if [ $is_public -eq 0 ]
+then  # Remove the public access
+  ynh_app_setting_delete $app skipped_uris
+fi
+# Make app public if necessary
+if [ $is_public -eq 1 ]
+then
+  # unprotected_uris allows SSO credentials to be passed anyway.
+  ynh_app_setting_set $app unprotected_uris "/"
+fi
+
+#=================================================
+# RELOAD NGINX
+#=================================================
+
+systemctl reload nginx
