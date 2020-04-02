@@ -12,54 +12,7 @@ extra_pkg_dependencies="php${YNH_PHP_VERSION}-bz2 php${YNH_PHP_VERSION}-imap php
 # EXPERIMENTAL HELPERS
 #=================================================
 
-# Execute a command as another user
-# usage: exec_as USER COMMAND [ARG ...]
-exec_as() {
-  local USER=$1
-  shift 1
 
-  if [[ $USER = $(whoami) ]]; then
-    eval "$@"
-  else
-    sudo -u "$USER" "$@"
-  fi
-}
-
-#=================================================
-
-# Check if an URL is already handled
-# usage: is_url_handled --domain=DOMAIN --path=PATH_URI
-is_url_handled() {
-    # Declare an array to define the options of this helper.
-    local legacy_args=dp
-    declare -Ar args_array=( [d]=domain= [p]=path= )
-    local domain
-    local path
-    # Manage arguments with getopts
-    ynh_handle_getopts_args "$@"
-
-    # Try to get the url with curl, and keep the http code and an eventual redirection url.
-    local curl_output="$(curl --insecure --silent --output /dev/null \
-      --write-out '%{http_code};%{redirect_url}' https://127.0.0.1$path --header "Host: $domain" --resolve $domain:443:127.0.0.1)"
-
-    # Cut the output and keep only the first part to keep the http code
-    local http_code="${curl_output%%;*}"
-    # Do the same thing but keep the second part, the redirection url
-    local redirection="${curl_output#*;}"
-
-    # Return 1 if the url isn't handled.
-    # Which means either curl got a 404 (or the admin) or the sso.
-    # A handled url should redirect to a publicly accessible url.
-    # Return 1 if the url has returned 404
-    if [ "$http_code" = "404" ] || [[ $redirection =~ "/yunohost/admin" ]]; then
-        return 1
-    # Return 1 if the url is redirected to the SSO
-    elif [[ $redirection =~ "/yunohost/sso" ]]; then
-        return 1
-    fi
-}
-
-#=================================================
 
 # Make the main steps to migrate an app to its fork.
 #
@@ -226,51 +179,6 @@ ynh_handle_app_migration ()  {
     ynh_replace_string "\(^final_path: .*\)$old_app" "\1$new_app" "$settings_dir/$new_app/settings.yml"
 
     #=================================================
-    # MOVE THE DATABASE
-    #=================================================
-
-    db_pwd=$(ynh_app_setting_get $old_app mysqlpwd)
-    db_name=$(ynh_app_setting_get $old_app db_name)
-
-    # Check if a database exists before trying to move it
-    local mysql_root_password=$(cat $MYSQL_ROOT_PWD_FILE)
-    if [ -n "$db_name" ] && mysqlshow -u root -p$mysql_root_password | grep -q "^| $db_name"
-    then
-        new_db_name=$(ynh_sanitize_dbid $new_app)
-        echo "Rename the database $db_name to $new_db_name" >&2
-
-        local sql_dump="/tmp/${db_name}-$(date '+%s').sql"
-
-        # Dump the old database
-        ynh_mysql_dump_db "$db_name" > "$sql_dump"
-
-        # Create a new database
-        ynh_mysql_setup_db $new_db_name $new_db_name $db_pwd
-        # Then restore the old one into the new one
-        ynh_mysql_connect_as $new_db_name $db_pwd $new_db_name < "$sql_dump"
-
-        # Remove the old database
-        ynh_mysql_remove_db $db_name $db_name
-        # And the dump
-        ynh_secure_remove "$sql_dump"
-
-        # Update the value of $db_name
-        db_name=$new_db_name
-        ynh_app_setting_set $new_app db_name $db_name
-    fi
-
-    #=================================================
-    # CREATE A NEW USER
-    #=================================================
-
-    # Check if the user exists on the system
-    if ynh_system_user_exists "$old_app"
-    then
-      echo "Create a new user $new_app to replace $old_app" >&2
-      ynh_system_user_create $new_app
-    fi
-
-    #=================================================
     # CHANGE THE FAKE DEPENDENCIES PACKAGE
     #=================================================
 
@@ -342,79 +250,6 @@ ynh_smart_mktemp () {
         fi
 
         echo "$(sudo mktemp --directory --tmpdir="$tmpdir")"
-}
-
-#=================================================
-
-# Check the amount of available RAM
-#
-# usage: ynh_check_ram [--required=RAM required in Mb] [--no_swap|--only_swap] [--free_ram]
-# | arg: -r, --required= - Amount of RAM required in Mb. The helper will return 0 is there's enough RAM, or 1 otherwise.
-# If --required isn't set, the helper will print the amount of RAM, in Mb.
-# | arg: -s, --no_swap   - Ignore swap
-# | arg: -o, --only_swap - Ignore real RAM, consider only swap.
-# | arg: -f, --free_ram  - Count only free RAM, not the total amount of RAM available.
-ynh_check_ram () {
-  # Declare an array to define the options of this helper.
-  declare -Ar args_array=( [r]=required= [s]=no_swap [o]=only_swap [f]=free_ram )
-  local required
-  local no_swap
-  local only_swap
-  # Manage arguments with getopts
-  ynh_handle_getopts_args "$@"
-  required=${required:-}
-  no_swap=${no_swap:-0}
-  only_swap=${only_swap:-0}
-
-  local total_ram=$(vmstat --stats --unit M | grep "total memory" | awk '{print $1}')
-  local total_swap=$(vmstat --stats --unit M | grep "total swap" | awk '{print $1}')
-  local total_ram_swap=$(( total_ram + total_swap ))
-
-  local free_ram=$(vmstat --stats --unit M | grep "free memory" | awk '{print $1}')
-  local free_swap=$(vmstat --stats --unit M | grep "free swap" | awk '{print $1}')
-  local free_ram_swap=$(( free_ram + free_swap ))
-
-  # Use the total amount of ram
-  local ram=$total_ram_swap
-  if [ $free_ram -eq 1 ]
-  then
-    # Use the total amount of free ram
-    ram=$free_ram_swap
-    if [ $no_swap -eq 1 ]
-    then
-      # Use only the amount of free ram
-      ram=$free_ram
-    elif [ $only_swap -eq 1 ]
-    then
-      # Use only the amount of free swap
-      ram=$free_swap
-    fi
-  else
-    if [ $no_swap -eq 1 ]
-    then
-      # Use only the amount of free ram
-      ram=$total_ram
-    elif [ $only_swap -eq 1 ]
-    then
-      # Use only the amount of free swap
-      ram=$total_swap
-    fi
-  fi
-
-  if [ -n "$required" ]
-  then
-    # Return 1 if the amount of ram isn't enough.
-    if [ $ram -lt $required ]
-    then
-      return 1
-    else
-      return 0
-    fi
-
-  # If no RAM is required, return the amount of available ram.
-  else
-    echo $ram
-  fi
 }
 
 #=================================================
@@ -576,44 +411,6 @@ ynh_get_scalable_phpfpm () {
 # FUTURE OFFICIAL HELPERS
 #=================================================
 
-#=================================================
-# YUNOHOST MULTIMEDIA INTEGRATION
-#=================================================
-
-# Install or update the main directory yunohost.multimedia
-#
-# usage: ynh_multimedia_build_main_dir
-ynh_multimedia_build_main_dir () {
-        local ynh_media_release="v1.2"
-        local checksum="806a827ba1902d6911095602a9221181"
-
-        # Download yunohost.multimedia scripts
-        wget -nv https://github.com/YunoHost-Apps/yunohost.multimedia/archive/${ynh_media_release}.tar.gz
-
-        # Check the control sum
-        echo "${checksum} ${ynh_media_release}.tar.gz" | md5sum -c --status \
-                || ynh_die "Corrupt source"
-
-        # Check if the package acl is installed. Or install it.
-        ynh_package_is_installed 'acl' \
-                || ynh_package_install acl
-
-        # Extract
-        mkdir yunohost.multimedia-master
-        tar -xf ${ynh_media_release}.tar.gz -C yunohost.multimedia-master --strip-components 1
-        ./yunohost.multimedia-master/script/ynh_media_build.sh
-}
-
-# Grant write access to multimedia directories to a specified user
-#
-# usage: ynh_multimedia_addaccess user_name
-#
-# | arg: user_name - User to be granted write access
-ynh_multimedia_addaccess () {
-        local user_name=$1
-        groupadd -f multimedia
-        usermod -a -G multimedia $user_name
-}
 
 # Install another version of php.
 #
