@@ -55,7 +55,7 @@ ynh_app_setting_set $app is_public $is_public
 
 if [ "$(lsb_release --codename --short)" != "jessie" ]
 then
-  ynh_install_app_dependencies php7.0-sqlite3
+  ynh_install_app_dependencies php-sqlite3
 else
   ynh_install_app_dependencies php5-sqlite
 fi
