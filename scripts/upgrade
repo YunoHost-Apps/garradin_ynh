@@ -9,6 +9,12 @@
 source _common.sh
 source /usr/share/yunohost/helpers
 
+#=================================================
+# Backup squlite, config.local.php and squelettes directory
+#=================================================
+sudo cp -avr /var/www/garradin/association.sqlite /tmp/association.sqlite
+sudo cp -avr /var/www/garradin/www/squelettes /tmp/squelettes
+sudo cp -a /var/www/garradin/config.local.php /tmp/config.local.php
 
 #=================================================
 # LOAD SETTINGS
@@ -34,12 +40,6 @@ final_path=$(ynh_app_setting_get --app=$app --key=final_path) || ynh_die "This p
 ### UPGRADE_APP should be used to upgrade the core app only if there's an upgrade to do.
 upgrade_type=$(ynh_check_app_version_changed)
 
-#=================================================
-# Backup squlite, config.local.php and squelettes directory
-#=================================================
-sudo cp -avr $path_url/association.sqlite /tmp/association.sqlite
-sudo cp -avr $path_url/www/squelettes /tmp/squelettes
-sudo cp -a $path_url/config.local.php /tmp/config.local.php
 
 #=================================================
 # ENSURE DOWNWARD COMPATIBILITY
