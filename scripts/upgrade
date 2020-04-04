@@ -9,12 +9,6 @@
 source _common.sh
 source /usr/share/yunohost/helpers
 
-#=================================================
-# Backup squlite, config.local.php and squelettes directory
-#=================================================
-sudo cp -avr /var/www/garradin/association.sqlite /tmp/association.sqlite
-sudo cp -avr /var/www/garradin/www/squelettes /tmp/squelettes
-sudo cp -avr /var/www/garradin/config.local.php /tmp/config.local.php
 
 #=================================================
 # LOAD SETTINGS
@@ -55,6 +49,14 @@ elif [ "$is_public" = "No" ]; then
 	ynh_app_setting_set --app=$app --key=is_public --value=0
 	is_public=0
 fi
+
+#=================================================
+# Backup squlite, config.local.php and squelettes directory
+#=================================================
+ynh_script_progression --message="Backing up the bdd and squelettes before upgrading (may take a while)..." --time --weight=1
+
+sudo cp -avr /var/www/garradin/association.sqlite /tmp/association.sqlite
+sudo cp -avr /var/www/garradin/www/squelettes /tmp/squelettes
 
 #=================================================
 # BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
@@ -114,10 +116,20 @@ then
 fi
 
 #=================================================
-# backup bdd, squelettes directory and config.local.php
+# Change options in file config.dist.php 
+# and copy in local.dist.php
 #=================================================
 
-sudo cp -a /tmp/config.local.php $final_path/config.local.php
+sudo cp -a $final_path/config.dist.php $final_path/config.local.php
+
+# ynh_replace_string --match_string="const ROOT = __DIR__;" --replace_string="const ROOT = /var/www/garradin/;" --target_file="$final_path/config.local.php"
+ynh_replace_string --match_string="const PREFER_HTTPS = false;" --replace_string="const PREFER_HTTPS = true;" --target_file="$final_path/config.local.php"
+ynh_replace_string --match_string="//const WWW_URI = '/asso/';" --replace_string="const WWW_URI = '/garradin/';" --target_file="$final_path/config.local.php"
+
+
+#=================================================
+# backup bdd, squelettes directory and config.local.php
+#=================================================
 
 sudo cp -a /tmp/association.sqlite $final_path/association.sqlite
 sudo cp -avr /tmp/squelettes $final_path/www/squelettes
