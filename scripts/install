@@ -29,6 +29,7 @@ app=$YNH_APP_INSTANCE_NAME
 #=================================================
 # CHECK IF THE APP CAN BE INSTALLED WITH THESE ARGS
 #=================================================
+ynh_script_progression --message="Validating installation parameters..." --time --weight=1
 
 final_path=/var/www/$app
 test ! -e "$final_path" || ynh_die "This path already contains a folder"
@@ -39,41 +40,44 @@ path_url=$(ynh_normalize_url_path $path_url)
 # Check web path availability
 ynh_webpath_available $domain $path_url
 # Register (book) web path
-ynh_webpath_register $app $domain $path_url
+ynh_webpath_register --app=$app --domain=$domain --path_url=$path_url
 
 #=================================================
 # STORE SETTINGS FROM MANIFEST
 #=================================================
+ynh_script_progression --message="Storing installation settings..." --time --weight=1
 
-ynh_app_setting_set $app path_url $path_url
-ynh_app_setting_set $app domain $domain
-ynh_app_setting_set $app is_public $is_public
+ynh_app_setting_set --app=$app --key=domain --value=$domain
+ynh_app_setting_set --app=$app --key=path --value=$path_url
+ynh_app_setting_set --app=$app --key=is_public --value=$is_public
 
 #=================================================
 # Install dependency to convert tracks to a readable format for the browser
 #=================================================
+ynh_script_progression --message="Installing dependencies..." --time --weight=1
 
 if [ "$(lsb_release --codename --short)" != "jessie" ]
 then
-  ynh_install_app_dependencies php7.0-sqlite3
+  ynh_install_app_dependencies $pkg_dependencies
 else
-  ynh_install_app_dependencies php5-sqlite
+  ynh_die --message="Votre version de Debian n'est pas compatible..." --time --weight=1
 fi
 
 #=================================================
 # CREATE DEDICATED USER
 #=================================================
-
+ynh_script_progression --message="Configuring system user..." --time --weight=1
 # Create a system user
-ynh_system_user_create $app
+ynh_system_user_create --username=$app
 
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
 #=================================================
+ynh_script_progression --message="Setting up source files..." --time --weight=1
 
-ynh_app_setting_set $app final_path $final_path
+ynh_app_setting_set --app=$app --key=final_path --value=$final_path
 # Download, check integrity, uncompress and patch the source from app.src
-ynh_setup_source "$final_path"
+ynh_setup_source --dest_dir="$final_path"
 
 #=================================================
 # Files owned by user app
@@ -85,13 +89,14 @@ sudo chmod 755 $final_path -R
 #=================================================
 # NGINX CONFIGURATION
 #=================================================
-
+ynh_script_progression --message="Configuring nginx web server..." --time --weight=1
 # Create a dedicated nginx config
 ynh_add_nginx_config
 
 #=================================================
 # PHP-FPM CONFIGURATION
 #=================================================
+ynh_script_progression --message="Configuring php-fpm..." --time --weight=1
 
 # Create a dedicated php-fpm config
 ynh_add_fpm_config
@@ -99,6 +104,9 @@ ynh_add_fpm_config
 #=================================================
 # SETUP SSOWAT
 #=================================================
+ynh_script_progression --message="Configuring SSOwat..." --time --weight=1
+
+
 
 if [ $is_public -eq 0 ]
 then  # Remove the public access
@@ -108,11 +116,18 @@ fi
 if [ $is_public -eq 1 ]
 then
   # unprotected_uris allows SSO credentials to be passed anyway.
-  ynh_app_setting_set $app unprotected_uris "/"
+  ynh_app_setting_set --app=$app --key=unprotected_uris --value="/"
 fi
 
 #=================================================
 # RELOAD NGINX
 #=================================================
+ynh_script_progression --message="Reloading nginx web server..." --time --weight=1
 
 systemctl reload nginx
+
+#=================================================
+# END OF SCRIPT
+#=================================================
+
+ynh_script_progression --message="Installation of $app completed" --time --last

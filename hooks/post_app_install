@@ -1,0 +1,22 @@
+#!/bin/bash
+
+#=================================================
+# GENERIC START
+#=================================================
+# IMPORT GENERIC HELPERS
+#=================================================
+
+source _common.sh
+source /usr/share/yunohost/helpers
+
+#=================================================
+# Change options in file config.dist.php 
+# and copy in local.dist.php
+#=================================================
+
+ynh_replace_string --match_string="const ROOT = __DIR__;" --replace_string="const ROOT = /var/www/garradin;" --target_file="$final_path/config.dist.php"
+ynh_replace_string --match_string="const PREFER_HTTPS = false;" --replace_string="const PREFER_HTTPS = false;" --target_file="$final_path/config.dist.php"
+ynh_replace_string --match_string="//const WWW_URI = '/asso/';" --replace_string="const WWW_URI = '/garradin/';" --target_file="$final_path/config.dist.php"
+ynh_replace_string --match_string="const SECRET_KEY = '3xUhIgGwuovRKOjVsVPQ5yUMfXUSIOX2GKzcebsz5OINrYC50r';" --replace_string="const SECRET_KEY = 'uqn8jvlmVZLn988lOZiHd1z97hD36V40AnE0LLqLY1801LG3caO';" --target_file="$final_path/config.dist.php"
+
+sudo cp -a $final_path/config.dist.php $final_path/local.dist.php
