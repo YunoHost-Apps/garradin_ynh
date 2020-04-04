@@ -20,7 +20,7 @@ final_path=/var/www/$app
 # and copy in config.local.php
 #=================================================
 
-sudo cp -a $final_path/garradin/config.dist.php $final_path/garradin/config.local.php
+sudo cp -a $final_path/config.dist.php $final_path/config.local.php
 
 #=================================================
 # backup the bdd
