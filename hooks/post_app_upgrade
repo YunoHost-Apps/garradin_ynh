@@ -16,6 +16,12 @@ app=$YNH_APP_INSTANCE_NAME
 final_path=/var/www/$app
 
 #=================================================
+# backup the bdd
+#=================================================
+sudo cp /tmp/association.sqlite $final_path/association.sqlite
+
+
+#=================================================
 # Change options in file config.dist.php 
 # and copy in config.local.php
 #=================================================
