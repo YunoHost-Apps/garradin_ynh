@@ -16,17 +16,18 @@ app=$YNH_APP_INSTANCE_NAME
 final_path=/var/www/$app
 
 #=================================================
+# Change options in file config.dist.php 
+# and copy in config.local.php
+#=================================================
+
+sudo cp -a $final_path/garradin/config.dist.php $final_path/garradin/config.local.php
+
+#=================================================
 # backup the bdd
 #=================================================
 sudo cp -a /tmp/association.sqlite $final_path/association.sqlite
 sudo cp -avr /tmp/squelettes $final_path/www/squelettes 
 
-#=================================================
-# Change options in file config.dist.php 
-# and copy in config.local.php
-#=================================================
-
-sudo cp -a /var/www/garradin/config.dist.php var/www/garradin/config.local.php
 
 # ynh_replace_string --match_string="const ROOT = __DIR__;" --replace_string="const ROOT = /var/www/garradin;" --target_file="$final_path/config.local.php"
 ynh_replace_string --match_string="const PREFER_HTTPS = false;" --replace_string="const PREFER_HTTPS = true;" --target_file="$final_path/config.local.php"
