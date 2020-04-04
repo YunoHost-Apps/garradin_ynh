@@ -49,17 +49,11 @@ elif [ "$is_public" = "No" ]; then
 	is_public=0
 fi
 
-# If final_path doesn't exist, create it
-if [ -z "$final_path" ]; then
-	final_path=/var/www/$app
-	ynh_app_setting_set --app=$app --key=final_path --value=$final_path
-fi
-
 #=================================================
 # Backup squlite
 #=================================================
-sudo cp -a $final_path/association.sqlite /tmp/association.sqlite
-
+sudo cp -avr $final_path/association.sqlite /tmp/association.sqlite
+sudo cp -avr $final_path/www/squelettes /tmp/squelettes
 #=================================================
 # BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
 #=================================================
@@ -74,29 +68,36 @@ ynh_clean_setup () {
 # Exit if an error occurs during the execution of the script
 ynh_abort_if_errors
 
+# #=================================================
+# # CHECK THE PATH
+# #=================================================
+
+# # Normalize the URL path syntax
+# # N.B. : this is for app installations before YunoHost 2.7
+# # where this value might be something like /foo/ or foo/
+# # instead of /foo ....
+# # If nobody installed your app before 2.7, then you may
+# # safely remove this line
+# path_url=$(ynh_normalize_url_path --path_url=$path_url)
+
+
+# final_path=/var/www/$app
+# test ! -e "$final_path" || ynh_die "This path already contains a folder"
+
+# # Normalize the url path syntax
+# path_url=$(ynh_normalize_url_path $path_url)
+
+# # Check web path availability
+# ynh_webpath_available $domain $path_url
+# # Register (book) web path
+# ynh_webpath_register $app $domain $path_url
+
 #=================================================
-# CHECK THE PATH
+# UPGRADE DEPENDENCIES
 #=================================================
+ynh_script_progression --message="Upgrading dependencies..." --time --weight=1
 
-# Normalize the URL path syntax
-# N.B. : this is for app installations before YunoHost 2.7
-# where this value might be something like /foo/ or foo/
-# instead of /foo ....
-# If nobody installed your app before 2.7, then you may
-# safely remove this line
-path_url=$(ynh_normalize_url_path --path_url=$path_url)
-
-
-final_path=/var/www/$app
-test ! -e "$final_path" || ynh_die "This path already contains a folder"
-
-# Normalize the url path syntax
-path_url=$(ynh_normalize_url_path $path_url)
-
-# Check web path availability
-ynh_webpath_available $domain $path_url
-# Register (book) web path
-ynh_webpath_register $app $domain $path_url
+ynh_install_app_dependencies $pkg_dependencies
 
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
@@ -109,13 +110,6 @@ then
 	# Download, check integrity, uncompress and patch the source from app.src
 	ynh_setup_source --dest_dir="$final_path"
 fi
-
-#=================================================
-# UPGRADE DEPENDENCIES
-#=================================================
-ynh_script_progression --message="Upgrading dependencies..." --time --weight=1
-
-ynh_install_app_dependencies $pkg_dependencies
 
 #=================================================
 # NGINX CONFIGURATION
@@ -134,15 +128,15 @@ ynh_script_progression --message="Making sure dedicated system user exists..." -
 # Create a dedicated user (if not existing)
 ynh_system_user_create --username=$app
 
-#=================================================
-# STORE THE CONFIG FILE CHECKSUM
-#=================================================
+# #=================================================
+# # STORE THE CONFIG FILE CHECKSUM
+# #=================================================
 
-### Verify the checksum of a file, stored by `ynh_store_file_checksum` in the install script.
-### And create a backup of this file if the checksum is different. So the file will be backed up if the admin had modified it.
-ynh_backup_if_checksum_is_different --file="$final_path/CONFIG_FILE"
-# Recalculate and store the checksum of the file for the next upgrade.
-ynh_store_file_checksum --file="$final_path/CONFIG_FILE"
+# ### Verify the checksum of a file, stored by `ynh_store_file_checksum` in the install script.
+# ### And create a backup of this file if the checksum is different. So the file will be backed up if the admin had modified it.
+# ynh_backup_if_checksum_is_different --file="$final_path/CONFIG_FILE"
+# # Recalculate and store the checksum of the file for the next upgrade.
+# ynh_store_file_checksum --file="$final_path/CONFIG_FILE"
 
 #=================================================
 # Files owned by user app

@@ -18,8 +18,8 @@ final_path=/var/www/$app
 #=================================================
 # backup the bdd
 #=================================================
-sudo cp /tmp/association.sqlite $final_path/association.sqlite
-
+sudo cp -a /tmp/association.sqlite $final_path/association.sqlite
+sudo cp -avr /tmp/squelettes $final_path/www/squelettes 
 
 #=================================================
 # Change options in file config.dist.php 
