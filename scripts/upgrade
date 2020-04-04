@@ -54,7 +54,7 @@ fi
 #=================================================
 sudo cp -avr $final_path/association.sqlite /tmp/association.sqlite
 sudo cp -avr $final_path/www/squelettes /tmp/squelettes
-sudo cp -a $final_path/config.local.php 
+sudo cp -a $final_path/config.local.php /tmp/config.local.php
 #=================================================
 # BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
 #=================================================
