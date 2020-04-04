@@ -6,12 +6,8 @@
 # IMPORT GENERIC HELPERS
 #=================================================
 
-if [ ! -e _common.sh ]; then
-  # Get the _common.sh file if it's not in the current directory
-  cp ../settings/scripts/_common.sh ./_common.sh
-  chmod a+rx _common.sh
-fi
-source _common.sh
+#Keep this path for calling _common.sh inside the execution's context of backup and restore scripts
+source ../settings/scripts/_common.sh
 source /usr/share/yunohost/helpers
 
 #=================================================
@@ -30,7 +26,6 @@ app=$YNH_APP_INSTANCE_NAME
 
 final_path=$(ynh_app_setting_get --app=$app --key=final_path)
 domain=$(ynh_app_setting_get --app=$app --key=domain)
-db_name=$(ynh_app_setting_get --app=$app --key=db_name)
 
 #=================================================
 # STANDARD BACKUP STEPS
@@ -54,7 +49,13 @@ ynh_backup --src_path="/etc/nginx/conf.d/$domain.d/$app.conf"
 ynh_script_progression --message="Backing up php-fpm configuration..." --time --weight=1
 
 ynh_backup --src_path="/etc/php/7.0/fpm/pool.d/$app.conf"
-ynh_backup --src_path="/etc/php/7.0/fpm/conf.d/20-$app.ini"
+
+#=================================================
+# END OF SCRIPT
+#=================================================
+
+ynh_script_progression --message="Backup script completed for $app. (YunoHost will then actually copy those files to the archive)." --time --last
+#ynh_backup --src_path="/etc/php/7.0/fpm/conf.d/20-$app.ini"
 
 # # Backup directory location for the app from where the script is executed and
 # # which will be compressed afterward
