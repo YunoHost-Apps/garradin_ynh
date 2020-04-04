@@ -56,6 +56,11 @@ if [ -z "$final_path" ]; then
 fi
 
 #=================================================
+# Backup squlite
+#=================================================
+sudo cp -a $final_path/association.squilte /tmp/association.squilte
+
+#=================================================
 # BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
 #=================================================
 ynh_script_progression --message="Backing up the app before upgrading (may take a while)..." --time --weight=1
@@ -129,17 +134,9 @@ ynh_script_progression --message="Making sure dedicated system user exists..." -
 ynh_system_user_create --username=$app
 
 #=================================================
-# PHP-FPM CONFIGURATION
-#=================================================
-ynh_script_progression --message="Upgrading php-fpm configuration..." --time --weight=1
-
-# Create a dedicated php-fpm config
-ynh_add_fpm_config
-
-#=================================================
 # SPECIFIC UPGRADE
 #=================================================
-# ...
+sudo cp /tmp/association.squilte $final_path/association.squilte
 #=================================================
 
 #=================================================
@@ -162,6 +159,7 @@ sudo chmod 755 $final_path -R
 #=================================================
 # PHP-FPM CONFIGURATION
 #=================================================
+ynh_script_progression --message="Upgrading php-fpm configuration..." --time --weight=1
 
 # Create a dedicated php-fpm config
 ynh_add_fpm_config
