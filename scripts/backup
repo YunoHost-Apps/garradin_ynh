@@ -44,7 +44,7 @@ ynh_backup --src_path="$final_path"
 #=================================================
 # BACKUP THE NGINX CONFIGURATION
 #=================================================
- --time --weight=1ynh_script_progression --message="Backing up nginx web server configuration..." --time --weight=1
+ynh_script_progression --message="Backing up nginx web server configuration..." --time --weight=1
 
 ynh_backup --src_path="/etc/nginx/conf.d/$domain.d/$app.conf"
 
