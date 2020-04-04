@@ -14,7 +14,7 @@ source /usr/share/yunohost/helpers
 #=================================================
 sudo cp -avr /var/www/garradin/association.sqlite /tmp/association.sqlite
 sudo cp -avr /var/www/garradin/www/squelettes /tmp/squelettes
-sudo cp -a /var/www/garradin/config.local.php /tmp/config.local.php
+sudo cp -avr /var/www/garradin/config.local.php /tmp/config.local.php
 
 #=================================================
 # LOAD SETTINGS
