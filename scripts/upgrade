@@ -58,7 +58,7 @@ fi
 #=================================================
 # Backup squlite
 #=================================================
-sudo cp -a $final_path/association.squilte /tmp/association.squilte
+sudo cp -a $final_path/association.sqlite /tmp/association.sqlite
 
 #=================================================
 # BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
@@ -136,7 +136,7 @@ ynh_system_user_create --username=$app
 #=================================================
 # SPECIFIC UPGRADE
 #=================================================
-sudo cp /tmp/association.squilte $final_path/association.squilte
+sudo cp /tmp/association.sqlite $final_path/association.sqlite
 #=================================================
 
 #=================================================
