@@ -35,6 +35,13 @@ final_path=$(ynh_app_setting_get --app=$app --key=final_path) || ynh_die "This p
 upgrade_type=$(ynh_check_app_version_changed)
 
 #=================================================
+# Backup squlite, config.local.php and squelettes directory
+#=================================================
+sudo cp -avr $path_url/association.sqlite /tmp/association.sqlite
+sudo cp -avr $path_url/www/squelettes /tmp/squelettes
+sudo cp -a $path_url/config.local.php /tmp/config.local.php
+
+#=================================================
 # ENSURE DOWNWARD COMPATIBILITY
 #=================================================
 
@@ -49,12 +56,6 @@ elif [ "$is_public" = "No" ]; then
 	is_public=0
 fi
 
-#=================================================
-# Backup squlite, config.local.php and squelettes directory
-#=================================================
-sudo cp -avr $final_path/association.sqlite /tmp/association.sqlite
-sudo cp -avr $final_path/www/squelettes /tmp/squelettes
-sudo cp -a $final_path/config.local.php /tmp/config.local.php
 #=================================================
 # BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
 #=================================================
