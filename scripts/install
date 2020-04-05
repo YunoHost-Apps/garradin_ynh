@@ -80,11 +80,11 @@ ynh_app_setting_set --app=$app --key=final_path --value=$final_path
 ynh_setup_source --dest_dir="$final_path"
 
 #=================================================
-# Change options in file config.dist.php 
+# Change options in file config.dist.php
 # and copy in local.dist.php
 #=================================================
 
-sudo cp -a $final_path/config.dist.php $final_path/config.local.php
+cp -a $final_path/config.dist.php $final_path/config.local.php
 
 # ynh_replace_string --match_string="const ROOT = __DIR__;" --replace_string="const ROOT = /var/www/garradin/;" --target_file="$final_path/config.local.php"
 ynh_replace_string --match_string="const PREFER_HTTPS = false;" --replace_string="const PREFER_HTTPS = true;" --target_file="$final_path/config.local.php"
