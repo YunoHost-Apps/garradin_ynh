@@ -56,8 +56,6 @@ nginx_conf_path=/etc/nginx/conf.d/$old_domain.d/$app.conf
 # Change the path in the nginx config file
 if [ $change_path -eq 1 ]
 then
-# Change the path in the config.local.php
-  ynh_replace_string --match_string="//const WWW_URI = '$old_path/';" --replace_string="const WWW_URI = '$new_path/';" --target_file="$new_path/config.local.php"
 fi
   # Make a backup of the original nginx config file if modified
   ynh_backup_if_checksum_is_different "$nginx_conf_path"
@@ -80,7 +78,8 @@ then
   # Store file checksum for the new config file location
   ynh_store_file_checksum "/etc/nginx/conf.d/$new_domain.d/$app.conf"
 fi
-
+# Change the path in the config.local.php
+  ynh_replace_string --match_string="//const WWW_URI = '$old_path/';" --replace_string="const WWW_URI = '$new_path/';" --target_file="$new_path/config.local.php"
 
 #=================================================
 # GENERIC FINALISATION
