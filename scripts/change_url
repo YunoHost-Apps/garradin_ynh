@@ -53,6 +53,7 @@ fi
 #=================================================
 
 nginx_conf_path=/etc/nginx/conf.d/$old_domain.d/$app.conf
+final_path=/var/www/$app
 
 # Change the path in the nginx config file
 if [ $change_path -eq 1 ]
@@ -66,6 +67,7 @@ then
   ynh_replace_string "return \([[:digit:]]\{3\}\) $old_path" "return \1 $new_path"  "$nginx_conf_path"
   # Calculate and store the nginx config file checksum
   ynh_store_file_checksum "$nginx_conf_path"
+  ynh_replace_string --match_string="//const WWW_URI = '$old_path/';" --replace_string="const WWW_URI = '$new_path/';" --target_file="$final_path/config.local.php"
 fi
 
 
@@ -78,10 +80,7 @@ then
   # Store file checksum for the new config file location
   ynh_store_file_checksum "/etc/nginx/conf.d/$new_domain.d/$app.conf"
 fi
-# Change the path in the config.local.php
-  ynh_replace_string --match_string="//const WWW_URI = '$old_path/';" --replace_string="const WWW_URI = '$new_path/';" --target_file="$new_path/config.local.php"
 
-#=================================================
 # GENERIC FINALISATION
 #=================================================
 # RELOAD NGINX
