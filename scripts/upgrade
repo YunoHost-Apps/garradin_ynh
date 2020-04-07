@@ -53,8 +53,8 @@ fi
 #=================================================
 ynh_script_progression --message="Backing up the bdd and squelettes before upgrading (may take a while)..." --time --weight=1
 
-bdd=/var/www/garradin/association.sqlite
-squelettes=/var/www/garradin//www/squelettes
+bdd=$final_path/association.sqlite
+squelettes=$final_path/www/squelettes
 
 if  [ -d "$squelettes" ]
 then
@@ -123,20 +123,9 @@ then
 fi
 
 #=================================================
-# Change options in file config.dist.php
-# and copy in local.dist.php
-#=================================================
-
-cp -a $final_path/config.dist.php $final_path/config.local.php
-
-# ynh_replace_string --match_string="const ROOT = __DIR__;" --replace_string="const ROOT = /var/www/garradin/;" --target_file="$final_path/config.local.php"
-ynh_replace_string --match_string="const PREFER_HTTPS = false;" --replace_string="const PREFER_HTTPS = true;" --target_file="$final_path/config.local.php"
-ynh_replace_string --match_string="//const WWW_URI = '/asso/';" --replace_string="const WWW_URI = '$path_url/';" --target_file="$final_path/config.local.php"
-
-
-#=================================================
 # backup bdd, squelettes directory and config.local.php
 #=================================================
+
 backup_bdd=/tmp/association.sqlite
 backup_squelettes=/tmp/squelettes
 
@@ -149,6 +138,18 @@ if [ -e "$backup_bdd" ]
 then
 	cp -a /tmp/association.sqlite $final_path/association.sqlite
 fi
+
+
+#=================================================
+# Change options in file config.dist.php
+# and copy in local.dist.php
+#=================================================
+
+cp -a $final_path/config.dist.php $final_path/config.local.php
+
+# ynh_replace_string --match_string="const ROOT = __DIR__;" --replace_string="const ROOT = /var/www/garradin/;" --target_file="$final_path/config.local.php"
+ynh_replace_string --match_string="const PREFER_HTTPS = false;" --replace_string="const PREFER_HTTPS = true;" --target_file="$final_path/config.local.php"
+ynh_replace_string --match_string="//const WWW_URI = '/asso/';" --replace_string="const WWW_URI = '$path_url/';" --target_file="$final_path/config.local.php"
 
 #=================================================
 # NGINX CONFIGURATION
