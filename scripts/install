@@ -89,7 +89,7 @@ cp -a $final_path/config.dist.php $final_path/config.local.php
 # ynh_replace_string --match_string="const ROOT = __DIR__;" --replace_string="const ROOT = /var/www/garradin/;" --target_file="$final_path/config.local.php"
 ynh_replace_string --match_string="const PREFER_HTTPS = false;" --replace_string="const PREFER_HTTPS = true;" --target_file="$final_path/config.local.php"
 
-if $path_url != "/"
+if $path_url != /
 then
    ynh_replace_string --match_string="//const WWW_URI = '/asso/';" --replace_string="const WWW_URI = '$path_url/';" --target_file="$final_path/config.local.php"
 else
