@@ -146,6 +146,7 @@ then
 fi
 
 if [ -b "$backup_bdd" ]
+then	
 	cp -ar /tmp/association.sqlite $final_path/association.sqlite
 fi
 
