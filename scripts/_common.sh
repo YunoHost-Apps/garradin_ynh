@@ -14,7 +14,7 @@ pkg_dependencies="php7.0-sqlite3"
 #
 # usage: ynh_remove_file_checksum file
 # | arg: file - The file for which the checksum will be deleted
-ynh_delete_file_checksum () {
-  local checksum_setting_name=checksum_${1//[\/ ]/_}  # Replace all '/' and ' ' by '_'
-  ynh_app_setting_delete $app $checksum_setting_name
-}
+# ynh_delete_file_checksum () {
+#   local checksum_setting_name=checksum_${1//[\/ ]/_}  # Replace all '/' and ' ' by '_'
+#   ynh_app_setting_delete $app $checksum_setting_name
+# }
