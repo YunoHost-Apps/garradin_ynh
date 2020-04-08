@@ -69,7 +69,7 @@ then
   ynh_store_file_checksum "$nginx_conf_path"
   # ynh_replace_string
   ynh_replace_string --match_string="const WWW_URI = '$old_path/';" --replace_string="const WWW_URI = '$new_path/';" --target_file="$final_path/config.local.php"
-fi  
+fi
 
 # Change the domain for nginx
 if [ $change_domain -eq 1 ]
@@ -81,6 +81,7 @@ then
   ynh_store_file_checksum "/etc/nginx/conf.d/$new_domain.d/$app.conf"
 fi
 
+#=================================================
 # GENERIC FINALISATION
 #=================================================
 # RELOAD NGINX
