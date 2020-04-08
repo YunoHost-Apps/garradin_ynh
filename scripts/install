@@ -95,8 +95,8 @@ ynh_replace_string --match_string="//const WWW_URI = '/asso/';" --replace_string
 # Files owned by user app
 #=================================================
 
-sudo chown $app:$app $final_path -R
-sudo chmod 755 $final_path -R
+chown $app:$app $final_path -R
+chmod 755 $final_path -R
 
 #=================================================
 # NGINX CONFIGURATION
