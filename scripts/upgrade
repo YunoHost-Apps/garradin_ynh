@@ -9,7 +9,6 @@
 source _common.sh
 source /usr/share/yunohost/helpers
 
-
 #=================================================
 # LOAD SETTINGS
 #=================================================
@@ -138,7 +137,6 @@ if [ -e "$backup_bdd" ]
 then
 	cp -a /tmp/association.sqlite $final_path/association.sqlite
 fi
-
 
 #=================================================
 # Change options in file config.dist.php
