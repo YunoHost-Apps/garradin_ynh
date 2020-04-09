@@ -72,7 +72,7 @@ if [ $change_path -eq 1 ] && [ "$new_path" == "/" ]
 then
   ynh_replace_string --match_string="const WWW_URI = '$old_path/';" --replace_string="const WWW_URI = '$new_path';" --target_file="$final_path/config.local.php"
 else
-  ynh_replace_string --match_string="const WWW_URI = '$old_path';" --replace_string="const WWW_URI = '$new_path/';" --target_file="$final_path/config.local.php"
+  ynh_replace_string --match_string="const WWW_URI = '$old_path/';" --replace_string="const WWW_URI = '$new_path/';" --target_file="$final_path/config.local.php"
 fi
 
 # Change the domain for nginx
