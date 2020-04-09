@@ -75,12 +75,6 @@ then
   path_url="$new_path"
   # Create a dedicated nginx config
   ynh_add_nginx_config
-elif [ "$new_path" == "/" ]
-then
-  ynh_replace_string --match_string="const WWW_URI = '$old_path/';" --replace_string="const WWW_URI = '$new_path';" --target_file="$final_path/config.local.php"
-else
-  ynh_replace_string --match_string="const WWW_URI = '$old_path/';" --replace_string="const WWW_URI = '$new_path/';" --target_file="$final_path/config.local.php"
-fi
 
 # Change the domain for nginx
 if [ $change_domain -eq 1 ]
@@ -101,6 +95,15 @@ ynh_script_progression --message="Reloading nginx web server..." --time --weight
 
 ynh_systemd_action --service_name=nginx --action=reload
 
+#=================================================
+# last configuration
+#=================================================
+if [ $change_path -eq 1 && "$new_path" == "/"]
+then
+  ynh_replace_string --match_string="const WWW_URI = '$old_path/';" --replace_string="const WWW_URI = '$new_path';" --target_file="$final_path/config.local.php"
+else
+  ynh_replace_string --match_string="const WWW_URI = '$old_path/';" --replace_string="const WWW_URI = '$new_path/';" --target_file="$final_path/config.local.php"
+fi
 #=================================================
 # END OF SCRIPT
 #=================================================
