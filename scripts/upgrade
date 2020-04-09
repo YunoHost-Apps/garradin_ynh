@@ -54,6 +54,7 @@ ynh_script_progression --message="Backing up the bdd and squelettes before upgra
 
 bdd=$final_path/association.sqlite
 squelettes=$final_path/www/squelettes
+conf=$final_path/www/config.local.php
 
 if  [ -d "$squelettes" ]
 then
@@ -63,6 +64,11 @@ fi
 if [ -e "$bdd" ]
 then
   cp -a $bdd /tmp/association.sqlite
+fi
+
+if [ -e "$conf" ]
+then
+  cp -a $bdd /tmp/config.local.php
 fi
 
 #=================================================
@@ -127,26 +133,28 @@ fi
 
 backup_bdd=/tmp/association.sqlite
 backup_squelettes=/tmp/squelettes
+backup_conf=/tmp/config.local.php
 
 if 	[ -d "$backup_squelettes" ]
 then
-  cp -ar /tmp/squelettes $final_path/www/squelettes
+  cp -ar $backup_squelettes $final_path/www/squelettes
 fi
 
 if [ -e "$backup_bdd" ]
 then
-	cp -a /tmp/association.sqlite $final_path/association.sqlite
+	cp -a $backup_bdd $final_path/association.sqlite
 fi
 
-#=================================================
-# Change options in file config.dist.php
-# and copy in local.dist.php
-#=================================================
-
-cp -a $final_path/config.dist.php $final_path/config.local.php
+if [ -e "$backup_conf" ]
+then
+  cp -a $backup_conf $final_path/config.local.php
+  echo "const WWW_URI = '$path_url/';" >> $final_path/config.local.php
+else
+  cp -a $final_path/config.dist.php $final_path/config.local.php
+  ynh_replace_string --match_string="//const WWW_URI = '/asso/';" --replace_string="const WWW_URI = '$path_url/';" --target_file="$final_path/config.local.php"
+fi
 
 # ynh_replace_string --match_string="const ROOT = __DIR__;" --replace_string="const ROOT = /var/www/garradin/;" --target_file="$final_path/config.local.php"
-ynh_replace_string --match_string="//const WWW_URI = '/asso/';" --replace_string="const WWW_URI = '$path_url/';" --target_file="$final_path/config.local.php"
 
 #=================================================
 # NGINX CONFIGURATION
