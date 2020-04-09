@@ -130,12 +130,14 @@ systemctl reload nginx
 # Change options in file config.dist.php
 # and copy in local.dist.php
 #=================================================
+key=$(ynh_string_random --length=8)
+cp -a $final_path/config.dist.php $final_path/config.local.php
 
-ynh_local_curl "page_uri"
-echo "const WWW_URI = '$path_url/';" >> $final_path/config.local.php
-# ynh_replace_string --match_string="//const WWW_URI = '/asso/';" --replace_string="const WWW_URI = '$path_url/';" --target_file="$final_path/config.local.php"
+ynh_replace_string --match_string="//const WWW_URI = '/asso/';" --replace_string="const WWW_URI = '$path_url/';" --target_file="$final_path/config.local.php"
+ynh_replace_string --match_string="const SECRET_KEY = '3xUhIgGwuovRKOjVsVPQ5yUMfXUSIOX2GKzcebsz5OINrYC50r';" --replace_string="const SECRET_KEY = '$key';" --target_file="$final_path/config.local.php"
 # ynh_replace_string --match_string="const ROOT = __DIR__;" --replace_string="const ROOT = /var/www/garradin/;" --target_file="$final_path/config.local.php"
 # ynh_replace_string --match_string="const PREFER_HTTPS = false;" --replace_string="const PREFER_HTTPS = true;" --target_file="$final_path/config.local.php"
+# echo "const WWW_URI = '$path_url/';" >> $final_path/config.local.php
 
 #=================================================
 # END OF SCRIPT
