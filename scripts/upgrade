@@ -208,5 +208,5 @@ echo "const WWW_URI = '$path_url/';" >> $final_path/config.local.php
 #=================================================
 # END OF SCRIPT
 #=================================================
-
+ynh_local_curl "page_uri"
 ynh_script_progression --message="Upgrade of $app completed" --time --last
