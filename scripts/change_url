@@ -63,14 +63,14 @@ then
   # Set global variables for nginx helper
   domain="$old_domain"
   path_url="$new_path"
+  # Create a dedicated nginx config
+  ynh_add_nginx_config
 if [ "$new_path" == "/" ]
 then
   ynh_replace_string --match_string="const WWW_URI = '$old_path/';" --replace_string="const WWW_URI = '$new_path';" --target_file="$final_path/config.local.php"
 else
   ynh_replace_string --match_string="const WWW_URI = '$old_path/';" --replace_string="const WWW_URI = '$new_path/';" --target_file="$final_path/config.local.php"
 fi
-  # Create a dedicated nginx config
-  ynh_add_nginx_config
 fi
 
 # Change the domain for nginx
