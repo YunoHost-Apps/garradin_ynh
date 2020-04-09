@@ -147,8 +147,7 @@ fi
 
 if [ -e "$backup_conf" ]
 then
-  cp -a $backup_conf $final_path/config.local.php
-  echo "const WWW_URI = '$path_url/';" >> $final_path/config.local.php
+  cp -a $backup_conf $final_path/config.local.php && echo "const WWW_URI = '$path_url/';" >> $final_path/config.local.php
 else
   cp -a $final_path/config.dist.php $final_path/config.local.php
   ynh_replace_string --match_string="//const WWW_URI = '/asso/';" --replace_string="const WWW_URI = '$path_url/';" --target_file="$final_path/config.local.php"
