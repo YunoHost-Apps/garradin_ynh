@@ -59,9 +59,8 @@ final_path=/var/www/$app
 if [ $change_path -eq 1 ]
 then
   # Make a backup of the original nginx config file if modified
-  ynh_backup_if_checksum_is_different --file="$nginx_conf_path"
+  # ynh_backup_if_checksum_is_different --file="$nginx_conf_path"
   # Set global variables for nginx helper
-  domain="$old_domain"
   path_url="$new_path"
   # Create a dedicated nginx config
   ynh_add_nginx_config
@@ -78,11 +77,13 @@ fi
 # Change the domain for nginx
 if [ $change_domain -eq 1 ]
 then
+   domain="$new_domain"
   # Delete file checksum for the old conf file location
   ynh_delete_file_checksum --file="$nginx_conf_path"
   mv $nginx_conf_path /etc/nginx/conf.d/$new_domain.d/$app.conf
   # Store file checksum for the new config file location
-  ynh_store_file_checksum --file="/etc/nginx/conf.d/$new_domain.d/$app.conf"
+  #ynh_store_file_checksum --file="/etc/nginx/conf.d/$new_domain.d/$app.conf"
+  ynh_replace_string --match_string="const WWW_URL = '$old_domain' . WWW_URI" --replace_string="const WWW_URI = '$new_domain . WWW_URI';" --target_file="$final_path/config.local.php"
 fi
 
 #=================================================
