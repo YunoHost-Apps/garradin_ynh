@@ -79,12 +79,6 @@ ynh_app_setting_set --app=$app --key=final_path --value=$final_path
 # Download, check integrity, uncompress and patch the source from app.src
 ynh_setup_source --dest_dir="$final_path"
 
-#=================================================
-# Files owned by user app
-#=================================================
-
-chown $app:$app $final_path -R
-chmod 755 $final_path -R
 
 #=================================================
 # NGINX CONFIGURATION
@@ -125,8 +119,7 @@ ynh_script_progression --message="Reloading nginx web server..." --time --weight
 systemctl reload nginx
 
 #=================================================
-# Change options in file config.dist.php
-# and copy in local.dist.php
+# MODIFY A CONFIG FILE
 #=================================================
 key=$(ynh_string_random --length=50)
 cp -a $final_path/config.dist.php $final_path/config.local.php
@@ -137,6 +130,13 @@ then
 else
   ynh_replace_string --match_string="//const WWW_URI = '/asso/';" --replace_string="const WWW_URI = '$path_url/';" --target_file="$final_path/config.local.php"
 fi
+
+#=================================================
+# Files owned by user app
+#=================================================
+
+chown $app:$app $final_path -R
+chmod 755 $final_path -R
 
 #=================================================
 # END OF SCRIPT

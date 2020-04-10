@@ -18,7 +18,6 @@ site de garradin : http://garradin.eu
 - À travers l'interface d'administration
 
 ### TODO list :
-- Backup de la base de donnée SQlite (AIDE REQUISE)? [Résolu]
 - Permissions de certains fichiers sensibles ?
 
 #### Problèmes / Avertissements :

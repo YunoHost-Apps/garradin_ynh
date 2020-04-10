@@ -53,17 +53,4 @@ ynh_backup --src_path="/etc/php/7.0/fpm/pool.d/$app.conf"
 #=================================================
 # END OF SCRIPT
 #=================================================
-
 ynh_script_progression --message="Backup script completed for $app. (YunoHost will then actually copy those files to the archive)." --time --last
-#ynh_backup --src_path="/etc/php/7.0/fpm/conf.d/20-$app.ini"
-
-# # Backup directory location for the app from where the script is executed and
-# # which will be compressed afterward
-# backup_dir=$YNH_APP_BACKUP_DIR
-
-# # Backup sources & data
-# ynh_backup "/var/www/$app" "sources"
-
-# # Copy Nginx conf
-# sudo mkdir -p ./conf
-# ynh_backup "/etc/nginx/conf.d/$domain.d/$app.conf" "conf/nginx.conf"

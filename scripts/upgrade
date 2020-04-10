@@ -172,16 +172,6 @@ then
 	cp -a $backup_bdd $final_path/association.sqlite
 fi
 
-# #=================================================
-# # STORE THE CONFIG FILE CHECKSUM
-# #=================================================
-
-# ### Verify the checksum of a file, stored by `ynh_store_file_checksum` in the install script.
-# ### And create a backup of this file if the checksum is different. So the file will be backed up if the admin had modified it.
-ynh_backup_if_checksum_is_different --file="$final_path/CONFIG_FILE"
-# # Recalculate and store the checksum of the file for the next upgrade.
-ynh_store_file_checksum --file="$final_path/CONFIG_FILE"
-
 #=================================================
 # Files owned by user app
 #=================================================
