@@ -83,7 +83,7 @@ then
   mv $nginx_conf_path /etc/nginx/conf.d/$new_domain.d/$app.conf
   # Store file checksum for the new config file location
   #ynh_store_file_checksum --file="/etc/nginx/conf.d/$new_domain.d/$app.conf"
-  ynh_replace_string --match_string="const WWW_URL = '$old_domain' . WWW_URI;" --replace_string="const WWW_URI = '$new_domain . WWW_URI;" --target_file="$final_path/config.local.php"
+  ynh_replace_string --match_string="const WWW_URL = '$old_domain' . WWW_URI;" --replace_string="const WWW_URI = '$new_domain' . WWW_URI;" --target_file="$final_path/config.local.php"
 fi
 
 #=================================================
