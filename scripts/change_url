@@ -79,9 +79,9 @@ fi
 if [ $change_path -eq 1 ] && [ "$new_path" == "/" ]
 then
   ynh_replace_string --match_string="const WWW_URI = '$old_path/';" --replace_string="const WWW_URI = '$new_path';" --target_file="$final_path/config.local.php"
-elif [ "$old_path" == "/"]
+elif [ "$old_path" == "/" ]
   ynh_replace_string --match_string="const WWW_URI = '$old_path';" --replace_string="const WWW_URI = '$new_path/';" --target_file="$final_path/config.local.php"
-else [ "$new_path" != "/" -o "$old_path" != "/"]
+else [ "$new_path" != "/" -o "$old_path" != "/" ]
    ynh_replace_string --match_string="const WWW_URI = '$old_path/';" --replace_string="const WWW_URI = '$new_path/';" --target_file="$final_path/config.local.php"
 fi
 
