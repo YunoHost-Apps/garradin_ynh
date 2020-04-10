@@ -53,20 +53,18 @@ if [ -z "$final_path" ]; then
 fi
 
 #=================================================
-# Backup squlite, config.local.php and squelettes directory
+# Backup Data
 #=================================================
 ynh_script_progression --message="Backing up the data before upgrading (may take a while)..." --time --weight=1
 
 bdd=$final_path/association.sqlite
 squelettes=$final_path/www/squelettes
 
-if  [ -d "$squelettes" ]
-then
+if  [ -d "$squelettes" ]; then
   cp -ar $squelettes /tmp/squelettes
 fi
 
-if [ -e "$bdd" ]
-then
+if [ -e "$bdd" ]; then
   cp -a $bdd /tmp/association.sqlite
 fi
 

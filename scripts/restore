@@ -83,8 +83,7 @@ ynh_restore_file --origin_path="/etc/php/7.0/fpm/pool.d/$app.conf"
 ynh_script_progression --message="Reinstalling dependencies..." --time --weight=1
 
 # Define and install dependencies
-ynh_install_app_dependencies php7.0-sqlite3
-
+ynh_install_app_dependencies $pkg_dependencies
 
 #=================================================
 # GENERIC FINALIZATION
