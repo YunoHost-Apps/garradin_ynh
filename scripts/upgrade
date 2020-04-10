@@ -46,6 +46,12 @@ elif [ "$is_public" = "No" ]; then
 	is_public=0
 fi
 
+# If final_path doesn't exist, create it
+if [ -z "$final_path" ]; then
+  final_path=/var/www/$app
+  ynh_app_setting_set --app=$app --key=final_path --value=$final_path
+fi
+
 #=================================================
 # Backup squlite, config.local.php and squelettes directory
 #=================================================
@@ -148,9 +154,9 @@ then
 else
   ynh_replace_string --match_string="//const WWW_URI = '/asso/';" --replace_string="const WWW_URI = '$path_url/';" --target_file="$final_path/config.local.php"
 fi
-#=================================================
+#=======================================================
 # backup bdd, squelettes directory and config.local.php
-#=================================================
+#=======================================================
 ynh_script_progression --message="restore data..." --time --weight=1
 
 backup_bdd=/tmp/association.sqlite
