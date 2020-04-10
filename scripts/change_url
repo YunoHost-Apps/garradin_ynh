@@ -102,8 +102,7 @@ fi
 # Change the domain for nginx
 if [ $change_domain -eq 1 ]
 then
-   domain="$new_domain"
-  # Delete file checksum for the old conf file location
+   # Delete file checksum for the old conf file location
   ynh_delete_file_checksum --file="$nginx_conf_path"
   mv $nginx_conf_path /etc/nginx/conf.d/$new_domain.d/$app.conf
   # Store file checksum for the new config file location
