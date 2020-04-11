@@ -3,13 +3,13 @@
     "id": "garradin",
     "packaging_format": 1,
     "requirements": {
-        "yunohost": ">= 2.7.2"
+        "yunohost": ">=3.5.0"
     },
     "description": {
         "en": "Software to manage association",
         "fr": "Logiciel libre de gestion d'association"
     },
-     "version": "0.9.2~ynh1",
+     "version": "0.9.5~ynh3",
     "url": "http://garradin.eu/a-propos/",
     "license": "GPL-3.0-or-later",
     "maintainer": {
@@ -19,7 +19,7 @@
     "multi_instance": true,
     "services": [
         "nginx",
-        "php5-fpm"
+        "php7.0-fpm"
     ],
     "arguments": {
         "install" : [
