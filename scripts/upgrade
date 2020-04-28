@@ -56,7 +56,7 @@ fi
 ### then you may safely remove these lines
 
 # Cleaning legacy permissions
-is_public=$(ynh_app_setting_get --app=$app --key=is_public)
+# is_public=$(ynh_app_setting_get --app=$app --key=is_public)
 
 if [ -n "$is_public" ]; then
   # Remove unprotected_uris
@@ -64,9 +64,9 @@ if [ -n "$is_public" ]; then
   # Remove protected_uris
   ynh_app_setting_delete --app=$app --key=protected_uris
 
-  # Removing skipped/unprotected_uris under certain conditions, remove the visitors group added during the migration process of 3.7
-  # Remove skipped_uris. If the app was public, add visitors again to the main permission
-  if ynh_permission_has_user --permission=main --user=visitors
+  #Removing skipped/unprotected_uris under certain conditions, remove the visitors group added during the migration process of 3.7
+  #Remove skipped_uris. If the app was public, add visitors again to the main permission
+  elif ynh_permission_has_user --permission=main --user=visitors
   then
     ynh_app_setting_delete --app=$app --key=skipped_uris
     ynh_permission_update --permission "main" --add "visitors"
@@ -216,10 +216,10 @@ ynh_script_progression --message="Upgrading permissions configuration..." --time
 # 	ynh_app_setting_set --app=$app --key=unprotected_uris --value="/"
 # fi
 
-# Create the admin permission if needed
-# if ! ynh_permission_exists --permission "all_users"; then
-#   ynh_permission_create --permission "all_users" --url "/admin" --allowed $admin
-# fi
+# Create the visitors permission if needed
+if ! ynh_permission_exists --permission "visitors"; then
+  ynh_permission_create --permission "visitors" --url "/admin" --allowed $admin
+fi
 
 #=================================================
 # RELOAD NGINX
