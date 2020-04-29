@@ -218,7 +218,7 @@ ynh_script_progression --message="Upgrading permissions configuration..." --time
 
 # Create the visitors permission if needed
 if ! ynh_permission_exists --permission "visitors"; then
-  ynh_permission_create --permission "visitors" --url "/admin" --allowed $admin
+  ynh_permission_create --permission "visitors"
 fi
 
 #=================================================
