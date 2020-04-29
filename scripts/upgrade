@@ -37,15 +37,6 @@ upgrade_type=$(ynh_check_app_version_changed)
 #=================================================
 ynh_script_progression --message="Ensuring downward compatibility..." --time --weight=1
 
-# # Fix is_public as a boolean value
-# if [ "$is_public" = "Yes" ]; then
-# 	ynh_app_setting_set --app=$app --key=is_public --value=1
-# 	is_public=1
-# elif [ "$is_public" = "No" ]; then
-# 	ynh_app_setting_set --app=$app --key=is_public --value=0
-# 	is_public=0
-# fi
-
 # If final_path doesn't exist, create it
 if [ -z "$final_path" ]; then
   final_path=/var/www/$app
@@ -206,15 +197,6 @@ chmod 755 $final_path -R
 # SETUP SSOWAT
 #=================================================
 ynh_script_progression --message="Upgrading permissions configuration..." --time --weight=1
-
-
-
-# # Make app public if necessary
-# if [ $is_public -eq 1 ]
-# then
-# 	# unprotected_uris allows SSO credentials to be passed anyway
-# 	ynh_app_setting_set --app=$app --key=unprotected_uris --value="/"
-# fi
 
 # Create the visitors permission if needed
 if ! ynh_permission_exists --permission "visitors"; then

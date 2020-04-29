@@ -48,7 +48,6 @@ ynh_script_progression --message="Storing installation settings..." --time --wei
 
 ynh_app_setting_set --app=$app --key=domain --value=$domain
 ynh_app_setting_set --app=$app --key=path --value=$path_url
-#ynh_app_setting_set --app=$app --key=is_public --value=$is_public
 
 #=================================================
 # Install dependency to convert tracks to a readable format for the browser
@@ -108,16 +107,6 @@ ynh_app_setting_delete --app=$app --key=skipped_uris
 #=================================================
 ynh_script_progression --message="Configuring permissions..." --time --weight=1
 
-# if [ $is_public -eq 0 ]
-# then  # Remove the public access
-#   ynh_app_setting_delete $app skipped_uris
-# fi
-# # Make app public if necessary
-# if [ $is_public -eq 1 ]
-# then
-#   # unprotected_uris allows SSO credentials to be passed anyway.
-#   ynh_app_setting_set --app=$app --key=unprotected_uris --value="/"
-# fi
 # Make app public if necessary
 if [ $is_public -eq 1 ]
 then
