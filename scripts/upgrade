@@ -18,7 +18,6 @@ app=$YNH_APP_INSTANCE_NAME
 
 domain=$(ynh_app_setting_get --app=$app --key=domain)
 path_url=$(ynh_app_setting_get --app=$app --key=path)
-#is_public=$(ynh_app_setting_get --app=$app --key=is_public)
 final_path=$(ynh_app_setting_get --app=$app --key=final_path) || ynh_die "This path already contains a folder"
 #=================================================
 # CHECK VERSION
@@ -52,9 +51,7 @@ fi
 if [ -n "$is_public" ]; then
   # Remove unprotected_uris
   ynh_app_setting_delete --app=$app --key=unprotected_uris
-  # Remove protected_uris
-  ynh_app_setting_delete --app=$app --key=protected_uris
-
+  
   #Removing skipped/unprotected_uris under certain conditions, remove the visitors group added during the migration process of 3.7
   #Remove skipped_uris. If the app was public, add visitors again to the main permission
   if ynh_permission_has_user --permission=main --user=visitors
@@ -96,18 +93,6 @@ ynh_clean_setup () {
 }
 # Exit if an error occurs during the execution of the script
 ynh_abort_if_errors
-
-# #=================================================
-# # CHECK THE PATH
-# #=================================================
-
-# Normalize the URL path syntax
-# N.B. : this is for app installations before YunoHost 2.7
-# where this value might be something like /foo/ or foo/
-# instead of /foo ....
-# If nobody installed your app before 2.7, then you may
-# safely remove this line
-#path_url=$(ynh_normalize_url_path --path_url=$path_url)
 
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE

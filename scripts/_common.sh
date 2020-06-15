@@ -42,4 +42,4 @@ ynh_permission_has_user() {
     allowed_users="$(echo "$perm" | grep --invert-match '^#')"
     # Grep the list of users an return the result if the user is indeed into the list
     echo "$allowed_users" | grep --quiet --word "$user"
-}
+    }

@@ -48,18 +48,15 @@ ynh_script_progression --message="Storing installation settings..." --time --wei
 
 ynh_app_setting_set --app=$app --key=domain --value=$domain
 ynh_app_setting_set --app=$app --key=path --value=$path_url
+ynh_app_setting_set --app=$app --key=is_public --value=$is_public
+
 
 #=================================================
 # Install dependency to convert tracks to a readable format for the browser
 #=================================================
 ynh_script_progression --message="Installing dependencies..." --time --weight=1
 
-if [ "$(lsb_release --codename --short)" != "jessie" ]
-then
-  ynh_install_app_dependencies $pkg_dependencies
-else
-  ynh_die --message="Votre version de Debian n'est pas compatible..." --time --weight=1
-fi
+ynh_install_app_dependencies $pkg_dependencies
 
 #=================================================
 # CREATE DEDICATED USER
