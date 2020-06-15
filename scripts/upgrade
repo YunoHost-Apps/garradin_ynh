@@ -50,8 +50,6 @@ fi
 # is_public=$(ynh_app_setting_get --app=$app --key=is_public)
 
 if [ -n "$is_public" ]; then
-  # Remove unprotected_uris
-  ynh_app_setting_delete --app=$app --key=unprotected_uris
   # Remove protected_uris
   ynh_app_setting_delete --app=$app --key=protected_uris
 
