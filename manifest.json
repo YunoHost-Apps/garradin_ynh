@@ -9,7 +9,7 @@
         "en": "Software to manage association",
         "fr": "Logiciel libre de gestion d'association"
     },
-    "version": "0.9.6~ynh3",
+     "version": "0.9.5~ynh3",
     "url": "http://garradin.eu/a-propos/",
     "license": "GPL-3.0-or-later",
     "maintainer": {
