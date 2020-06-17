@@ -5,7 +5,8 @@
 #=================================================
 
 # dependencies used by the app
-pkg_dependencies="php7.0-sqlite3"
+
+pkg_dependencies="php-sqlite3"
 
 # ============= FUTURE YUNOHOST HELPER =============
 
@@ -42,4 +43,4 @@ ynh_permission_has_user() {
     allowed_users="$(echo "$perm" | grep --invert-match '^#')"
     # Grep the list of users an return the result if the user is indeed into the list
     echo "$allowed_users" | grep --quiet --word "$user"
-    }
+}
