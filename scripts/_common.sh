@@ -5,6 +5,7 @@
 #=================================================
 
 # dependencies used by the app
+
 pkg_dependencies="php-sqlite3"
 
 # ============= FUTURE YUNOHOST HELPER =============
