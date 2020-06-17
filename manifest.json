@@ -52,7 +52,7 @@
                     "fr": "Est-ce une application publique ?"
                 },
                 "help": {
-                    "en": "The SSO is not implemented for this app and yunohost is not sure for hundred of users..."
+                    "en": "The SSO is not implemented for this app and yunohost is not sure for hundred of users...",
                     "fr": "Le SSO n'est pas implémenté pour cette application et yunohost n'est pas sûr pour une centaine d'utilisateurs..."
                 },
                 "default": true
