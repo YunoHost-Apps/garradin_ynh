@@ -9,7 +9,9 @@
         "en": "Software to manage association",
         "fr": "Logiciel libre de gestion d'association"
     },
-     "version": "0.9.5~ynh3",
+
+     "version": "0.9.6~ynh3",
+
     "url": "http://garradin.eu/a-propos/",
     "license": "GPL-3.0-or-later",
     "maintainer": {
@@ -48,6 +50,10 @@
                 "ask": {
                     "en": "Is it a public application?",
                     "fr": "Est-ce une application publique ?"
+                },
+                "help": {
+                    "en": "The SSO is not implemented for this app and yunohost is not sure for hundred of users...",
+                    "fr": "Le SSO n'est pas implémenté pour cette application et yunohost n'est pas sûr pour une centaine d'utilisateurs..."
                 },
                 "default": true
             }
