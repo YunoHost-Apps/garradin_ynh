@@ -69,6 +69,7 @@ fi
 #=================================================
 ynh_script_progression --message="Updating nginx web server configuration..." --time --weight=1
 
+final_path=/var/www/$app
 nginx_conf_path=/etc/nginx/conf.d/$old_domain.d/$app.conf
 
 # Change the path in the nginx config file
