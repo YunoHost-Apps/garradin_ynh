@@ -23,7 +23,6 @@ ynh_abort_if_errors
 domain=$YNH_APP_ARG_DOMAIN
 path_url=$YNH_APP_ARG_PATH
 is_public=$YNH_APP_ARG_IS_PUBLIC
-
 app=$YNH_APP_INSTANCE_NAME
 
 #=================================================
@@ -51,17 +50,13 @@ ynh_app_setting_set --app=$app --key=domain --value=$domain
 ynh_app_setting_set --app=$app --key=path --value=$path_url
 ynh_app_setting_set --app=$app --key=is_public --value=$is_public
 
+
 #=================================================
 # Install dependency to convert tracks to a readable format for the browser
 #=================================================
 ynh_script_progression --message="Installing dependencies..." --time --weight=1
 
-if [ "$(lsb_release --codename --short)" != "jessie" ]
-then
-  ynh_install_app_dependencies $pkg_dependencies
-else
-  ynh_die --message="Votre version de Debian n'est pas compatible..." --time --weight=1
-fi
+ynh_install_app_dependencies $pkg_dependencies
 
 #=================================================
 # CREATE DEDICATED USER
@@ -96,27 +91,28 @@ ynh_script_progression --message="Configuring php-fpm..." --time --weight=1
 ynh_add_fpm_config
 
 #=================================================
+# Files owned by user app
+#=================================================
+
+chown $app:$app $final_path -R
+chmod 755 $final_path -R
+
+# Remove the public access
+ynh_app_setting_delete --app=$app --key=skipped_uris
+#=================================================
 # SETUP SSOWAT
 #=================================================
-ynh_script_progression --message="Configuring SSOwat..." --time --weight=1
+ynh_script_progression --message="Configuring permissions..." --time --weight=1
 
-if [ $is_public -eq 0 ]
-then  # Remove the public access
-  ynh_app_setting_delete $app skipped_uris
-fi
 # Make app public if necessary
 if [ $is_public -eq 1 ]
 then
-  # unprotected_uris allows SSO credentials to be passed anyway.
-  ynh_app_setting_set --app=$app --key=unprotected_uris --value="/"
+    # Everyone can access the app.
+  # The "main" permission is automatically created before the install script.
+  ynh_permission_update --permission "main" --add "visitors"
 fi
-
-#=================================================
-# RELOAD NGINX
-#=================================================
-ynh_script_progression --message="Reloading nginx web server..." --time --weight=1
-
-systemctl reload nginx
+# Only the users can access to the panel of the app
+# ynh_permission_update --permission="main" --add "all_users"
 
 #=================================================
 # MODIFY A CONFIG FILE
@@ -134,11 +130,11 @@ else
 fi
 
 #=================================================
-# Files owned by user app
+# RELOAD NGINX
 #=================================================
+ynh_script_progression --message="Reloading nginx web server..." --time --weight=1
 
-chown $app:$app $final_path -R
-chmod 755 $final_path -R
+systemctl reload nginx
 
 #=================================================
 # END OF SCRIPT
