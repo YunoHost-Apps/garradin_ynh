@@ -29,27 +29,37 @@ ynh_script_progression --message="Loading installation settings..." --time --wei
 # Needed for helper "ynh_add_nginx_config"
 final_path=$(ynh_app_setting_get --app=$app --key=final_path)
 
-# #=================================================
-# # CHECK THE SYNTAX OF THE PATHS
-# #=================================================
+#=================================================
+# BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
+#=================================================
+ynh_script_progression --message="Backing up the app before changing its url (may take a while)..." --time --weight=1
 
-# test -n "$old_path" || old_path="/"
-# test -n "$new_path" || new_path="/"
-# new_path=$(ynh_normalize_url_path $new_path)
-# old_path=$(ynh_normalize_url_path $old_path)
+# Backup the current version of the app
+ynh_backup_before_upgrade
+ynh_clean_setup () {
+	# Remove the new domain config file, the remove script won't do it as it doesn't know yet its location.
+	ynh_secure_remove --file="/etc/nginx/conf.d/$new_domain.d/$app.conf"
+
+	# restore it if the upgrade fails
+	ynh_restore_upgradebackup
+}
+# Exit if an error occurs during the execution of the script
+ynh_abort_if_errors
 
 #=================================================
 # CHECK WHICH PARTS SHOULD BE CHANGED
 #=================================================
 
 change_domain=0
-if [ "$old_domain" != "$new_domain" ]; then
-  change_domain=1
+if [ "$old_domain" != "$new_domain" ]
+then
+	change_domain=1
 fi
 
 change_path=0
-if [ "$old_path" != "$new_path" ]; then
-  change_path=1
+if [ "$old_path" != "$new_path" ]
+then
+	change_path=1
 fi
 
 #=================================================
