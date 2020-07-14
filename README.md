@@ -25,7 +25,6 @@ Garradin is a free association managing software.
 
 * [Official demo](https://garradin.eu/essai/)
 
-
 ## Documentation
 
  * Official documentation: https://fossil.kd2.org/garradin/wiki?name=Documentation
@@ -43,7 +42,7 @@ LDAP is not supported yet.
 
 ## Limitations
 
-* The application is ONLY translated into french.
+* Garradin is only available in French.
 
 ## Links
 
