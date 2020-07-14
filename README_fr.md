@@ -1,17 +1,17 @@
-# Garradin
+# Garradin pour YunoHost
 
 [![Niveau d'intégration](https://dash.yunohost.org/integration/garradin.svg)](https://dash.yunohost.org/appci/app/garradin) ![](https://ci-apps.yunohost.org/ci/badges/garradin.status.svg) ![](https://ci-apps.yunohost.org/ci/badges/garradin.maintain.svg)  
 [![Installer Garradin avec YunoHost](https://install-app.yunohost.org/install-with-yunohost.png)](https://install-app.yunohost.org/?app=garradin)
 
 *[Read this readme in english.](./README.md)* 
 
-> *Ce package vous permet d'installer REPLACEBYYOURAPP rapidement et simplement sur un serveur YunoHost.  
+> *Ce package vous permet d'installer Garradin rapidement et simplement sur un serveur YunoHost.  
 Si vous n'avez pas YunoHost, consultez [le guide](https://yunohost.org/#/install) pour apprendre comment l'installer.*
 
 ## Vue d'ensemble
 Garradin est un logiciel libre de gestion associative. il permet de gérer des membres.
 
-**Version incluse :** 0.9.6
+**Version incluse :** 0.9.7
 
 ## Captures d'écran
 
@@ -44,9 +44,6 @@ Garradin est un logiciel libre de gestion associative. il permet de gérer des m
 
 * Garradin n'est disponible qu'en français.
 
-**Plus d'informations sur la page de documentation :**  
-https://yunohost.org/packaging_apps
-
 ## Liens
 
  * Signaler un bug : https://github.com/YunoHost-Apps/garradin_ynh/issues
@@ -59,7 +56,6 @@ https://yunohost.org/packaging_apps
 Informations pour les développeurs
 ----------------
 
-**Seulement si vous voulez utiliser une branche de test pour le codage, au lieu de fusionner directement dans la banche principale.**
 Merci de faire vos pull request sur la [branche testing](https://github.com/YunoHost-Apps/garradin_ynh/tree/testing).
 
 Pour essayer la branche testing, procédez comme suit.
