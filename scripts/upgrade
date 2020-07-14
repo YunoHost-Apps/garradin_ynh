@@ -19,6 +19,7 @@ app=$YNH_APP_INSTANCE_NAME
 domain=$(ynh_app_setting_get --app=$app --key=domain)
 path_url=$(ynh_app_setting_get --app=$app --key=path)
 final_path=$(ynh_app_setting_get --app=$app --key=final_path) || ynh_die "This path already contains a folder"
+
 #=================================================
 # CHECK VERSION
 #=================================================
@@ -61,7 +62,7 @@ fi
 #=================================================
 # Backup Data
 #=================================================
-ynh_script_progression --message="Backing up the data before upgrading (may take a while)..." --time --weight=1
+ynh_script_progression --message="Backing up the data before upgrading (may take a while)..." --weight=1
 
 bdd=$final_path/association.sqlite
 squelettes=$final_path/www/squelettes
@@ -77,7 +78,7 @@ fi
 #=================================================
 # BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
 #=================================================
-ynh_script_progression --message="Backing up the app before upgrading (may take a while)..." --time --weight=1
+ynh_script_progression --message="Backing up the app before upgrading (may take a while)..." --weight=1
 
 # Backup the current version of the app
 ynh_backup_before_upgrade
@@ -134,7 +135,7 @@ ynh_add_fpm_config
 # Change options in file config.dist.php
 # and copy in local.dist.php
 #=================================================
-ynh_script_progression --message="final configuration needed..." --time --weight=1
+ynh_script_progression --message="final configuration needed..." --weight=1
 
 key=$(ynh_string_random --length=50)
 cp -a $final_path/config.dist.php $final_path/config.local.php
