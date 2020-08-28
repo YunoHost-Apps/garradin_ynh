@@ -44,8 +44,9 @@ LDAP is not supported yet.
 ## Limitations
 
 * The application is ONLY translated into french.
+* Do not install this application on the default root path's domain name without adding a subpath, otherwise the sso conection page will be substitute by home's garradin page.
 
-**More info on the documentation page:**  
+**More info on the documentation page:**
 https://yunohost.org/packaging_apps
 
 ## Links

@@ -43,8 +43,9 @@ Garradin est un logiciel libre de gestion associative. il permet de gérer des m
 ## Limitations
 
 * Garradin n'est disponible qu'en français.
+* N'installez pas cette apllication à la racine du domaine par défaut sans ajouter un sous-domaine. Sinon la page de connexion SSO sera remplacée par la page d'accueil de Garradin.
 
-**Plus d'informations sur la page de documentation :**  
+**Plus d'informations sur la page de documentation :**
 https://yunohost.org/packaging_apps
 
 ## Liens
