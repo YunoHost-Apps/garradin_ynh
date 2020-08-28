@@ -71,6 +71,7 @@ ynh_script_progression --message="Backing up the data before upgrading (may take
 
 bdd=$final_path/association.sqlite
 squelettes=$final_path/www/squelettes
+config=$final_path/config.local.php
 
 if  [ -d "$squelettes" ]; then
   cp -ar $squelettes /tmp/squelettes
@@ -78,6 +79,10 @@ fi
 
 if [ -e "$bdd" ]; then
   cp -a $bdd /tmp/association.sqlite
+fi
+
+if  [ -e "$config" ]; then
+  cp -a $config /tmp/config
 fi
 
 #=================================================
@@ -153,17 +158,17 @@ ynh_add_fpm_config
 # Change options in file config.dist.php
 # and copy in local.dist.php
 #=================================================
-ynh_script_progression --message="final configuration needed..." --time --weight=1
+# ynh_script_progression --message="final configuration needed..." --time --weight=1
 
 #  key=$(ynh_string_random --length=50)
-cp -a $final_path/config.dist.php $final_path/config.local.php
+# cp -a $final_path/config.dist.php $final_path/config.local.php
 #   ynh_replace_string --match_string="const SECRET_KEY = '3xUhIgGwuovRKOjVsVPQ5yUMfXUSIOX2GKzcebsz5OINrYC50r';" --replace_string="const SECRET_KEY = '$key';" --target_file="$final_path/config.local.php"
-if [ "$path_url" == "/" ]
-then
-  ynh_replace_string --match_string="//const WWW_URI = '/asso/';" --replace_string="const WWW_URI = '$path_url';" --target_file="$final_path/config.local.php"
-else
-  ynh_replace_string --match_string="//const WWW_URI = '/asso/';" --replace_string="const WWW_URI = '$path_url/';" --target_file="$final_path/config.local.php"
-fi
+# if [ "$path_url" == "/" ]
+# then
+#  ynh_replace_string --match_string="//const WWW_URI = '/asso/';" --replace_string="const WWW_URI = '$path_url';" --target_file="$final_path/config.local.php"
+# else
+#  ynh_replace_string --match_string="//const WWW_URI = '/asso/';" --replace_string="const WWW_URI = '$path_url/';" --target_file="$final_path/config.local.php"
+# fi
 #=======================================================
 # backup bdd, squelettes directory and config.local.php
 #=======================================================
@@ -171,6 +176,7 @@ ynh_script_progression --message="restore data..." --time --weight=1
 
 backup_bdd=/tmp/association.sqlite
 backup_squelettes=/tmp/squelettes
+backup_config=/tmp/config
 
 if 	[ -d "$backup_squelettes" ]
 then
@@ -180,6 +186,21 @@ fi
 if [ -e "$backup_bdd" ]
 then
 	cp -a $backup_bdd $final_path/association.sqlite
+fi
+
+if [ -e "$backup_config" ]
+then
+  cp -a $backup_config $final_path/config.local.php
+else
+  key=$(ynh_string_random --length=50)
+  cp -a $final_path/config.dist.php $final_path/config.local.php
+  ynh_replace_string --match_string="const SECRET_KEY = '3xUhIgGwuovRKOjVsVPQ5yUMfXUSIOX2GKzcebsz5OINrYC50r';" --replace_string="const SECRET_KEY = '$key';" --target_file="$final_path/config.local.php"
+  if [ "$path_url" == "/" ]
+  then
+  ynh_replace_string --match_string="//const WWW_URI = '/asso/';" --replace_string="const WWW_URI = '$path_url';" --target_file="$final_path/config.local.php"
+  else
+  ynh_replace_string --match_string="//const WWW_URI = '/asso/';" --replace_string="const WWW_URI = '$path_url/';" --target_file="$final_path/config.local.php"
+  fi
 fi
 
 #=================================================
