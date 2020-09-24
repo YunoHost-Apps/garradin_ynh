@@ -4,12 +4,8 @@
 # COMMON VARIABLES
 #=================================================
 # dependencies used by the app
-if
-ynh_get_debian_release = "buster"; then
-pkg_dependencies="php7.3-sqlite3"
-else
-pkg_dependencies="php7.0-sqlite3"
-fi
+
+pkg_dependencies="php-sqlite3"
 
 # ============= FUTURE YUNOHOST HELPER =============
 
