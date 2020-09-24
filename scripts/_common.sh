@@ -3,10 +3,10 @@
 #=================================================
 # COMMON VARIABLES
 #=================================================
-
+echo $(php -r "echo PHP_MAJOR_VERSION.'.'.PHP_MINOR_VERSION;") = "phpversion"
+YNH_PHP_VERSION="phpversion"
 # dependencies used by the app
-
-pkg_dependencies="php-sqlite3"
+pkg_dependencies="php$YNH_PHP_VERSION-sqlite3"
 
 # ============= FUTURE YUNOHOST HELPER =============
 
@@ -22,25 +22,31 @@ pkg_dependencies="php-sqlite3"
 # example: ynh_permission_has_user --permission=main --user=visitors
 #
 # Requires YunoHost version 3.7.1 or higher.
-ynh_permission_has_user() {
-    local legacy_args=pu
-    # Declare an array to define the options of this helper.
-    declare -Ar args_array=( [p]=permission= [u]=user= )
-    local permission
-    local user
-    # Manage arguments with getopts
-    ynh_handle_getopts_args "$@"
+# ynh_permission_has_user() {
+#     local legacy_args=pu
+#     # Declare an array to define the options of this helper.
+#     declare -Ar args_array=( [p]=permission= [u]=user= )
+#     local permission
+#     local user
+#     # Manage arguments with getopts
+#     ynh_handle_getopts_args "$@"
 
-    if ! ynh_permission_exists --permission=$permission
-    then
-        return 1
-    fi
+#     if ! ynh_permission_exists --permission=$permission
+#     then
+#         return 1
+#     fi
+#=================================================
+# EXPERIMENTAL HELPERS
+#=================================================
 
-    # List all permissions
-    # Filter only the required permission with a multiline sed (Here a cut from the permission to the next one), remove the url and his value
-    perm="$(yunohost user permission list --full --output-as plain | sed --quiet "/^#$app.$permission/,/^#[[:alnum:]]/p" | sed "/^##url/,+1d")"
-    # Remove all lines starting by # (got from the plain output before)
-    allowed_users="$(echo "$perm" | grep --invert-match '^#')"
-    # Grep the list of users an return the result if the user is indeed into the list
-    echo "$allowed_users" | grep --quiet --word "$user"
-}
+#     # List all permissions
+#     # Filter only the required permission with a multiline sed (Here a cut from the permission to the next one), remove the url and his value
+#     perm="$(yunohost user permission list --full --output-as plain | sed --quiet "/^#$app.$permission/,/^#[[:alnum:]]/p" | sed "/^##url/,+1d")"
+#     # Remove all lines starting by # (got from the plain output before)
+#     allowed_users="$(echo "$perm" | grep --invert-match '^#')"
+#     # Grep the list of users an return the result if the user is indeed into the list
+#     echo "$allowed_users" | grep --quiet --word "$user"
+# }
+#=================================================
+# FUTURE OFFICIAL HELPERS
+#=================================================
