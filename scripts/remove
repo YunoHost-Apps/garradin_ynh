@@ -30,7 +30,7 @@ ynh_remove_app_dependencies
 #=================================================
 # REMOVE APP MAIN DIR
 #=================================================
-ynh_script_progression --message="Removing app main directory..." --time --weight=3
+ynh_script_progression --message="Removing app main directory..." --weight=3
 
 # Remove the app directory securely
 ynh_secure_remove --file="$final_path"
@@ -46,7 +46,7 @@ ynh_remove_nginx_config
 #=================================================
 # REMOVE PHP-FPM CONFIGURATION
 #=================================================
-ynh_script_progression --message="Removing php-fpm configuration..." --time --weight=2
+ynh_script_progression --message="Removing php-fpm configuration..." --weight=2
 
 # Remove the dedicated php-fpm config
 ynh_remove_fpm_config
