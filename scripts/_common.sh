@@ -3,10 +3,13 @@
 #=================================================
 # COMMON VARIABLES
 #=================================================
-echo $(php -r "echo PHP_MAJOR_VERSION.'.'.PHP_MINOR_VERSION;") = "phpversion"
-YNH_PHP_VERSION="phpversion"
 # dependencies used by the app
-pkg_dependencies="php$YNH_PHP_VERSION-sqlite3"
+if
+ynh_get_debian_release = "buster"; then
+pkg_dependencies="php7.3-sqlite3"
+else
+pkg_dependencies="php7.0-sqlite3"
+fi
 
 # ============= FUTURE YUNOHOST HELPER =============
 
