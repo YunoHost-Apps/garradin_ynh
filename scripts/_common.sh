@@ -4,8 +4,11 @@
 # COMMON VARIABLES
 #=================================================
 # dependencies used by the app
-
-pkg_dependencies="php-sqlite3"
+if [ "$lsb_release --codename --short" = "buster"]; then
+  pkg_dependencies="php7.3-sqlite3"
+else [ "$lsb_release --codename --short" = "stretch"]; then
+  pkg_dependencies="php7.0-sqlite3"
+fi
 
 # ============= FUTURE YUNOHOST HELPER =============
 
