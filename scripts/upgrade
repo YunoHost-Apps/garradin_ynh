@@ -12,7 +12,7 @@ source /usr/share/yunohost/helpers
 #=================================================
 # LOAD SETTINGS
 #=================================================
-ynh_script_progression --message="Loading installation settings..." --weight=1
+ynh_script_progression --message="Loading installation settings..." --weight=3
 
 app=$YNH_APP_INSTANCE_NAME
 
@@ -62,7 +62,7 @@ fi
 #=================================================
 # Backup Data
 #=================================================
-ynh_script_progression --message="Backing up the data before upgrading (may take a while)..." --weight=1
+ynh_script_progression --message="Backing up the data before upgrading (may take a while)..." --weight=30
 
 bdd=$final_path/association.sqlite
 squelettes=$final_path/www/squelettes
@@ -78,7 +78,7 @@ fi
 #=================================================
 # BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
 #=================================================
-ynh_script_progression --message="Backing up the app before upgrading (may take a while)..." --weight=1
+ynh_script_progression --message="Backing up the app before upgrading (may take a while)..." --weight=30
 
 # Backup the current version of the app
 ynh_backup_before_upgrade
@@ -103,7 +103,7 @@ fi
 #=================================================
 # UPGRADE DEPENDENCIES
 #=================================================
-ynh_script_progression --message="Upgrading dependencies..." --weight=3
+ynh_script_progression --message="Upgrading dependencies..." --weight=5
 
 ynh_install_app_dependencies $pkg_dependencies
 
@@ -118,38 +118,23 @@ ynh_system_user_create --username=$app
 #=================================================
 # NGINX CONFIGURATION
 #=================================================
-ynh_script_progression --message="Upgrading nginx web server configuration..." --weight=1
+ynh_script_progression --message="Upgrading NGINX web server configuration..." --weight=2
 
-# Create a dedicated nginx config
+# Create a dedicated NGINX config
 ynh_add_nginx_config
 
 #=================================================
 # PHP-FPM CONFIGURATION
 #=================================================
-ynh_script_progression --message="Upgrading php-fpm configuration..." --weight=1
+ynh_script_progression --message="Upgrading PHP-FPM configuration..." --weight=2
 
-# Create a dedicated php-fpm config
+# Create a dedicated PHP-FPM config
 ynh_add_fpm_config
 
-#=================================================
-# Change options in file config.dist.php
-# and copy in local.dist.php
-#=================================================
-ynh_script_progression --message="final configuration needed..." --weight=1
-
-key=$(ynh_string_random --length=50)
-cp -a $final_path/config.dist.php $final_path/config.local.php
-ynh_replace_string --match_string="const SECRET_KEY = '3xUhIgGwuovRKOjVsVPQ5yUMfXUSIOX2GKzcebsz5OINrYC50r';" --replace_string="const SECRET_KEY = '$key';" --target_file="$final_path/config.local.php"
-if [ "$path_url" == "/" ]
-then
-  ynh_replace_string --match_string="//const WWW_URI = '/asso/';" --replace_string="const WWW_URI = '$path_url';" --target_file="$final_path/config.local.php"
-else
-  ynh_replace_string --match_string="//const WWW_URI = '/asso/';" --replace_string="const WWW_URI = '$path_url/';" --target_file="$final_path/config.local.php"
-fi
 #=======================================================
 # backup bdd, squelettes directory and config.local.php
 #=======================================================
-ynh_script_progression --message="restore data..." --time --weight=1
+ynh_script_progression --message="restore data..." --weight=10
 
 backup_bdd=/tmp/association.sqlite
 backup_squelettes=/tmp/squelettes
@@ -164,6 +149,16 @@ then
 	cp -a $backup_bdd $final_path/association.sqlite
 fi
 
+key=$(ynh_string_random --length=50)
+cp -a $final_path/config.dist.php $final_path/config.local.php
+ynh_replace_string --match_string="const SECRET_KEY = '3xUhIgGwuovRKOjVsVPQ5yUMfXUSIOX2GKzcebsz5OINrYC50r';" --replace_string="const SECRET_KEY = '$key';" --target_file="$final_path/config.local.php"
+ynh_replace_string --match_string="const ROOT = __DIR__;" --replace_string="'/var/www/garradin';" --target_file="$final_path/config.local.php"
+if [ "$path_url" == "/" ]; then
+ynh_replace_string --match_string="//const WWW_URI = '/asso/';" --replace_string="const WWW_URI = '$path_url';" --target_file="$final_path/config.local.php"
+else
+ynh_replace_string --match_string="//const WWW_URI = '/asso/';" --replace_string="const WWW_URI = '$path_url/';" --target_file="$final_path/config.local.php"
+fi
+
 #=================================================
 # Files owned by user app
 #=================================================
@@ -175,7 +170,7 @@ chmod 755 $final_path -R
 #=================================================
 # SETUP SSOWAT
 #=================================================
-ynh_script_progression --message="Upgrading permissions configuration..." --weight=1
+ynh_script_progression --message="Upgrading permissions configuration..." --weight=2
 
 # Create the visitors permission if needed
 if ! ynh_permission_exists --permission "visitors"; then
@@ -185,7 +180,7 @@ fi
 #=================================================
 # RELOAD NGINX
 #=================================================
-ynh_script_progression --message="Reloading nginx web server..." --weight=1
+ynh_script_progression --message="Reloading NGINX web server..." --weight=1
 
 ynh_systemd_action --service_name=nginx --action=reload
 

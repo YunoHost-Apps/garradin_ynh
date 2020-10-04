@@ -46,21 +46,20 @@ ynh_webpath_register --app=$app --domain=$domain --path_url=$path_url
 #=================================================
 ynh_script_progression --message="Storing installation settings..." --weight=1
 
-
 ynh_app_setting_set --app=$app --key=domain --value=$domain
 ynh_app_setting_set --app=$app --key=path --value=$path_url
 
 #=================================================
 # Install dependency to convert tracks to a readable format for the browser
 #=================================================
-ynh_script_progression --message="Installing dependencies..." --weight=9
+ynh_script_progression --message="Installing dependencies..." --weight=10
 
 ynh_install_app_dependencies $pkg_dependencies
 
 #=================================================
 # CREATE DEDICATED USER
 #=================================================
-ynh_script_progression --message="Configuring system user..." --weight=1
+ynh_script_progression --message="Configuring system user..." --weight=3
 
 # Create a system user
 ynh_system_user_create --username=$app
@@ -77,14 +76,14 @@ ynh_setup_source --dest_dir="$final_path"
 #=================================================
 # NGINX CONFIGURATION
 #=================================================
-ynh_script_progression --message="Configuring nginx web server..." --weight=2
+ynh_script_progression --message="Configuring NGINX web server..." --weight=2
 # Create a dedicated nginx config
 ynh_add_nginx_config
 
 #=================================================
 # PHP-FPM CONFIGURATION
 #=================================================
-ynh_script_progression --message="Configuring php-fpm..." --weight=1
+ynh_script_progression --message="Configuring PHP-FPM..." --weight=5
 
 # Create a dedicated php-fpm config
 ynh_add_fpm_config
@@ -101,7 +100,7 @@ ynh_app_setting_delete --app=$app --key=skipped_uris
 #=================================================
 # SETUP SSOWAT
 #=================================================
-ynh_script_progression --message="Configuring permissions..." --weight=1
+ynh_script_progression --message="Configuring permissions..." --weight=8
 
 # Make app public if necessary
 if [ $is_public -eq 1 ]
@@ -122,6 +121,7 @@ cp -a $final_path/config.dist.php $final_path/config.local.php
 key=$(ynh_string_random --length=50)
 # edit config.local.php
 ynh_replace_string --match_string="const SECRET_KEY = '3xUhIgGwuovRKOjVsVPQ5yUMfXUSIOX2GKzcebsz5OINrYC50r';" --replace_string="const SECRET_KEY = '$key';" --target_file="$final_path/config.local.php"
+ynh_replace_string --match_string="const ROOT = __DIR__;" --replace_string="const ROOT = '/var/www/garradin';" --target_file="$final_path/config.local.php"
 if [ "$path_url" == "/" ]; then
   ynh_replace_string --match_string="//const WWW_URI = '/asso/';" --replace_string="const WWW_URI = '$path_url';" --target_file="$final_path/config.local.php"
 else
@@ -131,7 +131,7 @@ fi
 #=================================================
 # RELOAD NGINX
 #=================================================
-ynh_script_progression --message="Reloading nginx web server..." --weight=1
+ynh_script_progression --message="Reloading NGINX web server..." --weight=1
 
 systemctl reload nginx
 

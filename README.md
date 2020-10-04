@@ -1,17 +1,17 @@
 # Garradin for YunoHost
 
-[![Integration level](https://dash.yunohost.org/integration/garradin.svg)](https://dash.yunohost.org/appci/app/garradin) ![](https://ci-apps.yunohost.org/ci/badges/garradin.status.svg) ![](https://ci-apps.yunohost.org/ci/badges/garradin.maintain.svg)  
+[![Integration level](https://dash.yunohost.org/integration/garradin.svg)](https://dash.yunohost.org/appci/app/garradin) ![](https://ci-apps.yunohost.org/ci/badges/garradin.status.svg) ![](https://ci-apps.yunohost.org/ci/badges/garradin.maintain.svg)
 [![Install Garradin with YunoHost](https://install-app.yunohost.org/install-with-yunohost.png)](https://install-app.yunohost.org/?app=garradin)
 
 *[Lire ce readme en français.](./README_fr.md)*
 
-> *This package allows you to install Garradin quickly and simply on a YunoHost server.  
+> *This package allows you to install Garradin quickly and simply on a YunoHost server.
 If you don't have YunoHost, please consult [the guide](https://yunohost.org/#/install) to learn how to install it.*
 
 ## Overview
 Garradin is a free association managing software.
 
-**Shipped version:** 0.9.7
+**Shipped version:** 0.9.8.1
 
 ## Screenshots
 
@@ -26,7 +26,7 @@ Garradin is a free association managing software.
 * [Official demo](https://garradin.eu/essai/)
 
 ## Documentation
-
+  
  * Official documentation: https://fossil.kd2.org/garradin/wiki?name=Documentation
 
 ## YunoHost specific features
@@ -42,7 +42,8 @@ LDAP is not supported yet.
 
 ## Limitations
 
-* Garradin is only available in French.
+* The application is ONLY translated into french.
+* Do not install this application on the default root path's domain name without adding a subpath, otherwise the sso conection page will be substitute by home's garradin page.
 
 ## Links
 
@@ -53,8 +54,7 @@ LDAP is not supported yet.
 
 ---
 
-Developer info
-----------------
+## Developer info
 
 Please send your pull request to the [testing branch](https://github.com/YunoHost-Apps/garradin_ynh/tree/testing).
 
@@ -62,5 +62,5 @@ To try the testing branch, please proceed like that.
 ```
 sudo yunohost app install https://github.com/YunoHost-Apps/garradin_ynh/tree/testing --debug
 or
-sudo yunohost app upgrade REPLACEBYYOURAPP -u https://github.com/YunoHost-Apps/garradin_ynh/tree/testing --debug
+sudo yunohost app upgrade garradin -u https://github.com/YunoHost-Apps/garradin_ynh/tree/testing --debug
 ```

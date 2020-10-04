@@ -11,7 +11,7 @@ Si vous n'avez pas YunoHost, consultez [le guide](https://yunohost.org/#/install
 ## Vue d'ensemble
 Garradin est un logiciel libre de gestion associative. il permet de gérer des membres.
 
-**Version incluse :** 0.9.7
+**Version incluse :** 0.9.8.1
 
 ## Captures d'écran
 
@@ -43,6 +43,7 @@ Garradin est un logiciel libre de gestion associative. il permet de gérer des m
 ## Limitations
 
 * Garradin n'est disponible qu'en français.
+* N'installez pas cette apllication à la racine du domaine par défaut sans ajouter un sous-domaine. Sinon la page de connexion SSO sera remplacée par la page d'accueil de Garradin.
 
 ## Liens
 
@@ -53,8 +54,7 @@ Garradin est un logiciel libre de gestion associative. il permet de gérer des m
 
 ---
 
-Informations pour les développeurs
-----------------
+## Informations pour les développeurs
 
 Merci de faire vos pull request sur la [branche testing](https://github.com/YunoHost-Apps/garradin_ynh/tree/testing).
 
@@ -62,5 +62,5 @@ Pour essayer la branche testing, procédez comme suit.
 ```
 sudo yunohost app install https://github.com/YunoHost-Apps/garradin_ynh/tree/testing --debug
 ou
-sudo yunohost app upgrade REPLACEBYYOURAPP -u https://github.com/YunoHost-Apps/garradin_ynh/tree/testing --debug
+sudo yunohost app upgrade garradin -u https://github.com/YunoHost-Apps/garradin_ynh/tree/testing --debug
 ```
