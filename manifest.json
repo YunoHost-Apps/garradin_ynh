@@ -6,7 +6,7 @@
         "en": "Software to manage association",
         "fr": "Logiciel libre de gestion d'association"
     },
-    "version": "0.9.8~ynh3",
+    "version": "0.9.8~ynh4",
     "url": "http://garradin.eu/a-propos/",
     "license": "GPL-3.0-or-later",
     "maintainer": {
@@ -14,7 +14,7 @@
         "email": "win10@tutanota.com"
     },
      "requirements": {
-        "yunohost": ">=3.7.1"
+        "yunohost": ">=3.8.1"
     },
     "multi_instance": true,
     "services": [

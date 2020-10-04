@@ -4,11 +4,10 @@
 # COMMON VARIABLES
 #=================================================
 # dependencies used by the app
-if [ "$lsb_release --codename --short" = "buster"]; then
-  pkg_dependencies="php7.3-sqlite3"
-else [ "$lsb_release --codename --short" = "stretch"]
-  pkg_dependencies="php7.0-sqlite3"
-fi
+
+YNH_PHP_VERSION="7.3"
+
+extra_php_dependencies="php${YNH_PHP_VERSION}-sqlite3"
 
 #=================================================
 # PERSONAL HELPERS
