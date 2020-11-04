@@ -2,21 +2,19 @@
     "name": "Garradin",
     "id": "garradin",
     "packaging_format": 1,
-    "requirements": {
-        "yunohost": ">=3.7.0"
-    },
     "description": {
         "en": "Software to manage association",
         "fr": "Logiciel libre de gestion d'association"
     },
-
-     "version": "0.9.6~ynh3",
-
+    "version": "0.9.8.1~ynh4",
     "url": "http://garradin.eu/a-propos/",
     "license": "GPL-3.0-or-later",
     "maintainer": {
         "name": "frju365",
         "email": "win10@tutanota.com"
+    },
+     "requirements": {
+        "yunohost": ">=3.8.1"
     },
     "multi_instance": true,
     "services": [
