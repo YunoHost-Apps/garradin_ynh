@@ -16,15 +16,3 @@
 		incorrect_path=1
 		port_already_use=0
 		change_url=1
-;;; Levels
-	Level 1=auto
-	Level 2=auto
-	Level 3=auto
-	Level 4=na
-# l'utilisateur est à créer. LDAP non supporté par le paquet de base (obligation d'utiliser de MySql)
-	Level 5=auto
-	Level 6=auto
-	Level 7=auto
-	Level 8=0
-	Level 9=0
-	Level 10=0
