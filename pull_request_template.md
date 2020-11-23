@@ -1,15 +1,14 @@
 ## Problem
-- *Useless redirection in nginx.conf*
-
+- *Description of why you made this PR*
 ## Solution
-- *Delete redirections to 403 on the nginx.conf for sensibles urls*
+- *And how do you fix that problem*
 
 ## PR Status
 - [ ] Code finished.
 - [ ] Tested with Package_check.
-- [x] Fix or enhancement tested.
+- [ ] Fix or enhancement tested.
 - [ ] Upgrade from last version tested.
-- [x] Can be reviewed and tested.
+- [ ] Can be reviewed and tested.
 
 ## Package_check results
 ---
