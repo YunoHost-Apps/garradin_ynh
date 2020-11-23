@@ -1,18 +1,14 @@
 ## Problem
-- *Upgrade of the application to v0.9.8.1 resolves some issues*
-- *Adding links in the public page made issues due to the nginx.conf*
-- *Protect somes links vilnerables for security*
+- *Useless redirection in nginx.conf*
 
 ## Solution
-- *I do the necessary to upgrade the application to the new sources*
-- *@ericg found the solution to add in the nginx.conf*
-- *Redirections to 403 on the nginx.conf for sensibles urls*
+- *Delete redirections to 403 on the nginx.conf for sensibles urls*
 
 ## PR Status
-- [x] Code finished.
-- [x] Tested with Package_check.
+- [ ] Code finished.
+- [ ] Tested with Package_check.
 - [x] Fix or enhancement tested.
-- [x] Upgrade from last version tested.
+- [ ] Upgrade from last version tested.
 - [x] Can be reviewed and tested.
 
 ## Package_check results
