@@ -1,6 +1,6 @@
 # Garradin for YunoHost
 
-[![Integration level](https://dash.yunohost.org/integration/garradin.svg)](https://dash.yunohost.org/appci/app/garradin) ![](https://ci-apps.yunohost.org/ci/badges/garradin.status.svg) ![](https://ci-apps.yunohost.org/ci/badges/garradin.maintain.svg)  
+[![Integration level](https://dash.yunohost.org/integration/garradin.svg)](https://dash.yunohost.org/appci/app/garradin) ![](https://ci-apps.yunohost.org/ci/badges/garradin.status.svg) ![](https://ci-apps.yunohost.org/ci/badges/garradin.maintain.svg)
 [![Install Garradin with YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=garradin)
 
 *[Lire ce readme en français.](./README_fr.md)*
@@ -26,7 +26,7 @@ Garradin is a free association managing software.
 * [Official demo](https://garradin.eu/essai/)
 
 ## Documentation
-  
+
  * Official documentation: https://fossil.kd2.org/garradin/wiki?name=Documentation
 
 ## YunoHost specific features
