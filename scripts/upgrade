@@ -125,6 +125,9 @@ ynh_script_progression --message="Upgrading PHP-FPM configuration..." --weight=2
 # Create a dedicated PHP-FPM config
 ynh_add_fpm_config --package="$extra_php_dependencies"
 
+#Replace Utils.php file (bug of the apps on 1.0.2)
+cp -a ../conf/Utils.php /$final_path//include/lib/Garradin/Utils.php
+
 #=======================================================
 # backup bdd, squelettes directory and config.local.php
 #=======================================================

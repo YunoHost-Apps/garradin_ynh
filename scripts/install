@@ -83,6 +83,9 @@ ynh_script_progression --message="Configuring PHP-FPM..." --weight=5
 ynh_add_fpm_config --package="$extra_php_dependencies"
 phpversion=$(ynh_app_setting_get --app=$app --key=phpversion)
 
+#Replace Utils.php file (bug of the apps on 1.0.2)
+cp -a ../conf/Utils.php /$final_path//include/lib/Garradin/Utils.php
+
 #=================================================
 # Files owned by user app
 #=================================================
