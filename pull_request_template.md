@@ -1,15 +1,16 @@
 ## Problem
-- *Description of why you made this PR*
+- Upgrade to the version 1.0.2
 
 ## Solution
-- *And how do you fix that problem*
+- BenoitCier found a solution in his Pull Request https://github.com/YunoHost-Apps/garradin_ynh/pull/32
+- I have added also a line for the script upgrade to put the file Utils.php in place to debug this version with Yunohost (perhaps it is temporally for this uniq version ?).
 
 ## PR Status
-- [ ] Code finished.
+- [x] Code finished.
 - [ ] Tested with Package_check.
 - [ ] Fix or enhancement tested.
-- [ ] Upgrade from last version tested.
-- [ ] Can be reviewed and tested.
+- [x] Upgrade from last version tested.
+- [x] Can be reviewed and tested.
 
 ## Package_check results
 ---
