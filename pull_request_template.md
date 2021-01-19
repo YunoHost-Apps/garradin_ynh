@@ -9,8 +9,8 @@
 - [x] Code finished.
 - [ ] Tested with Package_check.
 - [ ] Fix or enhancement tested.
-- [ ] Upgrade from last version tested.
-- [ ] Can be reviewed and tested.
+- [x] Upgrade from last version tested.
+- [x] Can be reviewed and tested.
 
 ## Package_check results
 ---
