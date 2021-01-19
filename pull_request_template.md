@@ -1,16 +1,16 @@
 ## Problem
-- Upgrade to the version 1.0.2
+- Upgrade to the version 1.0.3
 
 ## Solution
-- BenoitCier found a solution in his Pull Request https://github.com/YunoHost-Apps/garradin_ynh/pull/32
-- I have added also a line for the script upgrade to put the file Utils.php in place to debug this version with Yunohost (perhaps it is temporally for this uniq version ?).
+- Upgrade sources, Readme manifest
+- Remove the Utils.php files (bug v 1.0.2) and réference (install upgrade)
 
 ## PR Status
 - [x] Code finished.
 - [ ] Tested with Package_check.
 - [ ] Fix or enhancement tested.
-- [x] Upgrade from last version tested.
-- [x] Can be reviewed and tested.
+- [ ] Upgrade from last version tested.
+- [ ] Can be reviewed and tested.
 
 ## Package_check results
 ---
