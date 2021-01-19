@@ -32,7 +32,7 @@ ynh_secure_remove --file="$final_path"
 #=================================================
 ynh_script_progression --message="Removing NGINX web server configuration..." --weight=1
 
-# Remove the dedicated nginx config
+# Remove the dedicated NGINX config
 ynh_remove_nginx_config
 
 #=================================================
@@ -40,7 +40,7 @@ ynh_remove_nginx_config
 #=================================================
 ynh_script_progression --message="Removing PHP-FPM configuration..." --weight=2
 
-# Remove the dedicated php-fpm config
+# Remove the dedicated PHP-FPM config
 ynh_remove_fpm_config --package="$extra_php_dependencies"
 
 #=================================================

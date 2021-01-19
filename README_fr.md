@@ -1,17 +1,17 @@
 # Garradin pour YunoHost
 
-[![Niveau d'intégration](https://dash.yunohost.org/integration/garradin.svg)](https://dash.yunohost.org/appci/app/garradin) ![](https://ci-apps.yunohost.org/ci/badges/garradin.status.svg) ![](https://ci-apps.yunohost.org/ci/badges/garradin.maintain.svg)  
+[![Niveau d'intégration](https://dash.yunohost.org/integration/garradin.svg)](https://dash.yunohost.org/appci/app/garradin) ![](https://ci-apps.yunohost.org/ci/badges/garradin.status.svg) ![](https://ci-apps.yunohost.org/ci/badges/garradin.maintain.svg)
 [![Installer Garradin avec YunoHost](https://install-app.yunohost.org/install-with-yunohost.png)](https://install-app.yunohost.org/?app=garradin)
 
-*[Read this readme in english.](./README.md)* 
+*[Read this readme in english.](./README.md)*
 
-> *Ce package vous permet d'installer Garradin rapidement et simplement sur un serveur YunoHost.  
+> *Ce package vous permet d'installer Garradin rapidement et simplement sur un serveur YunoHost.
 Si vous n'avez pas YunoHost, consultez [le guide](https://yunohost.org/#/install) pour apprendre comment l'installer.*
 
 ## Vue d'ensemble
 Garradin est un logiciel libre de gestion associative. il permet de gérer des membres.
 
-**Version incluse :** 0.9.8.1
+**Version incluse :** 1.0.3
 
 ## Captures d'écran
 

@@ -1,19 +1,16 @@
 ## Problem
-- *Upgrade of the application to v0.9.8.1 resolves some issues*
-- *Adding links in the public page made issues due to the nginx.conf*
-- *Protect somes links vilnerables for security*
+- Upgrade to the version 1.0.3
 
 ## Solution
-- *I do the necessary to upgrade the application to the new sources*
-- *@ericg found the solution to add in the nginx.conf*
-- *Redirections to 403 on the nginx.conf for sensibles urls*
+- Upgrade sources, Readme manifest
+- Remove the Utils.php files (bug v 1.0.2) and réference (install upgrade)
 
 ## PR Status
-- [x] Code finished.
-- [x] Tested with Package_check.
-- [x] Fix or enhancement tested.
-- [x] Upgrade from last version tested.
-- [x] Can be reviewed and tested.
+- [ ] Code finished.
+- [ ] Tested with Package_check.
+- [ ] Fix or enhancement tested.
+- [ ] Upgrade from last version tested.
+- [ ] Can be reviewed and tested.
 
 ## Package_check results
 ---
