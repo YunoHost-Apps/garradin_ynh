@@ -6,11 +6,11 @@
 - Remove the Utils.php files (bug v 1.0.2) and réference (install upgrade)
 
 ## PR Status
-- [x] Code finished.
+- [ ] Code finished.
 - [ ] Tested with Package_check.
 - [ ] Fix or enhancement tested.
-- [x] Upgrade from last version tested.
-- [x] Can be reviewed and tested.
+- [ ] Upgrade from last version tested.
+- [ ] Can be reviewed and tested.
 
 ## Package_check results
 ---
