@@ -1,9 +1,8 @@
 ## Problem
-- Upgrade to the version 1.0.3
+- *Description of why you made this PR*
 
 ## Solution
-- Upgrade sources, Readme manifest
-- Remove the Utils.php files (bug v 1.0.2) and réference (install upgrade)
+- *And how do you fix that problem*
 
 ## PR Status
 - [ ] Code finished.
@@ -16,4 +15,4 @@
 ---
 *If you have access to [App Continuous Integration for packagers](https://yunohost.org/#/packaging_apps_ci) you can provide a link to the package_check results like below, replacing '-NUM-' in this link by the PR number and USERNAME by your username on the ci-apps-dev. Or you provide a screenshot or a pastebin of the results*
 
-[![Build Status](https://ci-apps-dev.yunohost.org/jenkins/job/garradin_ynh%20PR-NUM-%20(USERNAME)/badge/icon)](https://ci-apps-dev.yunohost.org/jenkins/job/garradin_ynh%20PR-NUM-%20(USERNAME)/)  
+[![Build Status](https://ci-apps-dev.yunohost.org/jenkins/job/garradin_ynh%20PR-NUM-%20(USERNAME)/badge/icon)](https://ci-apps-dev.yunohost.org/jenkins/job/garradin_ynh%20PR-NUM-%20(USERNAME)/)
