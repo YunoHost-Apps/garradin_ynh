@@ -118,13 +118,13 @@ backup_squelettes=/tmp/squelettes
 if 	[ -d "$backup_squelettes" ]
 then
   cp -ar $backup_squelettes $final_path/www/squelettes
-  rm -r  $backup_squelettes
+  ynh_secure_remove  $backup_squelettes
 fi
 
 if [ -e "$backup_bdd" ]
 then
 	cp -a $backup_bdd $final_path/association.sqlite
-  rm -r $backup_bdd
+  ynh_secure_remove $backup_bdd
 fi
 
 key=$(ynh_string_random --length=50)
