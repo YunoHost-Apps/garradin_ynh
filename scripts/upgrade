@@ -25,10 +25,8 @@ phpversion=$(ynh_app_setting_get --app=$app --key=phpversion)
 # CHECK VERSION
 #=================================================
 if ynh_compare_current_package_version --comparison lt --version 0.9.8.1~ynh1; then
-  ynh_print_info --message="Sorry your version is outdated and need first an update to version O.9.8.1 with the branch 0.9.8, proceed like that:
-   'sudo yunohost app upgrade garradin -u https://github.com/YunoHost-Apps/garradin_ynh/tree/0.9.8 --debug'
-  and please first connect to your garradin admin page before updating to version 1.0.*"
-  ynh_die "Sorry your version is outdated and need first an update to version O.9.8.1"
+  ynh_print_info --message="Sorry your version is outdated and need first an update to version O.9.8.1 with the branch 0.9.8, proceed like that:'sudo yunohost app upgrade garradin -u https://github.com/YunoHost-Apps/garradin_ynh/tree/0.9.8 --debug' and please first connect to your garradin admin page before next update to version 1.0.*"
+  ynh_die "Sorry your version is outdated and need first an update to version O.9.8.1 with the branch 0.9.8, proceed like that: 'sudo yunohost app upgrade garradin -u https://github.com/YunoHost-Apps/garradin_ynh/tree/0.9.8 --debug' and please first connect to your garradin admin page before next update to version 1.0.*"
 else
   upgrade_type=$(ynh_check_app_version_changed)
 fi
