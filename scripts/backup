@@ -20,7 +20,7 @@ ynh_abort_if_errors
 #=================================================
 # LOAD SETTINGS
 #=================================================
-ynh_script_progression --message="Loading installation settings..."
+ynh_print_info "Declaring files to be backed up..."
 
 app=$YNH_APP_INSTANCE_NAME
 
