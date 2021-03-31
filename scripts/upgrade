@@ -84,11 +84,42 @@ then
     # Download, check integrity, uncompress and patch the source from 0.9.8.src
   ynh_setup_source --dest_dir="$final_path" --source_id="0.9.8"
   # Set permissions on app files
-  chown $app:$app $final_path -R
-  chmod 755 $final_path -R
+  ynh_system_user_create --username=$app
   ynh_add_nginx_config
   ynh_add_fpm_config --package="$extra_php_dependencies"
   phpversion=$(ynh_app_setting_get --app=$app --key=phpversion)
+  ynh_script_progression --message="restore data..." --weight=10
+
+  backup_bdd=/tmp/association.sqlite
+  backup_squelettes=/tmp/squelettes
+
+  if 	[ -d "$backup_squelettes" ]
+  then
+    cp -ar $backup_squelettes $final_path/www/squelettes
+    ynh_secure_remove  $backup_squelettes
+  fi
+
+  if [ -e "$backup_bdd" ]
+  then
+	  cp -a $backup_bdd $final_path/association.sqlite
+    ynh_secure_remove $backup_bdd
+  fi
+
+  key=$(ynh_string_random --length=50)
+  cp -a $final_path/config.dist.php $final_path/config.local.php
+  ynh_replace_string --match_string="const SECRET_KEY = '3xUhIgGwuovRKOjVsVPQ5yUMfXUSIOX2GKzcebsz5OINrYC50r';" --replace_string="const SECRET_KEY = '$key';" --target_file="$final_path/config.local.php"
+  if [ "$path_url" == "/" ]; then
+  ynh_replace_string --match_string="//const WWW_URI = '/asso/';" --replace_string="const WWW_URI = '$path_url';" --target_file="$final_path/config.local.php"
+  else
+  ynh_replace_string --match_string="//const WWW_URI = '/asso/';" --replace_string="const WWW_URI = '$path_url/';" --target_file="$final_path/config.local.php"
+  fi
+  chown $app:$app $final_path -R
+  chmod 755 $final_path -R
+  # Create the visitors permission if needed
+  if ! ynh_permission_exists --permission "visitors"; then
+    ynh_permission_create --permission "visitors"
+  fi
+  
   ynh_systemd_action --service_name=nginx --action=reload
   #finalyse upgrade
   ynh_local_curl "/index.php"
