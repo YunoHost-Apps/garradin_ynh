@@ -92,7 +92,7 @@ then
   phpversion=$(ynh_app_setting_get --app=$app --key=phpversion)
   ynh_systemd_action --service_name=nginx --action=reload
   #finalyse upgrade
-  ynh_local_curl "/admin/upgrade.php"
+  ynh_local_curl "index.php"
   upgrade_type="0.9.8"
 fi
 
@@ -113,7 +113,7 @@ then
   phpversion=$(ynh_app_setting_get --app=$app --key=phpversion)
   ynh_systemd_action --service_name=nginx --action=reload
   #finalyse upgrade
-  ynh_local_curl "/admin/upgrade.php"
+  ynh_local_curl "/index.php"
   upgrade_type="UPGRADE_APP"
 fi
 #=================================================
