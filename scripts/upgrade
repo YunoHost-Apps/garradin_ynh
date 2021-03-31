@@ -84,6 +84,9 @@ then
   ynh_script_progression --message="Upgrading upgrade to 0.8.5" --weight=5
     # Download, check integrity, uncompress and patch the source from 0.8.5.src
   ynh_setup_source --dest_dir="$final_path" --source_id="0.8.5"
+  # Set permissions on app files
+  chown $app:$app $final_path -R
+  chmod 755 $final_path -R
   ynh_add_nginx_config
   ynh_add_fpm_config --package="$extra_php_dependencies"
   phpversion=$(ynh_app_setting_get --app=$app --key=phpversion)
@@ -102,6 +105,9 @@ then
   ynh_script_progression --message="Upgrading upgrade to 0.9.8" --weight=5
     # Download, check integrity, uncompress and patch the source from 0.9.8.src
   ynh_setup_source --dest_dir="$final_path" --source_id="0.9.8"
+  # Set permissions on app files
+  chown $app:$app $final_path -R
+  chmod 755 $final_path -R
   ynh_add_nginx_config
   ynh_add_fpm_config --package="$extra_php_dependencies"
   phpversion=$(ynh_app_setting_get --app=$app --key=phpversion)
