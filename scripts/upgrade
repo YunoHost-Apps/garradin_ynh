@@ -24,11 +24,14 @@ phpversion=$(ynh_app_setting_get --app=$app --key=phpversion)
 #=================================================
 # CHECK VERSION
 #=================================================
-if ynh_compare_current_package_version --comparison lt --version 0.9.8.1~ynh1; then
-  ynh_print_info --message="Sorry your version is outdated and need first an update to version 0.9.8.1 with the branch 0.9.8, proceed like that: 'sudo yunohost app upgrade garradin -u https://github.com/YunoHost-Apps/garradin_ynh/tree/0.9.8 --debug' and open your admin page to finalize before next update"
-  ynh_die "Sorry your version is outdated and need first an update to version 0.9.8.1 with the branch 0.9.8, proceed like that: 'sudo yunohost app upgrade garradin -u https://github.com/YunoHost-Apps/garradin_ynh/tree/0.9.8 --debug' and open your admin page to finalize before next update"
+if ynh_compare_current_package_version --comparison lt --version 0.8.5~ynh1; then
+  upgrade_type="0.8.5"
 else
-  upgrade_type=$(ynh_check_app_version_changed)
+  if ynh_compare_current_package_version --comparison lt --version 0.9.8.1~ynh1; then
+    upgrade_type="0.9.8"
+  else
+    upgrade_type=$(ynh_check_app_version_changed)
+  fi
 fi
 
 #=================================================
@@ -73,9 +76,45 @@ ynh_clean_setup () {
 ynh_abort_if_errors
 
 #=================================================
+# UPGRADE TO 0.8.5 if necessary
+#=================================================
+
+if [ "$upgrade_type" == "0.8.5" ]
+then 
+  ynh_script_progression --message="Upgrading upgrade to 0.8.5" --weight=5
+    # Download, check integrity, uncompress and patch the source from 0.8.5.src
+  ynh_setup_source --dest_dir="$final_path" --source_id="0.8.5"
+  ynh_add_nginx_config
+  ynh_add_fpm_config --package="$extra_php_dependencies"
+  phpversion=$(ynh_app_setting_get --app=$app --key=phpversion)
+  ynh_systemd_action --service_name=nginx --action=reload
+  #finalyse upgrade
+  ynh_local_curl "/admin/index.php"
+  upgrade_type="0.9.8"
+fi
+
+#=================================================
+# UPGRADE TO 0.9.8 if necessary
+#=================================================
+
+if [ "$upgrade_type" == "0.9.8" ]
+then 
+  ynh_script_progression --message="Upgrading upgrade to 0.9.8" --weight=5
+    # Download, check integrity, uncompress and patch the source from 0.9.8.src
+  ynh_setup_source --dest_dir="$final_path" --source_id="0.9.8"
+  ynh_add_nginx_config
+  ynh_add_fpm_config --package="$extra_php_dependencies"
+  phpversion=$(ynh_app_setting_get --app=$app --key=phpversion)
+  ynh_systemd_action --service_name=nginx --action=reload
+  #finalyse upgrade
+  ynh_local_curl "/admin/index.php"
+  upgrade_type="UPGRADE_APP"
+fi
+#=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
 #=================================================
 ynh_script_progression --message="Upgrading source files..." --weight=5
+
 
 if [ "$upgrade_type" == "UPGRADE_APP" ]
 then
