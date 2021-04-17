@@ -52,7 +52,7 @@ ynh_app_setting_set --app=$app --key=path --value=$path_url
 ynh_script_progression --message="Installing dependencies..." --weight=10
 
 ynh_install_app_dependencies $extra_pkg_dependencies
-ynh_install_php --phpversion="$php_version" --package="$extra_pkg_dependencies"
+ynh_install_php --phpversion=$YNH_PHP_VERSION --package="$extra_pkg_dependencies"
 
 #=================================================
 # CREATE DEDICATED USER
