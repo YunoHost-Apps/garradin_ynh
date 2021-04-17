@@ -11,7 +11,7 @@ If you don't have YunoHost, please consult [the guide](https://yunohost.org/#/in
 ## Overview
 Garradin is a free association managing software.
 
-**Shipped version:** 1.0.7
+**Shipped version:** 1.1.1
 
 ## Screenshots
 

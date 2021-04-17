@@ -79,7 +79,7 @@ ynh_abort_if_errors
 #=================================================
 
 if [ "$upgrade_type" == "0.9.8" ]
-then 
+then
   ynh_script_progression --message="Upgrading upgrade to 0.9.8" --weight=5
     # Download, check integrity, uncompress and patch the source from 0.9.8.src
   ynh_setup_source --dest_dir="$final_path" --source_id="0.9.8"
