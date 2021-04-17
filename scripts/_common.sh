@@ -6,7 +6,7 @@
 # dependencies used by the app
 YNH_PHP_VERSION="7.4"
 
-extra_php_dependencies="php${YNH_PHP_VERSION}-sqlite3 php${YNH_PHP_VERSION}-bz2 php${YNH_PHP_VERSION}-imap php${YNH_PHP_VERSION}-json php${YNH_PHP_VERSION}-intl php${YNH_PHP_VERSION}-curl php${YNH_PHP_VERSION}-zip"
+extra_php_dependencies="php${YNH_PHP_VERSION}-sqlite3 hp${YNH_PHP_VERSION}-gd php${YNH_PHP_VERSION}-imagick php${YNH_PHP_VERSION}-imap php${YNH_PHP_VERSION}-intl  php${YNH_PHP_VERSION}-cli"
 
 #=================================================
 # PERSONAL HELPERS
