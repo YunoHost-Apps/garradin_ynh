@@ -11,7 +11,7 @@ Si vous n'avez pas YunoHost, consultez [le guide](https://yunohost.org/#/install
 ## Vue d'ensemble
 Garradin est un logiciel libre de gestion associative. il permet de gérer des membres.
 
-**Version incluse :** 1.1.3
+**Version incluse :** 1.1.4
 
 ## Captures d'écran
 
