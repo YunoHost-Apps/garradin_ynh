@@ -77,7 +77,7 @@ ynh_setup_source --dest_dir="$final_path"
 ynh_script_progression --message="Configuring NGINX web server..." --weight=2
 
 # Create a dedicated NGINX config
-ynh_add_nginx_config
+ynh_add_nginx_config $YNH_PHP_VERSION
 
 #=================================================
 # PHP-FPM CONFIGURATION
