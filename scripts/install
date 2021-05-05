@@ -23,6 +23,7 @@ ynh_abort_if_errors
 domain=$YNH_APP_ARG_DOMAIN
 path_url=$YNH_APP_ARG_PATH
 is_public=$YNH_APP_ARG_IS_PUBLIC
+
 app=$YNH_APP_INSTANCE_NAME
 
 #=================================================
@@ -84,11 +85,9 @@ phpversion=$(ynh_app_setting_get --app=$app --key=phpversion)
 # Files owned by user app
 #=================================================
 
-chown $app:$app $final_path -R
-chmod 755 $final_path -R
+chown -R $app:$app $final_path
+chmod 755 $final_path
 
-# Remove the public access
-ynh_app_setting_delete --app=$app --key=skipped_uris
 #=================================================
 # SETUP SSOWAT
 #=================================================
@@ -97,12 +96,8 @@ ynh_script_progression --message="Configuring permissions..." --weight=8
 # Make app public if necessary
 if [ $is_public -eq 1 ]
 then
-    # Everyone can access the app.
-  # The "main" permission is automatically created before the install script.
-  ynh_permission_update --permission "main" --add "visitors"
+  ynh_permission_update --permission="main" --add="visitors"
 fi
-# Only the users can access to the panel of the app
-# ynh_permission_update --permission="main" --add "all_users"
 
 #=================================================
 # MODIFY A CONFIG FILE
