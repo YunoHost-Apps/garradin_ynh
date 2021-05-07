@@ -73,8 +73,8 @@ ynh_script_progression --message="Backing up Garradin before upgrading (may take
 # Backup the current version of the app
 ynh_backup_before_upgrade
 ynh_clean_setup () {
-	# restore it if the upgrade fails
-	ynh_restore_upgradebackup
+  # restore it if the upgrade fails
+  ynh_restore_upgradebackup
 }
 # Exit if an error occurs during the execution of the script
 ynh_abort_if_errors
@@ -180,7 +180,7 @@ ynh_script_progression --message="restore data..." --weight=10
 backup_bdd=/tmp/association.sqlite
 backup_squelettes=/tmp/squelettes
 
-if 	[ -d "$backup_squelettes" ]
+if  [ -d "$backup_squelettes" ]
 then
   cp -ar $backup_squelettes $final_path/www/squelettes
   ynh_secure_remove  $backup_squelettes
@@ -188,7 +188,7 @@ fi
 
 if [ -e "$backup_bdd" ]
 then
-	cp -a $backup_bdd $final_path/association.sqlite
+  cp -a $backup_bdd $final_path/association.sqlite
   ynh_secure_remove $backup_bdd
 fi
 
