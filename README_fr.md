@@ -15,10 +15,10 @@ Garradin est un logiciel libre de gestion associative. il permet de gérer des m
 
 ## Captures d'écran
 
-![](images/membre.png)
+![](images/membre-v1.1.png)
 ![](images/compta.png)
 ![](images/emails.png)
-![](images/wiki.png)
+![](images/edition-site-v1.1.png)
 ![](images/site.jpg)
 
 ## Démo
