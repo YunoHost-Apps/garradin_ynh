@@ -208,8 +208,8 @@ fi
 # Set permissions on app files
 chown -R $app:$app $final_path
 chmod 400 config.dist.php config.local.php index.php sous-domaine.html VERSION
-find $final_path/srcipts -type d -exec chmod 500 {} +
-find $final_path/srcipts -type f -exec chmod 400 {} +
+find $final_path/scripts -type d -exec chmod 500 {} +
+find $final_path/scripts -type f -exec chmod 400 {} +
 find $final_path/templates -type d -exec chmod 500 {} +
 find $final_path/templates -type f -exec chmod 400 {} +
 find $final_path/include -type d -exec chmod 500 {} +
