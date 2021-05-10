@@ -1,6 +1,6 @@
 # Garradin for YunoHost
 
-[![Integration level](https://dash.yunohost.org/integration/garradin.svg)](https://dash.yunohost.org/appci/app/garradin) ![](https://ci-apps.yunohost.org/ci/badges/garradin.status.svg) ![](https://ci-apps.yunohost.org/ci/badges/garradin.maintain.svg)
+[![Integration level](https://dash.yunohost.org/integration/garradin.svg)](https://dash.yunohost.org/appci/app/garradin) ![](https://ci-apps.yunohost.org/ci/badges/garradin.status.svg) ![](https://ci-apps.yunohost.org/ci/badges/garradin.maintain.svg)  
 [![Install Garradin with YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=garradin)
 
 *[Lire ce readme en français.](./README_fr.md)*
@@ -11,14 +11,14 @@ If you don't have YunoHost, please consult [the guide](https://yunohost.org/#/in
 ## Overview
 Garradin is a free association managing software.
 
-**Shipped version:** 1.0.7
+**Shipped version:** 1.1.5
 
 ## Screenshots
 
-![](images/membre.png)
+![](images/membre-v1.1.png)
 ![](images/compta.png)
 ![](images/emails.png)
-![](images/wiki.png)
+![](images/edition-site-v1.1.png)
 ![](images/site.jpg)
 
 ## Demo
@@ -37,8 +37,8 @@ LDAP is not supported yet.
 
 #### Supported architectures
 
-* x86-64 - [![Build Status](https://ci-apps.yunohost.org/ci/logs/garradin%20%28Apps%29.svg)](https://ci-apps.yunohost.org/ci/apps/garradin/)
-* ARMv8-A - [![Build Status](https://ci-apps-arm.yunohost.org/ci/logs/garradin%20%28Apps%29.svg)](https://ci-apps-arm.yunohost.org/ci/apps/garradin/)
+* x86-64 - [![Build Status](https://ci-apps.yunohost.org/ci/logs/garradin.svg)](https://ci-apps.yunohost.org/ci/apps/garradin/)
+* ARMv8-A - [![Build Status](https://ci-apps-arm.yunohost.org/ci/logs/garradin.svg)](https://ci-apps-arm.yunohost.org/ci/apps/garradin/)
 
 ## Limitations
 
