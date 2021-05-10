@@ -218,6 +218,7 @@ find $final_path/data -type d -exec chmod 700 {} +
 find $final_path/data -type f -exec chmod 600 {} +
 find /var/www/garradin/www -type d -exec chmod 755  {} +
 find /var/www/garradin/www -type f -exec chmod 644  {} +
+
 #=================================================
 # RELOAD NGINX
 #=================================================
