@@ -207,8 +207,17 @@ fi
 
 # Set permissions on app files
 chown -R $app:$app $final_path
-chmod 755 $final_path
-
+chmod 400 config.dist.php config.local.php index.php sous-domaine.html VERSION
+find $final_path/srcipts -type d -exec chmod 500 {} +
+find $final_path/srcipts -type f -exec chmod 400 {} +
+find $final_path/templates -type d -exec chmod 500 {} +
+find $final_path/templates -type f -exec chmod 400 {} +
+find $final_path/include -type d -exec chmod 500 {} +
+find $final_path/include -type f -exec chmod 400 {} +
+find $final_path/data -type d -exec chmod 700 {} +
+find $final_path/data -type f -exec chmod 600 {} +
+find /var/www/garradin/www -type d -exec chmod 755  {} +
+find /var/www/garradin/www -type f -exec chmod 644  {} +
 #=================================================
 # RELOAD NGINX
 #=================================================
