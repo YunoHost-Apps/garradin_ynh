@@ -99,7 +99,7 @@ then
   backup_bdd=/tmp/association.sqlite
   backup_squelettes=/tmp/squelettes
 
-  if  [ -d "$backup_squelettes" ]
+  if 	[ -d "$backup_squelettes" ]
   then
     cp -ar $backup_squelettes $final_path/www/squelettes
     ynh_secure_remove  $backup_squelettes
@@ -107,9 +107,11 @@ then
 
   if [ -e "$backup_bdd" ]
   then
-    cp -a $backup_bdd $final_path/association.sqlite
+	  cp -a $backup_bdd $final_path/association.sqlite
     ynh_secure_remove $backup_bdd
   fi
+
+  chown -R $app:$app $final_path
 
   key=$(ynh_string_random --length=50)
   cp -a $final_path/config.dist.php $final_path/config.local.php
@@ -119,12 +121,11 @@ then
   else
   ynh_replace_string --match_string="//const WWW_URI = '/asso/';" --replace_string="const WWW_URI = '$path_url/';" --target_file="$final_path/config.local.php"
   fi
-  chown -R $app:$app $final_path
   chmod 755 $final_path
   # Create the visitors permission if needed
   if [ $is_public -eq 1 ]
   then
-    ynh_permission_update --permission="main" --add="visitors"
+    ynh_permission_update --permission "main" --add "visitors"
   fi
 
   ynh_systemd_action --service_name=nginx --action=reload
@@ -169,7 +170,7 @@ ynh_add_nginx_config
 ynh_script_progression --message="Upgrading PHP-FPM configuration..." --weight=2
 
 # Create a dedicated PHP-FPM config
-ynh_add_fpm_config --package="$extra_php_dependencies"
+ynh_add_fpm_config --phpversion=$YNH_PHP_VERSION --package="$extra_php_dependencies"
 phpversion=$(ynh_app_setting_get --app=$app --key=phpversion)
 
 #=======================================================
@@ -192,6 +193,13 @@ then
   ynh_secure_remove $backup_bdd
 fi
 
+chown -R $app:$app $final_path
+
+#=================================================
+# ADD A CONFIGURATION
+#=================================================
+ynh_script_progression --message="Adding a configuration file..." --weight=5
+
 key=$(ynh_string_random --length=50)
 cp -a $final_path/config.dist.php $final_path/config.local.php
 ynh_replace_string --match_string="const SECRET_KEY = '3xUhIgGwuovRKOjVsVPQ5yUMfXUSIOX2GKzcebsz5OINrYC50r';" --replace_string="const SECRET_KEY = '$key';" --target_file="$final_path/config.local.php"
@@ -201,13 +209,19 @@ else
 ynh_replace_string --match_string="//const WWW_URI = '/asso/';" --replace_string="const WWW_URI = '$path_url/';" --target_file="$final_path/config.local.php"
 fi
 
-#=================================================
-# Files owned by user app
-#=================================================
-
 # Set permissions on app files
-chown -R $app:$app $final_path
-chmod 755 $final_path
+chmod 400 $final_path/config.dist.php $final_path/index.php $final_path/sous-domaine.html $final_path/VERSION
+chmod 644 $final_path/config.local.php
+find $final_path/scripts -type d -exec chmod 500 {} +
+find $final_path/scripts -type f -exec chmod 400 {} +
+find $final_path/templates -type d -exec chmod 500 {} +
+find $final_path/templates -type f -exec chmod 400 {} +
+find $final_path/include -type d -exec chmod 500 {} +
+find $final_path/include -type f -exec chmod 400 {} +
+find $final_path/data -type d -exec chmod 700 {} +
+find $final_path/data -type f -exec chmod 600 {} +
+find /var/www/garradin/www -type d -exec chmod 755  {} +
+find /var/www/garradin/www -type f -exec chmod 644  {} +
 
 #=================================================
 # RELOAD NGINX
