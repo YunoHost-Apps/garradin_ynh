@@ -31,7 +31,6 @@ else
   upgrade_type=$(ynh_check_app_version_changed)
 fi
 
-
 #=================================================
 # ENSURE DOWNWARD COMPATIBILITY
 #=================================================
@@ -41,6 +40,13 @@ ynh_script_progression --message="Ensuring downward compatibility..." --weight=1
 if [ -z "$final_path" ]; then
   final_path=/var/www/$app
   ynh_app_setting_set --app=$app --key=final_path --value=$final_path
+fi
+
+# Cleaning legacy permissions
+if ynh_legacy_permissions_exists; then
+  ynh_legacy_permissions_delete_all
+
+  ynh_app_setting_delete --app=$app --key=is_public
 fi
 
 #=================================================
@@ -93,7 +99,7 @@ then
   backup_bdd=/tmp/association.sqlite
   backup_squelettes=/tmp/squelettes
 
-  if  [ -d "$backup_squelettes" ]
+  if 	[ -d "$backup_squelettes" ]
   then
     cp -ar $backup_squelettes $final_path/www/squelettes
     ynh_secure_remove  $backup_squelettes
@@ -101,9 +107,11 @@ then
 
   if [ -e "$backup_bdd" ]
   then
-    cp -a $backup_bdd $final_path/association.sqlite
+	  cp -a $backup_bdd $final_path/association.sqlite
     ynh_secure_remove $backup_bdd
   fi
+
+  chown -R $app:$app $final_path
 
   key=$(ynh_string_random --length=50)
   cp -a $final_path/config.dist.php $final_path/config.local.php
@@ -113,11 +121,11 @@ then
   else
   ynh_replace_string --match_string="//const WWW_URI = '/asso/';" --replace_string="const WWW_URI = '$path_url/';" --target_file="$final_path/config.local.php"
   fi
-  chown $app:$app $final_path -R
-  chmod 755 $final_path -R
+  chmod 755 $final_path
   # Create the visitors permission if needed
-  if ! ynh_permission_exists --permission "visitors"; then
-    ynh_permission_create --permission "visitors"
+  if [ $is_public -eq 1 ]
+  then
+    ynh_permission_update --permission "main" --add "visitors"
   fi
 
   ynh_systemd_action --service_name=nginx --action=reload
@@ -162,8 +170,9 @@ ynh_add_nginx_config
 ynh_script_progression --message="Upgrading PHP-FPM configuration..." --weight=2
 
 # Create a dedicated PHP-FPM config
-ynh_add_fpm_config --package="$extra_php_dependencies"
+ynh_add_fpm_config --phpversion=$YNH_PHP_VERSION --package="$extra_php_dependencies"
 phpversion=$(ynh_app_setting_get --app=$app --key=phpversion)
+
 #=======================================================
 # backup bdd, squelettes directory and config.local.php
 #=======================================================
@@ -184,6 +193,13 @@ then
   ynh_secure_remove $backup_bdd
 fi
 
+chown -R $app:$app $final_path
+
+#=================================================
+# ADD A CONFIGURATION
+#=================================================
+ynh_script_progression --message="Adding a configuration file..." --weight=5
+
 key=$(ynh_string_random --length=50)
 cp -a $final_path/config.dist.php $final_path/config.local.php
 ynh_replace_string --match_string="const SECRET_KEY = '3xUhIgGwuovRKOjVsVPQ5yUMfXUSIOX2GKzcebsz5OINrYC50r';" --replace_string="const SECRET_KEY = '$key';" --target_file="$final_path/config.local.php"
@@ -193,23 +209,19 @@ else
 ynh_replace_string --match_string="//const WWW_URI = '/asso/';" --replace_string="const WWW_URI = '$path_url/';" --target_file="$final_path/config.local.php"
 fi
 
-#=================================================
-# Files owned by user app
-#=================================================
-
 # Set permissions on app files
-chown $app:$app $final_path -R
-chmod 755 $final_path -R
-
-#=================================================
-# SETUP SSOWAT
-#=================================================
-ynh_script_progression --message="Upgrading permissions configuration..." --weight=2
-
-# Create the visitors permission if needed
-if ! ynh_permission_exists --permission "visitors"; then
-  ynh_permission_create --permission "visitors"
-fi
+chmod 400 $final_path/config.dist.php $final_path/index.php $final_path/sous-domaine.html $final_path/VERSION
+chmod 644 $final_path/config.local.php
+find $final_path/scripts -type d -exec chmod 500 {} +
+find $final_path/scripts -type f -exec chmod 400 {} +
+find $final_path/templates -type d -exec chmod 500 {} +
+find $final_path/templates -type f -exec chmod 400 {} +
+find $final_path/include -type d -exec chmod 500 {} +
+find $final_path/include -type f -exec chmod 400 {} +
+find $final_path/data -type d -exec chmod 700 {} +
+find $final_path/data -type f -exec chmod 600 {} +
+find /var/www/garradin/www -type d -exec chmod 755  {} +
+find /var/www/garradin/www -type f -exec chmod 644  {} +
 
 #=================================================
 # RELOAD NGINX
@@ -221,7 +233,6 @@ ynh_systemd_action --service_name=nginx --action=reload
 #=================================================
 # Finalise Upgrade
 #=================================================
-
 ynh_script_progression --message="Finalise upgrade" --weight=1
 
 ynh_local_curl "/admin/index.php"
