@@ -1,18 +1,16 @@
 ## Problem
+
 - *Description of why you made this PR*
 
 ## Solution
+
 - *And how do you fix that problem*
 
 ## PR Status
-- [ ] Code finished.
-- [ ] Tested with Package_check.
-- [ ] Fix or enhancement tested.
-- [ ] Upgrade from last version tested.
-- [ ] Can be reviewed and tested.
 
-## Package_check results
----
-*If you have access to [App Continuous Integration for packagers](https://yunohost.org/#/packaging_apps_ci) you can provide a link to the package_check results like below, replacing '-NUM-' in this link by the PR number and USERNAME by your username on the ci-apps-dev. Or you provide a screenshot or a pastebin of the results*
+- [ ] Code finished and ready to be reviewed/tested
+- [ ] The fix/enhancement were manually tested (if applicable)
 
-[![Build Status](https://ci-apps-dev.yunohost.org/jenkins/job/garradin_ynh%20PR-NUM-%20(USERNAME)/badge/icon)](https://ci-apps-dev.yunohost.org/jenkins/job/garradin_ynh%20PR-NUM-%20(USERNAME)/)
+## Automatic tests
+
+Automatic tests can be triggered on https://ci-apps-dev.yunohost.org/ *after creating the PR*, by commenting "!testme", "!gogogadgetoci" or "By the power of systemd, I invoke The Great App CI to test this Pull Request!". (N.B. : for this to work you need to be a member of the Yunohost-Apps organization)
