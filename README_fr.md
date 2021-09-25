@@ -17,6 +17,10 @@ Garradin (mot signifiant argent dans un dialecte aborigène du nord de l'Austral
 
 **Démo :** https://garradin.eu/essai/
 
+## Captures d'écran
+
+![](./doc/screenshots/screenshot.png)
+
 ## Documentations et ressources
 
 * Site officiel de l'app : http://garradin.eu

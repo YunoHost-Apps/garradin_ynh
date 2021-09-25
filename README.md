@@ -21,6 +21,10 @@ Garradin (word meaning money in an aboriginal dialect of northern Australia, pro
 
 **Demo:** https://garradin.eu/essai/
 
+## Screenshots
+
+![](./doc/screenshots/screenshot.png)
+
 ## Documentation and resources
 
 * Official app website: http://garradin.eu
