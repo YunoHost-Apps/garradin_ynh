@@ -7,14 +7,22 @@
         "fr": "Logiciel libre de gestion d'association"
     },
     "version": "1.1.10~ynh1",
-    "url": "http://garradin.eu/a-propos/",
+    "url": "http://garradin.eu",
+    "upstream": {
+        "license": "GPL-3.0-or-later",
+        "website": "http://garradin.eu",
+        "demo": "https://garradin.eu/essai/",
+        "admindoc": "https://fossil.kd2.org/garradin/wiki?name=Documentation",
+        "userdoc": "https://yunohost.org/apps",
+        "code": "https://fossil.kd2.org/garradin/wiki?name=Garradin"
+    },
     "license": "GPL-3.0-or-later",
     "maintainer": {
         "name": "frju365",
         "email": "win10@tutanota.com"
     },
      "requirements": {
-        "yunohost": ">=4.1.7"
+        "yunohost": ">=4.2.4"
     },
     "multi_instance": true,
     "services": [

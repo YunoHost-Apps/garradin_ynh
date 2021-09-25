@@ -76,7 +76,7 @@ ynh_add_nginx_config
 ynh_script_progression --message="Configuring PHP-FPM..." --weight=5
 
 # Create a dedicated PHP-FPM config
-ynh_add_fpm_config --phpversion=$YNH_PHP_VERSION --package="$extra_php_dependencies"
+ynh_add_fpm_config --package="$extra_php_dependencies"
 
 #=================================================
 #  ADD A CONFIGURATION
@@ -112,7 +112,7 @@ ynh_script_progression --message="Configuring permissions..." --weight=8
 # Make app public if necessary
 if [ $is_public -eq 1 ]
 then
-  ynh_permission_update --permission "main" --add "visitors"
+  ynh_permission_update --permission="main" --add="visitors"
 fi
 
 #=================================================

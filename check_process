@@ -1,8 +1,8 @@
 ; Test complet
 	; Manifest
-		domain="domain.tld"	(DOMAIN)
-		path="/path"	(PATH)
-		is_public=1 (PUBLIC|public=1|private=0)
+		domain="domain.tld"
+		path="/path"
+		is_public=1
 	; Checks
 		pkg_linter=1
 		setup_sub_dir=1
@@ -11,6 +11,14 @@
 		setup_private=1
 		setup_public=1
 		upgrade=1
+		#upgrade=1	from_commit=a36dd8b13d85078ddcee0d6d3146feb107d3e042
 		backup_restore=1
 		multi_instance=1
 		change_url=1
+;;; Options
+Email=
+Notification=none
+;;; Upgrade options
+	; commit=a36dd8b13d85078ddcee0d6d3146feb107d3e042
+		name=Merge pull request #55 from yunohost-bot/issue-and-pr-template 
+		manifest_arg=domain=DOMAIN&path=PATH&admin=USER&language=fr&is_public=1&password=pass&port=666&

@@ -32,6 +32,20 @@ else
 fi
 
 #=================================================
+# BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
+#=================================================
+ynh_script_progression --message="Backing up Garradin before upgrading (may take a while)..." --weight=30
+
+# Backup the current version of the app
+ynh_backup_before_upgrade
+ynh_clean_setup () {
+  # restore it if the upgrade fails
+  ynh_restore_upgradebackup
+}
+# Exit if an error occurs during the execution of the script
+ynh_abort_if_errors
+
+#=================================================
 # ENSURE DOWNWARD COMPATIBILITY
 #=================================================
 ynh_script_progression --message="Ensuring downward compatibility..." --weight=1
@@ -64,21 +78,6 @@ fi
 if [ -e "$bdd" ]; then
   cp -a $bdd /tmp/association.sqlite
 fi
-
-#=================================================
-# BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
-#=================================================
-ynh_script_progression --message="Backing up Garradin before upgrading (may take a while)..." --weight=30
-
-# Backup the current version of the app
-ynh_backup_before_upgrade
-ynh_clean_setup () {
-  # restore it if the upgrade fails
-  ynh_restore_upgradebackup
-}
-# Exit if an error occurs during the execution of the script
-ynh_abort_if_errors
-
 
 #=================================================
 # UPGRADE TO 0.9.8 if necessary
@@ -137,24 +136,23 @@ then
 fi
 
 #=================================================
+# CREATE DEDICATED USER
+#=================================================
+ynh_script_progression --message="Making sure dedicated system user exists..." --weight=1
+
+# Create a dedicated user (if not existing)
+ynh_system_user_create --username=$app --home_dir="$final_path"
+
+#=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
 #=================================================
 ynh_script_progression --message="Upgrading source files..." --weight=5
-
 
 if [ "$upgrade_type" == "UPGRADE_APP" ]
 then
   # Download, check integrity, uncompress and patch the source from app.src
   ynh_setup_source --dest_dir="$final_path"
 fi
-
-#=================================================
-# CREATE DEDICATED USER
-#=================================================
-ynh_script_progression --message="Making sure dedicated system user exists..." --weight=1
-
-# Create a dedicated user (if not existing)
-ynh_system_user_create --username=$app
 
 #=================================================
 # NGINX CONFIGURATION
@@ -170,8 +168,7 @@ ynh_add_nginx_config
 ynh_script_progression --message="Upgrading PHP-FPM configuration..." --weight=2
 
 # Create a dedicated PHP-FPM config
-ynh_add_fpm_config --phpversion=$YNH_PHP_VERSION --package="$extra_php_dependencies"
-phpversion=$(ynh_app_setting_get --app=$app --key=phpversion)
+ynh_add_fpm_config --package="$extra_php_dependencies"
 
 #=======================================================
 # backup bdd, squelettes directory and config.local.php
