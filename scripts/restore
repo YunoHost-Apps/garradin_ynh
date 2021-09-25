@@ -34,8 +34,6 @@ phpversion=$(ynh_app_setting_get --app=$app --key=phpversion)
 #=================================================
 ynh_script_progression --message="Validating restoration parameters..." --weight=4
 
-ynh_webpath_available $domain $path_url \
-	|| ynh_die "Path not available: ${domain}${path_url}"
 test ! -d $final_path \
 	|| ynh_die "There is already a directory: $final_path "
 
@@ -67,7 +65,13 @@ ynh_system_user_create --username=$app
 #=================================================
 
 # Restore permissions on app files
-chown -R $app:$app $final_path
+chmod -R o-rwx "$final_path"
+chown -R $app:www-data "$final_path"
+find "$final_path" -type d -exec chmod 550 {} +
+find "$final_path" -type f -exec chmod 440 {} +
+find "$final_path/data" -type d -exec chmod 770 {} +
+find "$final_path/data" -type f -exec chmod 660 {} +
+chmod 660 "$final_path/config.local.php"
 
 #=================================================
 # RESTORE THE PHP-FPM CONFIGURATION
