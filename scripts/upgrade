@@ -121,9 +121,10 @@ then
   ynh_replace_string --match_string="//const WWW_URI = '/asso/';" --replace_string="const WWW_URI = '$path_url/';" --target_file="$final_path/config.local.php"
   fi
   chmod 755 $final_path
+  
   # Create the visitors permission if needed
-  if [ $is_public -eq 1 ]
-  then
+  visitors_enabled=$(ynh_permission_has_user "main" "visitors")
+  if [[ $visitors_enabled -eq 0 ]]
     ynh_permission_update --permission "main" --add "visitors"
   fi
 
@@ -133,6 +134,11 @@ then
   sleep 5
   ynh_local_curl "/index.php"
   upgrade_type="UPGRADE_APP"
+
+  if [[ $visitors_enabled -eq 0 ]]
+    ynh_permission_update --permission "main" --remove "visitors"
+  fi
+
 fi
 
 #=================================================
