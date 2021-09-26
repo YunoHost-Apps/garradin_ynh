@@ -24,7 +24,6 @@ Garradin (mot signifiant argent dans un dialecte aborigène du nord de l'Austral
 ## Documentations et ressources
 
 * Site officiel de l'app : http://garradin.eu
-* Documentation officielle utilisateur : https://yunohost.org/apps
 * Documentation officielle de l'admin : https://fossil.kd2.org/garradin/wiki?name=Documentation
 * Dépôt de code officiel de l'app : https://fossil.kd2.org/garradin/wiki?name=Garradin
 * Documentation YunoHost pour cette app : https://yunohost.org/app_garradin
