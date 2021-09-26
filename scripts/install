@@ -112,8 +112,8 @@ find $final_path/include -type d -exec chmod 500 {} +
 find $final_path/include -type f -exec chmod 400 {} +
 find $final_path/data -type d -exec chmod 700 {} +
 find $final_path/data -type f -exec chmod 600 {} +
-find /var/www/garradin/www -type d -exec chmod 505  {} +
-find /var/www/garradin/www -type f -exec chmod 644  {} +
+find $final_path/www -type d -exec chmod 505  {} +
+find $final_path/www -type f -exec chmod 644  {} +
 
 #=================================================
 # SETUP SSOWAT
