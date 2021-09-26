@@ -121,18 +121,25 @@ then
   ynh_replace_string --match_string="//const WWW_URI = '/asso/';" --replace_string="const WWW_URI = '$path_url/';" --target_file="$final_path/config.local.php"
   fi
   chmod 755 $final_path
-  # Create the visitors permission if needed
-  if [ $is_public -eq 1 ]
-  then
-    ynh_permission_update --permission "main" --add "visitors"
+
+  # We need to have the app public before finalizing the upgrade
+  # So let's store its current state and allow visitors if needed
+  visitors_enabled=$(ynh_permission_has_user --permission=main --user=visitors)
+  if [ $visitors_enabled -eq 0 ]
+    ynh_permission_update --permission "main" --remove "visitors"
   fi
 
   ynh_systemd_action --service_name=nginx --action=reload
-  #finalyse upgrade
+  # Finalize the upgrade
   ynh_local_curl "/index.php"
   sleep 5
   ynh_local_curl "/index.php"
   upgrade_type="UPGRADE_APP"
+
+  # Remove visitors access if they were not allowed initially
+  if [ $visitors_enabled -eq 0 ]
+    ynh_permission_update --permission "main" --remove "visitors"
+  fi
 fi
 
 #=================================================
