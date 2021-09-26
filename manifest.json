@@ -13,7 +13,6 @@
         "website": "http://garradin.eu",
         "demo": "https://garradin.eu/essai/",
         "admindoc": "https://fossil.kd2.org/garradin/wiki?name=Documentation",
-        "userdoc": "https://yunohost.org/apps",
         "code": "https://fossil.kd2.org/garradin/wiki?name=Garradin"
     },
     "license": "GPL-3.0-or-later",
