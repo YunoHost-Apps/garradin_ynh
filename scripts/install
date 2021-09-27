@@ -23,6 +23,7 @@ ynh_abort_if_errors
 domain=$YNH_APP_ARG_DOMAIN
 path_url=$YNH_APP_ARG_PATH
 is_public=$YNH_APP_ARG_IS_PUBLIC
+
 app=$YNH_APP_INSTANCE_NAME
 
 #=================================================
@@ -33,8 +34,6 @@ ynh_script_progression --message="Validating installation parameters..." --weigh
 final_path=/var/www/$app
 test ! -e "$final_path" || ynh_die "This path already contains a folder"
 
-# Check web path availability
-ynh_webpath_available $domain $path_url
 # Register (book) web path
 ynh_webpath_register --app=$app --domain=$domain --path_url=$path_url
 
@@ -52,7 +51,7 @@ ynh_app_setting_set --app=$app --key=path --value=$path_url
 ynh_script_progression --message="Configuring system user..." --weight=3
 
 # Create a system user
-ynh_system_user_create --username=$app
+ynh_system_user_create --username=$app --home_dir="$final_path"
 
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
@@ -78,35 +77,12 @@ ynh_script_progression --message="Configuring PHP-FPM..." --weight=5
 
 # Create a dedicated PHP-FPM config
 ynh_add_fpm_config --package="$extra_php_dependencies"
-phpversion=$(ynh_app_setting_get --app=$app --key=phpversion)
 
 #=================================================
-# Files owned by user app
+#  ADD A CONFIGURATION
 #=================================================
+ynh_script_progression --message="Adding a configuration file..." --weight=5
 
-chown $app:$app $final_path -R
-chmod 755 $final_path -R
-
-# Remove the public access
-ynh_app_setting_delete --app=$app --key=skipped_uris
-#=================================================
-# SETUP SSOWAT
-#=================================================
-ynh_script_progression --message="Configuring permissions..." --weight=8
-
-# Make app public if necessary
-if [ $is_public -eq 1 ]
-then
-    # Everyone can access the app.
-  # The "main" permission is automatically created before the install script.
-  ynh_permission_update --permission "main" --add "visitors"
-fi
-# Only the users can access to the panel of the app
-# ynh_permission_update --permission="main" --add "all_users"
-
-#=================================================
-# MODIFY A CONFIG FILE
-#=================================================
 # copy config.dist.php creating config.local.php
 cp -a $final_path/config.dist.php $final_path/config.local.php
 # create a key for the secret key CSFR;
@@ -117,6 +93,26 @@ if [ "$path_url" == "/" ]; then
   ynh_replace_string --match_string="//const WWW_URI = '/asso/';" --replace_string="const WWW_URI = '$path_url';" --target_file="$final_path/config.local.php"
 else
   ynh_replace_string --match_string="//const WWW_URI = '/asso/';" --replace_string="const WWW_URI = '$path_url/';" --target_file="$final_path/config.local.php"
+fi
+
+# Permissions on files and directories
+chmod -R o-rwx "$final_path"
+chown -R $app:www-data "$final_path"
+find "$final_path" -type d -exec chmod 550 {} +
+find "$final_path" -type f -exec chmod 440 {} +
+find "$final_path/data" -type d -exec chmod 770 {} +
+find "$final_path/data" -type f -exec chmod 660 {} +
+chmod 660 "$final_path/config.local.php"
+
+#=================================================
+# SETUP SSOWAT
+#=================================================
+ynh_script_progression --message="Configuring permissions..." --weight=8
+
+# Make app public if necessary
+if [ $is_public -eq 1 ]
+then
+  ynh_permission_update --permission="main" --add="visitors"
 fi
 
 #=================================================

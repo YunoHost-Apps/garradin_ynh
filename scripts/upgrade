@@ -31,6 +31,19 @@ else
   upgrade_type=$(ynh_check_app_version_changed)
 fi
 
+#=================================================
+# BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
+#=================================================
+ynh_script_progression --message="Backing up Garradin before upgrading (may take a while)..." --weight=30
+
+# Backup the current version of the app
+ynh_backup_before_upgrade
+ynh_clean_setup () {
+  # restore it if the upgrade fails
+  ynh_restore_upgradebackup
+}
+# Exit if an error occurs during the execution of the script
+ynh_abort_if_errors
 
 #=================================================
 # ENSURE DOWNWARD COMPATIBILITY
@@ -41,6 +54,13 @@ ynh_script_progression --message="Ensuring downward compatibility..." --weight=1
 if [ -z "$final_path" ]; then
   final_path=/var/www/$app
   ynh_app_setting_set --app=$app --key=final_path --value=$final_path
+fi
+
+# Cleaning legacy permissions
+if ynh_legacy_permissions_exists; then
+  ynh_legacy_permissions_delete_all
+
+  ynh_app_setting_delete --app=$app --key=is_public
 fi
 
 #=================================================
@@ -60,26 +80,11 @@ if [ -e "$bdd" ]; then
 fi
 
 #=================================================
-# BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
-#=================================================
-ynh_script_progression --message="Backing up Garradin before upgrading (may take a while)..." --weight=30
-
-# Backup the current version of the app
-ynh_backup_before_upgrade
-ynh_clean_setup () {
-	# restore it if the upgrade fails
-	ynh_restore_upgradebackup
-}
-# Exit if an error occurs during the execution of the script
-ynh_abort_if_errors
-
-
-#=================================================
 # UPGRADE TO 0.9.8 if necessary
 #=================================================
 
 if [ "$upgrade_type" == "0.9.8" ]
-then 
+then
   ynh_script_progression --message="Upgrading upgrade to 0.9.8" --weight=5
     # Download, check integrity, uncompress and patch the source from 0.9.8.src
   ynh_setup_source --dest_dir="$final_path" --source_id="0.9.8"
@@ -105,6 +110,8 @@ then
     ynh_secure_remove $backup_bdd
   fi
 
+  chown -R $app:$app $final_path
+
   key=$(ynh_string_random --length=50)
   cp -a $final_path/config.dist.php $final_path/config.local.php
   ynh_replace_string --match_string="const SECRET_KEY = '3xUhIgGwuovRKOjVsVPQ5yUMfXUSIOX2GKzcebsz5OINrYC50r';" --replace_string="const SECRET_KEY = '$key';" --target_file="$final_path/config.local.php"
@@ -113,31 +120,24 @@ then
   else
   ynh_replace_string --match_string="//const WWW_URI = '/asso/';" --replace_string="const WWW_URI = '$path_url/';" --target_file="$final_path/config.local.php"
   fi
-  chown $app:$app $final_path -R
-  chmod 755 $final_path -R
+  chmod 755 $final_path
+
   # Create the visitors permission if needed
-  if ! ynh_permission_exists --permission "visitors"; then
-    ynh_permission_create --permission "visitors"
+   visitors_enabled=$(ynh_permission_has_user "main" "visitors" && echo 0 || echo 1)
+  if [[ $visitors_enabled -eq 0 ]]; then
+    ynh_permission_update --permission "main" --add "visitors"
   fi
-  
+
   ynh_systemd_action --service_name=nginx --action=reload
-  #finalyse upgrade
+  # Finalize the upgrade
   ynh_local_curl "/index.php"
   sleep 5
   ynh_local_curl "/index.php"
   upgrade_type="UPGRADE_APP"
-fi
 
-#=================================================
-# DOWNLOAD, CHECK AND UNPACK SOURCE
-#=================================================
-ynh_script_progression --message="Upgrading source files..." --weight=5
-
-
-if [ "$upgrade_type" == "UPGRADE_APP" ]
-then
-  # Download, check integrity, uncompress and patch the source from app.src
-  ynh_setup_source --dest_dir="$final_path"
+  if [[ $visitors_enabled -eq 0 ]]; then
+    ynh_permission_update --permission "main" --remove "visitors"
+  fi
 fi
 
 #=================================================
@@ -146,7 +146,18 @@ fi
 ynh_script_progression --message="Making sure dedicated system user exists..." --weight=1
 
 # Create a dedicated user (if not existing)
-ynh_system_user_create --username=$app
+ynh_system_user_create --username=$app --home_dir="$final_path"
+
+#=================================================
+# DOWNLOAD, CHECK AND UNPACK SOURCE
+#=================================================
+ynh_script_progression --message="Upgrading source files..." --weight=5
+
+if [ "$upgrade_type" == "UPGRADE_APP" ]
+then
+  # Download, check integrity, uncompress and patch the source from app.src
+  ynh_setup_source --dest_dir="$final_path"
+fi
 
 #=================================================
 # NGINX CONFIGURATION
@@ -163,7 +174,7 @@ ynh_script_progression --message="Upgrading PHP-FPM configuration..." --weight=2
 
 # Create a dedicated PHP-FPM config
 ynh_add_fpm_config --package="$extra_php_dependencies"
-phpversion=$(ynh_app_setting_get --app=$app --key=phpversion)
+
 #=======================================================
 # backup bdd, squelettes directory and config.local.php
 #=======================================================
@@ -172,7 +183,7 @@ ynh_script_progression --message="restore data..." --weight=10
 backup_bdd=/tmp/association.sqlite
 backup_squelettes=/tmp/squelettes
 
-if 	[ -d "$backup_squelettes" ]
+if  [ -d "$backup_squelettes" ]
 then
   cp -ar $backup_squelettes $final_path/www/squelettes
   ynh_secure_remove  $backup_squelettes
@@ -180,9 +191,14 @@ fi
 
 if [ -e "$backup_bdd" ]
 then
-	cp -a $backup_bdd $final_path/association.sqlite
+  cp -a $backup_bdd $final_path/association.sqlite
   ynh_secure_remove $backup_bdd
 fi
+
+#=================================================
+# ADD A CONFIGURATION
+#=================================================
+ynh_script_progression --message="Adding a configuration file..." --weight=5
 
 key=$(ynh_string_random --length=50)
 cp -a $final_path/config.dist.php $final_path/config.local.php
@@ -193,23 +209,14 @@ else
 ynh_replace_string --match_string="//const WWW_URI = '/asso/';" --replace_string="const WWW_URI = '$path_url/';" --target_file="$final_path/config.local.php"
 fi
 
-#=================================================
-# Files owned by user app
-#=================================================
-
-# Set permissions on app files
-chown $app:$app $final_path -R
-chmod 755 $final_path -R
-
-#=================================================
-# SETUP SSOWAT
-#=================================================
-ynh_script_progression --message="Upgrading permissions configuration..." --weight=2
-
-# Create the visitors permission if needed
-if ! ynh_permission_exists --permission "visitors"; then
-  ynh_permission_create --permission "visitors"
-fi
+# Permissions on files and directories
+chmod -R o-rwx "$final_path"
+chown -R $app:www-data "$final_path"
+find "$final_path" -type d -exec chmod 550 {} +
+find "$final_path" -type f -exec chmod 440 {} +
+find "$final_path/data" -type d -exec chmod 770 {} +
+find "$final_path/data" -type f -exec chmod 660 {} +
+chmod 660 "$final_path/config.local.php"
 
 #=================================================
 # RELOAD NGINX
@@ -221,10 +228,10 @@ ynh_systemd_action --service_name=nginx --action=reload
 #=================================================
 # Finalise Upgrade
 #=================================================
-
 ynh_script_progression --message="Finalise upgrade" --weight=1
 
 ynh_local_curl "/admin/index.php"
+chmod 440 "$final_path/config.local.php"
 
 #=================================================
 # END OF SCRIPT

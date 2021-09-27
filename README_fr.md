@@ -1,58 +1,33 @@
 # Garradin pour YunoHost
 
-[![Niveau d'intégration](https://dash.yunohost.org/integration/garradin.svg)](https://dash.yunohost.org/appci/app/garradin) ![](https://ci-apps.yunohost.org/ci/badges/garradin.status.svg) ![](https://ci-apps.yunohost.org/ci/badges/garradin.maintain.svg)
-[![Installer Garradin avec YunoHost](https://install-app.yunohost.org/install-with-yunohost.png)](https://install-app.yunohost.org/?app=garradin)
+[![Niveau d'intégration](https://dash.yunohost.org/integration/garradin.svg)](https://dash.yunohost.org/appci/app/garradin) ![](https://ci-apps.yunohost.org/ci/badges/garradin.status.svg) ![](https://ci-apps.yunohost.org/ci/badges/garradin.maintain.svg)  
+[![Installer Garradin avec YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=garradin)
 
 *[Read this readme in english.](./README.md)*
+*[Lire ce readme en français.](./README_fr.md)*
 
 > *Ce package vous permet d'installer Garradin rapidement et simplement sur un serveur YunoHost.
-Si vous n'avez pas YunoHost, consultez [le guide](https://yunohost.org/#/install) pour apprendre comment l'installer.*
+Si vous n'avez pas YunoHost, regardez [ici](https://yunohost.org/#/install) pour savoir comment l'installer et en profiter.*
 
 ## Vue d'ensemble
-Garradin est un logiciel libre de gestion associative. il permet de gérer des membres.
 
-**Version incluse :** 1.0.7
+Garradin (mot signifiant argent dans un dialecte aborigène du nord de l'Australie, prononcé « gar-a-dine »em) est un logiciel de gestion associative. Il est l'outil de prédilection pour gérer une association, un club sportif, une ONG, etc. Il est conçu pour répondre aux besoins d'une structure de petite à moyenne taille : gestion des adhérents, comptabilité, site web, prise de notes en réunion, archivage et partage des documents de fonctionnement de l'association, discussion entre adhérents, etc etc.
+
+**Version incluse :** 1.1.10~ynh1
+
+**Démo :** https://garradin.eu/essai/
 
 ## Captures d'écran
 
-![](images/membre.png)
-![](images/compta.png)
-![](images/emails.png)
-![](images/wiki.png)
-![](images/site.jpg)
+![](./doc/screenshots/screenshot.png)
 
-## Démo
+## Documentations et ressources
 
-* [Démo officielle](https://garradin.eu/essai/)
-
-## Documentation
-
- * Documentation officielle : https://fossil.kd2.org/garradin/wiki?name=Documentation
-
-## Caractéristiques spécifiques YunoHost
-
-#### Support multi-utilisateur
-
-* L'authentification LDAP n'est pas disponible.
-
-#### Architectures supportées
-
-* x86-64 - [![Build Status](https://ci-apps.yunohost.org/ci/logs/garradin%20%28Apps%29.svg)](https://ci-apps.yunohost.org/ci/apps/garradin/)
-* ARMv8-A - [![Build Status](https://ci-apps-arm.yunohost.org/ci/logs/garradin%20%28Apps%29.svg)](https://ci-apps-arm.yunohost.org/ci/apps/garradin/)
-
-## Limitations
-
-* Garradin n'est disponible qu'en français.
-* N'installez pas cette apllication à la racine du domaine par défaut sans ajouter un sous-domaine. Sinon la page de connexion SSO sera remplacée par la page d'accueil de Garradin.
-
-## Liens
-
- * Signaler un bug : https://github.com/YunoHost-Apps/garradin_ynh/issues
- * Site de l'application : http://garradin.eu
- * Dépôt de l'application principale : https://fossil.kd2.org/garradin/wiki?name=Garradin
- * Site web YunoHost : https://yunohost.org/
-
----
+* Site officiel de l'app : http://garradin.eu
+* Documentation officielle de l'admin : https://fossil.kd2.org/garradin/wiki?name=Documentation
+* Dépôt de code officiel de l'app : https://fossil.kd2.org/garradin/wiki?name=Garradin
+* Documentation YunoHost pour cette app : https://yunohost.org/app_garradin
+* Signaler un bug : https://github.com/YunoHost-Apps/garradin_ynh/issues
 
 ## Informations pour les développeurs
 
@@ -64,3 +39,5 @@ sudo yunohost app install https://github.com/YunoHost-Apps/garradin_ynh/tree/tes
 ou
 sudo yunohost app upgrade garradin -u https://github.com/YunoHost-Apps/garradin_ynh/tree/testing --debug
 ```
+
+**Plus d'infos sur le packaging d'applications :** https://yunohost.org/packaging_apps
