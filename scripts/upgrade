@@ -27,7 +27,7 @@ phpversion=$(ynh_app_setting_get --app=$app --key=phpversion)
 
 if ynh_compare_current_package_version --comparison lt --version 0.9.8.1~ynh1; then
   upgrade_type="0.9.8"
-elif ynh_compare_current_package_version --comparison lt --version 1.0.7~ynh2; then
+elif ynh_compare_current_package_version --comparison lt --version 1.0.6~ynh1; then
   upgrade_type="1.1.1"
 else
   upgrade_type=$(ynh_check_app_version_changed)
