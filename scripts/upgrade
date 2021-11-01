@@ -25,13 +25,13 @@ phpversion=$(ynh_app_setting_get --app=$app --key=phpversion)
 # CHECK VERSION
 #=================================================
 
-if ynh_compare_current_package_version --comparison lt --version 0.9.8.1~ynh1; then
-  upgrade_type="0.9.8"
-elif ynh_compare_current_package_version --comparison le --version 1.0.7~ynh2; then
-  upgrade_type="1.1.0"
-else
+#if ynh_compare_current_package_version --comparison lt --version 0.9.8.1~ynh1; then
+#  upgrade_type="0.9.8"
+#elif ynh_compare_current_package_version --comparison le --version 1.0.7~ynh2; then
+#  upgrade_type="1.1.0"
+#else
   upgrade_type=$(ynh_check_app_version_changed)
-fi
+#fi
 
 #=================================================
 # BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
@@ -85,10 +85,11 @@ fi
 # UPGRADE TO 0.9.8 if necessary
 #=================================================
 
-if [ "$upgrade_type" == "0.9.8" ]
+if ynh_compare_current_package_version --comparison lt --version 0.9.8.1
 then
   ynh_script_progression --message="Upgrading upgrade to 0.9.8" --weight=5
-    # Download, check integrity, uncompress and patch the source from 0.9.8.src
+
+  # Download, check integrity, uncompress and patch the source from 0.9.8.src
   ynh_setup_source --keep="config.local.php" --dest_dir="$final_path" --source_id="0.9.8"
   # Set permissions on app files
   ynh_system_user_create --username=$app
@@ -134,10 +135,11 @@ fi
 # UPGRADE TO 1.1.0 if necessary
 #=================================================
 
-if [ "$upgrade_type" == "1.1.0" ]
+if ynh_compare_current_package_version --comparison lt --version 1.1.0
 then
   ynh_script_progression --message="Upgrading upgrade to 1.1.0" --weight=5
-  # Download, check integrity, uncompress and patch the source from 0.9.8.src
+
+  # Download, check integrity, uncompress and patch the source from 1.1.0.src
   ynh_setup_source --keep="config.local.php" --dest_dir="$final_path" --source_id="1.1.0"
   # Set permissions on app files
   ynh_system_user_create --username=$app
