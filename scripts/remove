@@ -40,8 +40,11 @@ ynh_remove_nginx_config
 #=================================================
 ynh_script_progression --message="Removing PHP-FPM configuration..." --weight=2
 
+# Remove the app dependencies installed along with php-fpm
+ynh_remove_app_dependencies
+
 # Remove the dedicated PHP-FPM config
-ynh_remove_fpm_config --package="$extra_php_dependencies"
+ynh_remove_fpm_config
 
 #=================================================
 # GENERIC FINALIZATION
