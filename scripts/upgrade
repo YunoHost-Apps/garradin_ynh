@@ -82,8 +82,7 @@ fi
 if ynh_compare_current_package_version --comparison lt --version 0.9.8.1~ynh1
 then
   ynh_script_progression --message="Upgrading upgrade to 0.9.8" --weight=5
-
-  # Download, check integrity, uncompress and patch the source from 0.9.8.src
+    # Download, check integrity, uncompress and patch the source from 0.9.8.src
   ynh_setup_source --keep="config.local.php" --dest_dir="$final_path" --source_id="0.9.8"
   # Set permissions on app files
   ynh_system_user_create --username=$app
@@ -95,11 +94,13 @@ then
   backup_bdd=/tmp/association.sqlite
   backup_squelettes=/tmp/squelettes
 
-  if  [ -d "$backup_squelettes" ]; then
+  if  [ -d "$backup_squelettes" ]
+  then
     cp -ar $backup_squelettes $final_path/www/squelettes
-   fi
+  fi
 
-  if [ -e "$backup_bdd" ]; then
+  if [ -e "$backup_bdd" ]
+  then
     cp -a $backup_bdd $final_path/association.sqlite
   fi
 
@@ -107,20 +108,25 @@ then
   chmod 755 $final_path
 
   # Create the visitors permission if needed
-   visitors_enabled=$(ynh_permission_has_user "main" "visitors" && echo 0 || echo 1)
-  if [[ $visitors_enabled -eq 0 ]]; then
+  visitors_enabled=$(ynh_permission_has_user "main" "visitors" && echo 0 || echo 1)
+  if [[ $visitors_enabled -eq 1 ]]; then
     ynh_permission_update --permission "main" --add "visitors"
+    ynh_systemd_action --service_name=nginx --action=reload
+    # Finalize the upgrade
+    ynh_local_curl "/index.php"
+    sleep 5
+    ynh_local_curl "/index.php"
+    upgrade_type="UPGRADE_APP"
+    ynh_permission_update --permission "main" --remove "visitors"
   fi
 
-  ynh_systemd_action --service_name=nginx --action=reload
-  # Finalize the upgrade
-  ynh_local_curl "/index.php"
-  sleep 5
-  ynh_local_curl "/index.php"
-  upgrade_type="UPGRADE_APP"
-
   if [[ $visitors_enabled -eq 0 ]]; then
-    ynh_permission_update --permission "main" --remove "visitors"
+    ynh_systemd_action --service_name=nginx --action=reload
+    # Finalize the upgrade
+    ynh_local_curl "/index.php"
+    sleep 5
+    ynh_local_curl "/index.php"
+    upgrade_type="UPGRADE_APP"
   fi
 fi
 #=================================================
@@ -130,7 +136,6 @@ fi
 if ynh_compare_current_package_version --comparison lt --version 1.1.0~ynh1
 then
   ynh_script_progression --message="Upgrading upgrade to 1.1.0" --weight=5
-  
   # Download, check integrity, uncompress and patch the source from 0.9.8.src
   ynh_setup_source --keep="config.local.php" --dest_dir="$final_path" --source_id="1.1.0"
   # Set permissions on app files
@@ -143,11 +148,13 @@ then
   backup_bdd=/tmp/association.sqlite
   backup_squelettes=/tmp/squelettes
 
-  if  [ -d "$backup_squelettes" ]; then
+  if  [ -d "$backup_squelettes" ]
+  then
     cp -ar $backup_squelettes $final_path/www/squelettes
   fi
 
-  if [ -e "$backup_bdd" ]; then
+  if [ -e "$backup_bdd" ]
+  then
     cp -a $backup_bdd $final_path/association.sqlite
   fi
 
@@ -155,20 +162,25 @@ then
   chmod 755 $final_path
 
   # Create the visitors permission if needed
-   visitors_enabled=$(ynh_permission_has_user "main" "visitors" && echo 0 || echo 1)
-  if [[ $visitors_enabled -eq 0 ]]; then
+  visitors_enabled=$(ynh_permission_has_user "main" "visitors" && echo 0 || echo 1)
+  if [[ $visitors_enabled -eq 1 ]]; then
     ynh_permission_update --permission "main" --add "visitors"
+    ynh_systemd_action --service_name=nginx --action=reload
+    # Finalize the upgrade
+    ynh_local_curl "/index.php"
+    sleep 5
+    ynh_local_curl "/index.php"
+    upgrade_type="UPGRADE_APP"
+    ynh_permission_update --permission "main" --remove "visitors"
   fi
 
-  ynh_systemd_action --service_name=nginx --action=reload
-  # Finalize the upgrade
-  ynh_local_curl "/index.php"
-  sleep 5
-  ynh_local_curl "/index.php"
-  upgrade_type="UPGRADE_APP"
-
   if [[ $visitors_enabled -eq 0 ]]; then
-    ynh_permission_update --permission "main" --remove "visitors"
+    ynh_systemd_action --service_name=nginx --action=reload
+    # Finalize the upgrade
+    ynh_local_curl "/index.php"
+    sleep 5
+    ynh_local_curl "/index.php"
+    upgrade_type="UPGRADE_APP"
   fi
 fi
 
@@ -215,12 +227,14 @@ ynh_script_progression --message="restore data..." --weight=10
 backup_bdd=/tmp/association.sqlite
 backup_squelettes=/tmp/squelettes
 
-if  [ -d "$backup_squelettes" ]; then
+if  [ -d "$backup_squelettes" ]
+then
   cp -ar $backup_squelettes $final_path/www/squelettes
   ynh_secure_remove  $backup_squelettes
 fi
 
-if [ -e "$backup_bdd" ]; then
+if [ -e "$backup_bdd" ]
+then
   cp -a $backup_bdd $final_path/association.sqlite
   ynh_secure_remove $backup_bdd
 fi
