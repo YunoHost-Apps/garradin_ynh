@@ -80,7 +80,6 @@ fi
 #=================================================
 
 if ynh_compare_current_package_version --comparison lt --version 0.9.8.1~ynh1
-
 then
   ynh_script_progression --message="Upgrading upgrade to 0.9.8" --weight=5
     # Download, check integrity, uncompress and patch the source from 0.9.8.src
@@ -110,7 +109,7 @@ then
 
   # Create the visitors permission if needed
    visitors_enabled=$(ynh_permission_has_user "main" "visitors" && echo 0 || echo 1)
-  if [[ $visitors_enabled -eq 0 ]]; then
+  if [[ $visitors_enabled -eq 1 ]]; then
     ynh_permission_update --permission "main" --add "visitors"
   fi
 
@@ -159,7 +158,7 @@ then
 
   # Create the visitors permission if needed
    visitors_enabled=$(ynh_permission_has_user "main" "visitors" && echo 0 || echo 1)
-  if [[ $visitors_enabled -eq 0 ]]; then
+  if [[ $visitors_enabled -eq 1 ]]; then
     ynh_permission_update --permission "main" --add "visitors"
   fi
 
