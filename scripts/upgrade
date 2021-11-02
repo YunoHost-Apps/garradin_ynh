@@ -80,7 +80,6 @@ fi
 #=================================================
 
 if ynh_compare_current_package_version --comparison lt --version 0.9.8.1~ynh1
-
 then
   ynh_script_progression --message="Upgrading upgrade to 0.9.8" --weight=5
     # Download, check integrity, uncompress and patch the source from 0.9.8.src
