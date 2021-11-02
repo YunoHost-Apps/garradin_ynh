@@ -13,7 +13,7 @@
         "website": "http://garradin.eu",
         "demo": "https://garradin.eu/essai/",
         "admindoc": "https://fossil.kd2.org/garradin/wiki?name=Documentation",
-        "code": "https://fossil.kd2.org/garradin/wiki?name=Garradin"
+        "code": "https://fossil.kd2.org/garradin/dir?ci=tip"
     },
     "license": "GPL-3.0-or-later",
     "maintainer": {
