@@ -108,20 +108,25 @@ then
   chmod 755 $final_path
 
   # Create the visitors permission if needed
-   visitors_enabled=$(ynh_permission_has_user "main" "visitors" && echo 0 || echo 1)
+  visitors_enabled=$(ynh_permission_has_user "main" "visitors" && echo 0 || echo 1)
   if [[ $visitors_enabled -eq 1 ]]; then
     ynh_permission_update --permission "main" --add "visitors"
+    ynh_systemd_action --service_name=nginx --action=reload
+    # Finalize the upgrade
+    ynh_local_curl "/index.php"
+    sleep 5
+    ynh_local_curl "/index.php"
+    upgrade_type="UPGRADE_APP"
+    ynh_permission_update --permission "main" --remove "visitors"
   fi
 
-  ynh_systemd_action --service_name=nginx --action=reload
-  # Finalize the upgrade
-  ynh_local_curl "/index.php"
-  sleep 5
-  ynh_local_curl "/index.php"
-  upgrade_type="UPGRADE_APP"
-
   if [[ $visitors_enabled -eq 0 ]]; then
-    ynh_permission_update --permission "main" --remove "visitors"
+    ynh_systemd_action --service_name=nginx --action=reload
+    # Finalize the upgrade
+    ynh_local_curl "/index.php"
+    sleep 5
+    ynh_local_curl "/index.php"
+    upgrade_type="UPGRADE_APP"
   fi
 fi
 #=================================================
@@ -157,20 +162,25 @@ then
   chmod 755 $final_path
 
   # Create the visitors permission if needed
-   visitors_enabled=$(ynh_permission_has_user "main" "visitors" && echo 0 || echo 1)
+  visitors_enabled=$(ynh_permission_has_user "main" "visitors" && echo 0 || echo 1)
   if [[ $visitors_enabled -eq 1 ]]; then
     ynh_permission_update --permission "main" --add "visitors"
+    ynh_systemd_action --service_name=nginx --action=reload
+    # Finalize the upgrade
+    ynh_local_curl "/index.php"
+    sleep 5
+    ynh_local_curl "/index.php"
+    upgrade_type="UPGRADE_APP"
+    ynh_permission_update --permission "main" --remove "visitors"
   fi
 
-  ynh_systemd_action --service_name=nginx --action=reload
-  # Finalize the upgrade
-  ynh_local_curl "/index.php"
-  sleep 5
-  ynh_local_curl "/index.php"
-  upgrade_type="UPGRADE_APP"
-
   if [[ $visitors_enabled -eq 0 ]]; then
-    ynh_permission_update --permission "main" --remove "visitors"
+    ynh_systemd_action --service_name=nginx --action=reload
+    # Finalize the upgrade
+    ynh_local_curl "/index.php"
+    sleep 5
+    ynh_local_curl "/index.php"
+    upgrade_type="UPGRADE_APP"
   fi
 fi
 
