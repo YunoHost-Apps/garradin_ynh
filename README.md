@@ -29,7 +29,7 @@ Garradin (word meaning money in an aboriginal dialect of northern Australia, pro
 
 * Official app website: http://garradin.eu
 * Official admin documentation: https://fossil.kd2.org/garradin/wiki?name=Documentation
-* Upstream app code repository: https://fossil.kd2.org/garradin/wiki?name=Garradin
+* Upstream app code repository: https://fossil.kd2.org/garradin/dir?ci=tip
 * YunoHost documentation for this app: https://yunohost.org/app_garradin
 * Report a bug: https://github.com/YunoHost-Apps/garradin_ynh/issues
 
