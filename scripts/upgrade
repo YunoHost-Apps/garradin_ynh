@@ -97,7 +97,7 @@ then
   if 	[ -d "$backup_squelettes" ]
   then
     cp -ar $backup_squelettes $final_path/www/squelettes
-   fi
+  fi
 
   if [ -e "$backup_bdd" ]
   then
