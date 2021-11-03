@@ -13,7 +13,7 @@ Si vous n'avez pas YunoHost, regardez [ici](https://yunohost.org/#/install) pour
 
 Garradin (mot signifiant argent dans un dialecte aborigène du nord de l'Australie, prononcé « gar-a-dine »em) est un logiciel de gestion associative. Il est l'outil de prédilection pour gérer une association, un club sportif, une ONG, etc. Il est conçu pour répondre aux besoins d'une structure de petite à moyenne taille : gestion des adhérents, comptabilité, site web, prise de notes en réunion, archivage et partage des documents de fonctionnement de l'association, discussion entre adhérents, etc etc.
 
-**Version incluse :** 1.1.10~ynh1
+**Version incluse :** 1.1.12~ynh1
 
 **Démo :** https://garradin.eu/essai/
 
@@ -25,7 +25,7 @@ Garradin (mot signifiant argent dans un dialecte aborigène du nord de l'Austral
 
 * Site officiel de l'app : http://garradin.eu
 * Documentation officielle de l'admin : https://fossil.kd2.org/garradin/wiki?name=Documentation
-* Dépôt de code officiel de l'app : https://fossil.kd2.org/garradin/wiki?name=Garradin
+* Dépôt de code officiel de l'app : https://fossil.kd2.org/garradin/dir?ci=tip
 * Documentation YunoHost pour cette app : https://yunohost.org/app_garradin
 * Signaler un bug : https://github.com/YunoHost-Apps/garradin_ynh/issues
 

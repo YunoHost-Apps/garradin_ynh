@@ -6,14 +6,14 @@
         "en": "Software to manage association",
         "fr": "Logiciel libre de gestion d'association"
     },
-    "version": "1.1.10~ynh1",
+    "version": "1.1.12~ynh1",
     "url": "http://garradin.eu",
     "upstream": {
         "license": "GPL-3.0-or-later",
         "website": "http://garradin.eu",
         "demo": "https://garradin.eu/essai/",
         "admindoc": "https://fossil.kd2.org/garradin/wiki?name=Documentation",
-        "code": "https://fossil.kd2.org/garradin/wiki?name=Garradin"
+        "code": "https://fossil.kd2.org/garradin/dir?ci=tip"
     },
     "license": "GPL-3.0-or-later",
     "maintainer": {
@@ -26,7 +26,7 @@
     "multi_instance": true,
     "services": [
         "nginx",
-        "php7.3-fpm"
+        "php7.4-fpm"
     ],
     "arguments": {
         "install" : [
