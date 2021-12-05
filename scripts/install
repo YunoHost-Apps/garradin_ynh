@@ -94,6 +94,7 @@ if [ "$path_url" == "/" ]; then
 else
   ynh_replace_string --match_string="//const WWW_URI = '/asso/';" --replace_string="const WWW_URI = '$path_url/';" --target_file="$final_path/config.local.php"
 fi
+ynh_replace_string --match_string="//const ENABLE_UPGRADES = true;" --replace_string="//const ENABLE_UPGRADES = false;" --target_file="$final_path/config.local.php"
 
 # Permissions on files and directories
 chmod -R o-rwx "$final_path"
