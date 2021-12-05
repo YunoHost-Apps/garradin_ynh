@@ -94,14 +94,14 @@ then
   backup_bdd=/tmp/association.sqlite
   backup_squelettes=/tmp/squelettes
 
-  if 	[ -d "$backup_squelettes" ]
+  if  [ -d "$backup_squelettes" ]
   then
     cp -ar $backup_squelettes $final_path/www/squelettes
   fi
 
   if [ -e "$backup_bdd" ]
   then
-	  cp -a $backup_bdd $final_path/association.sqlite
+    cp -a $backup_bdd $final_path/association.sqlite
   fi
 
   chown -R $app:$app $final_path
