@@ -186,7 +186,7 @@ ynh_script_progression --message="Upgrading source files..." --weight=5
 if [ "$upgrade_type" == "UPGRADE_APP" ]
 then
   # Download, check integrity, uncompress and patch the source from app.src
-  ynh_setup_source --dest_dir="$final_path"
+  ynh_setup_source --keep="config.local.php" --dest_dir="$final_path"
 fi
 
 #=================================================
@@ -230,18 +230,7 @@ fi
 #=================================================
 ynh_script_progression --message="Adding a configuration file..." --weight=5
 
-# copy config.dist.php creating config.local.php
-cp -a $final_path/config.dist.php $final_path/config.local.php
-# create a key for the secret key CSFR;
-key=$(ynh_string_random --length=50)
-# edit config.local.php
-ynh_replace_string --match_string="const SECRET_KEY = '3xUhIgGwuovRKOjVsVPQ5yUMfXUSIOX2GKzcebsz5OINrYC50r';" --replace_string="const SECRET_KEY = '$key';" --target_file="$final_path/config.local.php"
-if [ "$path_url" == "/" ]; then
-  ynh_replace_string --match_string="//const WWW_URI = '/asso/';" --replace_string="const WWW_URI = '$path_url';" --target_file="$final_path/config.local.php"
-else
-  ynh_replace_string --match_string="//const WWW_URI = '/asso/';" --replace_string="const WWW_URI = '$path_url/';" --target_file="$final_path/config.local.php"
-fi
-ynh_replace_string --match_string="//const ENABLE_UPGRADES = true;" --replace_string="const ENABLE_UPGRADES = false;" --target_file="$final_path/config.local.php"
+echo -e "\n /** \n * Activer la possibilité de faire une mise à jour semi-automatisée \n * depuis fossil.kd2.org. \n * \n * Si mis à TRUE, alors un bouton sera accessible depuis le menu "Configuration" \n * pour faire une mise à jour en deux clics. \n * \n * Il est conseillé de désactiver cette fonctionnalité si vous ne voulez pas \n * permettre à un utilisateur de casser l'installation ! \n * \n * Défaut : true \n * \n * @var bool \n */ \n \nconst ENABLE_UPGRADES = false;" >> $final_path/config.local.php
 
 # Permissions on files and directories
 chmod -R o-rwx "$final_path"
