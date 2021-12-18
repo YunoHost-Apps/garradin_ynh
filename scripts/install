@@ -83,8 +83,8 @@ ynh_add_fpm_config --package="$extra_php_dependencies"
 #=================================================
 ynh_script_progression --message="Adding a configuration file..." --weight=5
 
-# copy config.dist.php creating config.local.php
-cp -a $final_path/config.dist.php $final_path/config.local.php
+# copy config.dist.php create config.local.php
+ynh_add_config --template="config.dist.php" --destination="$final_path/config.local.php"
 # create a key for the secret key CSFR;
 key=$(ynh_string_random --length=50)
 # edit config.local.php
