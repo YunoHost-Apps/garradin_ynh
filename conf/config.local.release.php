@@ -15,9 +15,9 @@
  * @var bool
  */
 
-const ENABLE_UPGRADES = false
+const ENABLE_UPGRADES = false;
 
-**
+/**
  * Commande de création de PDF
  *
  * Commande qui sera exécutée pour créer un fichier PDF à partir d'un HTML.
