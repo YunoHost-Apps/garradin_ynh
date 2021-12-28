@@ -255,7 +255,9 @@ fi
 #=================================================
 ynh_script_progression --message="Adding a configuration file..." --weight=5
 
-echo -e "\n /** \n * Activer la possibilité de faire une mise à jour semi-automatisée \n * depuis fossil.kd2.org. \n * \n * Si mis à TRUE, alors un bouton sera accessible depuis le menu "Configuration" \n * pour faire une mise à jour en deux clics. \n * \n * Il est conseillé de désactiver cette fonctionnalité si vous ne voulez pas \n * permettre à un utilisateur de casser l'installation ! \n * \n * Défaut : true \n * \n * @var bool \n */ \n \nconst ENABLE_UPGRADES = false;" >> $final_path/config.local.php
+ynh_add_config --template="config.local.release.php" --destination="$final_path/config.local.release.php"
+
+echo -e "\n require 'config.local.release.php'" >> $final_path/config.local.php
 
 # Permissions on files and directories
 chmod -R o-rwx "$final_path"
@@ -265,6 +267,7 @@ find "$final_path" -type f -exec chmod 440 {} +
 find "$final_path/data" -type d -exec chmod 770 {} +
 find "$final_path/data" -type f -exec chmod 660 {} +
 chmod 660 "$final_path/config.local.php"
+chmod 660 "$final_path/config.local.release.php"
 
 #=================================================
 # RELOAD NGINX
