@@ -257,7 +257,7 @@ ynh_script_progression --message="Adding a configuration file..." --weight=5
 
 ynh_add_config --template="config.local.release.php" --destination="$final_path/config.local.release.php"
 
-echo -e "\n require 'config.local.release.php'" >> $final_path/config.local.php
+echo -e "\n require 'config.local.release.php;'" >> $final_path/config.local.php
 
 # Permissions on files and directories
 chmod -R o-rwx "$final_path"
