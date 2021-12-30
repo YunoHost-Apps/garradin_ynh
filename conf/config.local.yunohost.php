@@ -1,9 +1,6 @@
 <?php
 
 /**
- * Ce fichier représente un exemple des constantes de configuration
- * disponibles pour Garradin.
- *
  * NE PAS MODIFIER CE FICHIER!
  *
  * Ce fichier sera mis à jour à chaque nouvelle version de Yunohost
