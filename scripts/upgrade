@@ -97,7 +97,8 @@ then
   # Set permissions on app files
   ynh_system_user_create --username=$app
   ynh_add_nginx_config
-  ynh_add_fpm_config --package="$extra_php_dependencies"
+  ynh_install_app_dependencies "$extra_php_dependencies"
+  ynh_add_fpm_config
   phpversion=$(ynh_app_setting_get --app=$app --key=phpversion)
   ynh_script_progression --message="restore data..." --weight=10
 
@@ -144,7 +145,8 @@ then
   # Set permissions on app files
   ynh_system_user_create --username=$app
   ynh_add_nginx_config
-  ynh_add_fpm_config --package="$extra_php_dependencies"
+  ynh_install_app_dependencies "$extra_php_dependencies"
+  ynh_add_fpm_config
   phpversion=$(ynh_app_setting_get --app=$app --key=phpversion)
   ynh_script_progression --message="restore data..." --weight=10
 
@@ -213,7 +215,8 @@ ynh_add_nginx_config
 ynh_script_progression --message="Upgrading PHP-FPM configuration..." --weight=2
 
 # Create a dedicated PHP-FPM config
-ynh_add_fpm_config --package="$extra_php_dependencies"
+ynh_install_app_dependencies "$extra_php_dependencies"
+ynh_add_fpm_config
 
 #=======================================================
 # backup bdd, squelettes directory and config.local.php

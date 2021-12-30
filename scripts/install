@@ -76,7 +76,8 @@ ynh_add_nginx_config
 ynh_script_progression --message="Configuring PHP-FPM..." --weight=5
 
 # Create a dedicated PHP-FPM config
-ynh_add_fpm_config --package="$extra_php_dependencies"
+ynh_install_app_dependencies "$extra_php_dependencies"
+ynh_add_fpm_config
 
 #=================================================
 #  ADD A CONFIGURATION
