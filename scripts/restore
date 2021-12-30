@@ -71,7 +71,9 @@ find "$final_path" -type d -exec chmod 550 {} +
 find "$final_path" -type f -exec chmod 440 {} +
 find "$final_path/data" -type d -exec chmod 770 {} +
 find "$final_path/data" -type f -exec chmod 660 {} +
-chmod 660 "$final_path/config.local.php"
+chmod 440 "$final_path/config.local.php"
+chmod 440 "$final_path/config.local.yunohost.php"
+chmod 660 "$final_path/config.local.user.php"
 
 #=================================================
 # RESTORE THE PHP-FPM CONFIGURATION

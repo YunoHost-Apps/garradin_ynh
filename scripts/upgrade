@@ -259,6 +259,10 @@ fi
 #=================================================
 ynh_script_progression --message="Adding a configuration file..." --weight=5
 
+if ynh_compare_current_package_version --comparison lt --version 1.1.15~ynh1; then
+  ynh_add_config --template="config.local.user.php" --destination="$final_path/config.local.user.php"
+fi
+
 ynh_add_config --template="config.local.php" --destination="$final_path/config.local.php"
 ynh_add_config --template="config.local.yunohost.php" --destination="$final_path/config.local.yunohost.php"
 # NOTE: Don't overwrite config.local.user.php
