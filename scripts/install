@@ -84,18 +84,13 @@ ynh_add_fpm_config
 #=================================================
 ynh_script_progression --message="Adding a configuration file..." --weight=5
 
-# copy config.dist.php creating config.local.php
-cp -a $final_path/config.dist.php $final_path/config.local.php
-# create a key for the secret key CSFR;
-key=$(ynh_string_random --length=50)
-# edit config.local.php
-ynh_replace_string --match_string="const SECRET_KEY = '3xUhIgGwuovRKOjVsVPQ5yUMfXUSIOX2GKzcebsz5OINrYC50r';" --replace_string="const SECRET_KEY = '$key';" --target_file="$final_path/config.local.php"
-if [ "$path_url" == "/" ]; then
-  ynh_replace_string --match_string="//const WWW_URI = '/asso/';" --replace_string="const WWW_URI = '$path_url';" --target_file="$final_path/config.local.php"
-else
-  ynh_replace_string --match_string="//const WWW_URI = '/asso/';" --replace_string="const WWW_URI = '$path_url/';" --target_file="$final_path/config.local.php"
-fi
-ynh_replace_string --match_string="//const ENABLE_UPGRADES = true;" --replace_string="const ENABLE_UPGRADES = false;" --target_file="$final_path/config.local.php"
+# create a key for the secret key CSFR:
+secret_key=$(ynh_string_random --length=50)
+
+# Install configuration files
+ynh_add_config --template="config.local.php" --destination="$final_path/config.local.php"
+ynh_add_config --template="config.local.yunohost.php" --destination="$final_path/config.local.yunohost.php"
+ynh_add_config --template="config.local.user.php" --destination="$final_path/config.local.user.php"
 
 # Permissions on files and directories
 chmod -R o-rwx "$final_path"
@@ -104,7 +99,9 @@ find "$final_path" -type d -exec chmod 550 {} +
 find "$final_path" -type f -exec chmod 440 {} +
 find "$final_path/data" -type d -exec chmod 770 {} +
 find "$final_path/data" -type f -exec chmod 660 {} +
-chmod 660 "$final_path/config.local.php"
+chmod 440 "$final_path/config.local.php"
+chmod 440 "$final_path/config.local.yunohost.php"
+chmod 660 "$final_path/config.local.user.php"
 
 #=================================================
 # SETUP SSOWAT

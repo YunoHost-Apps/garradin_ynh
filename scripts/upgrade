@@ -20,6 +20,7 @@ domain=$(ynh_app_setting_get --app=$app --key=domain)
 path_url=$(ynh_app_setting_get --app=$app --key=path)
 final_path=$(ynh_app_setting_get --app=$app --key=final_path) || ynh_die "This path already contains a folder"
 phpversion=$(ynh_app_setting_get --app=$app --key=phpversion)
+secret_key=$(ynh_string_random --length=50)
 
 #=================================================
 # CHECK VERSION
@@ -91,7 +92,7 @@ fi
 
 if ynh_compare_current_package_version --comparison lt --version 0.9.8.1~ynh1
 then
-  ynh_script_progression --message="Upgrading upgrade to 0.9.8" --weight=5
+  ynh_script_progression --message="Upgrading to 0.9.8" --weight=5
     # Download, check integrity, uncompress and patch the source from 0.9.8.src
   ynh_setup_source --keep="config.local.php" --dest_dir="$final_path" --source_id="0.9.8"
   # Set permissions on app files
@@ -139,7 +140,7 @@ fi
 
 if ynh_compare_current_package_version --comparison lt --version 1.1.0~ynh1
 then
-  ynh_script_progression --message="Upgrading upgrade to 1.1.0" --weight=5
+  ynh_script_progression --message="Upgrading to 1.1.0" --weight=5
   # Download, check integrity, uncompress and patch the source from 0.9.8.src
   ynh_setup_source --keep="config.local.php" --dest_dir="$final_path" --source_id="1.1.0"
   # Set permissions on app files
@@ -198,7 +199,7 @@ ynh_script_progression --message="Upgrading source files..." --weight=5
 if [ "$upgrade_type" == "UPGRADE_APP" ]
 then
   # Download, check integrity, uncompress and patch the source from app.src
-  ynh_setup_source --keep="config.local.php" --dest_dir="$final_path"
+  ynh_setup_source --keep="config.local.user.php" --dest_dir="$final_path"
 fi
 
 #=================================================
@@ -258,9 +259,9 @@ fi
 #=================================================
 ynh_script_progression --message="Adding a configuration file..." --weight=5
 
-ynh_add_config --template="config.local.release.php" --destination="$final_path/config.local.release.php"
-
-echo -e "\n require 'config.local.release.php;'" >> $final_path/config.local.php
+ynh_add_config --template="config.local.php" --destination="$final_path/config.local.php"
+ynh_add_config --template="config.local.yunohost.php" --destination="$final_path/config.local.yunohost.php"
+# NOTE: Don't overwrite config.local.user.php
 
 # Permissions on files and directories
 chmod -R o-rwx "$final_path"
@@ -269,8 +270,9 @@ find "$final_path" -type d -exec chmod 550 {} +
 find "$final_path" -type f -exec chmod 440 {} +
 find "$final_path/data" -type d -exec chmod 770 {} +
 find "$final_path/data" -type f -exec chmod 660 {} +
-chmod 660 "$final_path/config.local.php"
-chmod 660 "$final_path/config.local.release.php"
+chmod 440 "$final_path/config.local.php"
+chmod 440 "$final_path/config.local.yunohost.php"
+chmod 660 "$final_path/config.local.user.php"
 
 #=================================================
 # RELOAD NGINX
@@ -285,7 +287,6 @@ ynh_systemd_action --service_name=nginx --action=reload
 ynh_script_progression --message="Finalise upgrade" --weight=1
 
 ynh_local_curl "/admin/index.php"
-chmod 440 "$final_path/config.local.php"
 
 #=================================================
 # END OF SCRIPT
