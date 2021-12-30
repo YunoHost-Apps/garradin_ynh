@@ -12,6 +12,8 @@
 		setup_public=1
 		upgrade=1
 		upgrade=1	from_commit=7205455e0a806a49c48c6d2f005d80d1b74a3355
+		upgrade=1       from_commit=fc55308f7521310d5c339139339896bb59bd73cd
+		upgrade=1       from_commit=e5dd30afa6a618344c9e7b927839d4e9ac8bfc56
 		backup_restore=1
 		multi_instance=1
 		change_url=1
@@ -20,5 +22,11 @@ Email=
 Notification=none
 ;;; Upgrade options
 	; commit=7205455e0a806a49c48c6d2f005d80d1b74a3355
-		name=Merge pull request #55 from yunohost-bot/issue-and-pr-template
+		name=Previous version
+		manifest_arg=domain=DOMAIN&path=PATH&admin=USER&language=fr&is_public=1&password=pass&port=666&
+	; commit=fc55308f7521310d5c339139339896bb59bd73cd
+		name=Version 0.9.5
+		manifest_arg=domain=DOMAIN&path=PATH&admin=USER&language=fr&is_public=1&password=pass&port=666&
+	; commit=e5dd30afa6a618344c9e7b927839d4e9ac8bfc56
+		name=Version 1.0.3~ynh2
 		manifest_arg=domain=DOMAIN&path=PATH&admin=USER&language=fr&is_public=1&password=pass&port=666&
