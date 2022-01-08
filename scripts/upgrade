@@ -18,8 +18,9 @@ app=$YNH_APP_INSTANCE_NAME
 
 domain=$(ynh_app_setting_get --app=$app --key=domain)
 path_url=$(ynh_app_setting_get --app=$app --key=path)
-final_path=$(ynh_app_setting_get --app=$app --key=final_path) || ynh_die "This path already contains a folder"
+final_path=$(ynh_app_setting_get --app=$app --key=final_path) || ynh_die --message="This path already contains a folder"
 phpversion=$(ynh_app_setting_get --app=$app --key=phpversion)
+secret_key=$(ynh_string_random --length=50)
 
 #=================================================
 # CHECK VERSION
@@ -66,13 +67,23 @@ ynh_script_progression --message="Backing up the data before upgrading (may take
 
 bdd=$final_path/association.sqlite
 squelettes=$final_path/www/squelettes
+data=$final_path/data
+skel_dist=$final_path/www/skel-dist
 
 if  [ -d "$squelettes" ]; then
-  cp -ar $squelettes /tmp/squelettes
+  cp -a "$squelettes" /tmp/squelettes
 fi
 
 if [ -e "$bdd" ]; then
-  cp -a $bdd /tmp/association.sqlite
+  cp -a "$bdd" /tmp/association.sqlite
+fi
+
+if  [ -d "$data" ]; then
+  cp -a "$data" /tmp/data
+fi
+
+if [ -d "$skel_dist" ]; then
+  cp -a "$skel_dist" /tmp/skel-dist
 fi
 
 #=================================================
@@ -81,13 +92,14 @@ fi
 
 if ynh_compare_current_package_version --comparison lt --version 0.9.8.1~ynh1
 then
-  ynh_script_progression --message="Upgrading upgrade to 0.9.8" --weight=5
+  ynh_script_progression --message="Upgrading to 0.9.8" --weight=5
     # Download, check integrity, uncompress and patch the source from 0.9.8.src
   ynh_setup_source --keep="config.local.php" --dest_dir="$final_path" --source_id="0.9.8"
   # Set permissions on app files
   ynh_system_user_create --username=$app
   ynh_add_nginx_config
-  ynh_add_fpm_config --package="$extra_php_dependencies"
+  ynh_install_app_dependencies "$extra_php_dependencies"
+  ynh_add_fpm_config
   phpversion=$(ynh_app_setting_get --app=$app --key=phpversion)
   ynh_script_progression --message="restore data..." --weight=10
 
@@ -96,12 +108,12 @@ then
 
   if  [ -d "$backup_squelettes" ]
   then
-    cp -ar $backup_squelettes $final_path/www/squelettes
+    cp -a "$backup_squelettes" $final_path/www/squelettes
   fi
 
   if [ -e "$backup_bdd" ]
   then
-    cp -a $backup_bdd $final_path/association.sqlite
+    cp -a "$backup_bdd" $final_path/association.sqlite
   fi
 
   chown -R $app:$app $final_path
@@ -128,13 +140,14 @@ fi
 
 if ynh_compare_current_package_version --comparison lt --version 1.1.0~ynh1
 then
-  ynh_script_progression --message="Upgrading upgrade to 1.1.0" --weight=5
+  ynh_script_progression --message="Upgrading to 1.1.0" --weight=5
   # Download, check integrity, uncompress and patch the source from 0.9.8.src
   ynh_setup_source --keep="config.local.php" --dest_dir="$final_path" --source_id="1.1.0"
   # Set permissions on app files
   ynh_system_user_create --username=$app
   ynh_add_nginx_config
-  ynh_add_fpm_config --package="$extra_php_dependencies"
+  ynh_install_app_dependencies "$extra_php_dependencies"
+  ynh_add_fpm_config
   phpversion=$(ynh_app_setting_get --app=$app --key=phpversion)
   ynh_script_progression --message="restore data..." --weight=10
 
@@ -143,12 +156,12 @@ then
 
   if  [ -d "$backup_squelettes" ]
   then
-    cp -ar $backup_squelettes $final_path/www/squelettes
+    cp -a "$backup_squelettes" $final_path/www/squelettes
   fi
 
   if [ -e "$backup_bdd" ]
   then
-    cp -a $backup_bdd $final_path/association.sqlite
+    cp -a "$backup_bdd" $final_path/association.sqlite
   fi
 
   chown -R $app:$app $final_path
@@ -186,7 +199,7 @@ ynh_script_progression --message="Upgrading source files..." --weight=5
 if [ "$upgrade_type" == "UPGRADE_APP" ]
 then
   # Download, check integrity, uncompress and patch the source from app.src
-  ynh_setup_source --keep="config.local.php" --dest_dir="$final_path"
+  ynh_setup_source --keep="config.local.user.php" --dest_dir="$final_path"
 fi
 
 #=================================================
@@ -203,7 +216,8 @@ ynh_add_nginx_config
 ynh_script_progression --message="Upgrading PHP-FPM configuration..." --weight=2
 
 # Create a dedicated PHP-FPM config
-ynh_add_fpm_config --package="$extra_php_dependencies"
+ynh_install_app_dependencies "$extra_php_dependencies"
+ynh_add_fpm_config
 
 #=======================================================
 # backup bdd, squelettes directory and config.local.php
@@ -212,23 +226,46 @@ ynh_script_progression --message="restore data..." --weight=10
 
 backup_bdd=/tmp/association.sqlite
 backup_squelettes=/tmp/squelettes
+backup_data=/tmp/data
+backup_skel_dist=/tmp/skel-dist
 
 if  [ -d "$backup_squelettes" ]
 then
-  cp -ar $backup_squelettes $final_path/www/squelettes
+  cp -a "$backup_squelettes" $final_path/www/squelettes
   ynh_secure_remove  $backup_squelettes
 fi
 
 if [ -e "$backup_bdd" ]
 then
-  cp -a $backup_bdd $final_path/association.sqlite
+  cp -a "$backup_bdd" $final_path/association.sqlite
   ynh_secure_remove $backup_bdd
 fi
+
+if  [ -d "$backup_data" ]
+then
+  cp -a "$backup_data" $final_path/data
+  ynh_secure_remove  $backup_data
+fi
+
+if  [ -d "$backup_skel_dist" ]
+then
+  cp -a "$backup_skel_dist" $final_path/www/skel-dist
+  ynh_secure_remove  $backup_skel_dist
+fi
+
 
 #=================================================
 # ADD A CONFIGURATION
 #=================================================
 ynh_script_progression --message="Adding a configuration file..." --weight=5
+
+if ynh_compare_current_package_version --comparison lt --version 1.1.15~ynh1; then
+  ynh_add_config --template="config.local.user.php" --destination="$final_path/config.local.user.php"
+fi
+
+ynh_add_config --template="config.local.php" --destination="$final_path/config.local.php"
+ynh_add_config --template="config.local.yunohost.php" --destination="$final_path/config.local.yunohost.php"
+# NOTE: Don't overwrite config.local.user.php
 
 # Permissions on files and directories
 chmod -R o-rwx "$final_path"
@@ -237,7 +274,9 @@ find "$final_path" -type d -exec chmod 550 {} +
 find "$final_path" -type f -exec chmod 440 {} +
 find "$final_path/data" -type d -exec chmod 770 {} +
 find "$final_path/data" -type f -exec chmod 660 {} +
-chmod 660 "$final_path/config.local.php"
+chmod 440 "$final_path/config.local.php"
+chmod 440 "$final_path/config.local.yunohost.php"
+chmod 660 "$final_path/config.local.user.php"
 
 #=================================================
 # RELOAD NGINX
@@ -252,7 +291,6 @@ ynh_systemd_action --service_name=nginx --action=reload
 ynh_script_progression --message="Finalise upgrade" --weight=1
 
 ynh_local_curl "/admin/index.php"
-chmod 440 "$final_path/config.local.php"
 
 #=================================================
 # END OF SCRIPT

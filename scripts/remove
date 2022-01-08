@@ -44,7 +44,10 @@ ynh_script_progression --message="Removing PHP-FPM configuration..." --weight=2
 ynh_remove_app_dependencies
 
 # Remove the dedicated PHP-FPM config
-ynh_remove_fpm_config
+# NB: If there is a warning because it cannot locate the garradin-ynh-deps package, ignore
+#     It's just it has been removed before.
+#     https://github.com/YunoHost/yunohost/blob/509ba1e8a28e0be598aa0617eda06669b7b0f1d8/data/helpers.d/php#L284-L287
+ynh_remove_fpm_config 2> >(grep -v 'WARNING E: Unable to locate package')
 
 #=================================================
 # GENERIC FINALIZATION
