@@ -20,8 +20,8 @@
         "name": "frju365",
         "email": "win10@tutanota.com"
     },
-     "requirements": {
-        "yunohost": ">=4.2.4"
+    "requirements": {
+        "yunohost": ">= 4.3.0"
     },
     "multi_instance": true,
     "services": [
@@ -29,7 +29,7 @@
         "php7.4-fpm"
     ],
     "arguments": {
-        "install" : [
+        "install": [
             {
                 "name": "domain",
                 "type": "domain"
