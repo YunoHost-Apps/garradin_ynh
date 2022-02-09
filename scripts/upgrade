@@ -25,23 +25,26 @@ secret_key=$(ynh_string_random --length=50)
 #=================================================
 # CHECK VERSION
 #=================================================
+ynh_script_progression --message="Checking version..."
 
 upgrade_type=$(ynh_check_app_version_changed)
 
 #=================================================
 # BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
 #=================================================
-ynh_script_progression --message="Backing up Garradin before upgrading (may take a while)..." --weight=30
+ynh_script_progression --message="Backing up the app before upgrading (may take a while)..." --weight=30
 
 # Backup the current version of the app
 ynh_backup_before_upgrade
 ynh_clean_setup () {
-  # restore it if the upgrade fails
-  ynh_restore_upgradebackup
+	# Restore it if the upgrade fails
+	ynh_restore_upgradebackup
 }
 # Exit if an error occurs during the execution of the script
 ynh_abort_if_errors
 
+#=================================================
+# STANDARD UPGRADE STEPS
 #=================================================
 # ENSURE DOWNWARD COMPATIBILITY
 #=================================================
@@ -194,12 +197,13 @@ ynh_system_user_create --username=$app --home_dir="$final_path"
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
 #=================================================
-ynh_script_progression --message="Upgrading source files..." --weight=5
 
 if [ "$upgrade_type" == "UPGRADE_APP" ]
 then
-  # Download, check integrity, uncompress and patch the source from app.src
-  ynh_setup_source --keep="config.local.user.php" --dest_dir="$final_path"
+	ynh_script_progression --message="Upgrading source files..." --weight=5
+
+	# Download, check integrity, uncompress and patch the source from app.src
+	ynh_setup_source --keep="config.local.user.php" --dest_dir="$final_path"
 fi
 
 #=================================================
@@ -253,7 +257,6 @@ then
   ynh_secure_remove  $backup_skel_dist
 fi
 
-
 #=================================================
 # ADD A CONFIGURATION
 #=================================================
@@ -279,6 +282,8 @@ chmod 440 "$final_path/config.local.yunohost.php"
 chmod 660 "$final_path/config.local.user.php"
 
 #=================================================
+# GENERIC FINALIZATION
+#=================================================
 # RELOAD NGINX
 #=================================================
 ynh_script_progression --message="Reloading NGINX web server..." --weight=1
@@ -296,4 +301,4 @@ ynh_local_curl "/admin/index.php"
 # END OF SCRIPT
 #=================================================
 
-ynh_script_progression --message="Upgrade of Garradin completed" --last
+ynh_script_progression --message="Upgrade of $app completed" --last
