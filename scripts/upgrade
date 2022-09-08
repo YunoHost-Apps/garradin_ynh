@@ -97,7 +97,7 @@ if ynh_compare_current_package_version --comparison lt --version 1.1.0~ynh1
 then
   ynh_script_progression --message="Upgrading to 1.1.0" --weight=5
   # Download, check integrity, uncompress and patch the source from 0.9.8.src
-  ynh_setup_source --keep="config.local.php" --dest_dir="$final_path" --source_id="1.1.0"
+  ynh_setup_source --keep="config.local.php" --source_id="1.1.0"
   # Set permissions on app files
   ynh_system_user_create --username=$app
   ynh_add_nginx_config
@@ -122,20 +122,14 @@ then
   chown -R $app:$app $final_path
   chmod 755 $final_path
 
-  # Temporarily enable visitors for curl if needed
-  visitors_enabled=$(ynh_permission_has_user "main" "visitors" && echo yes || echo no)
-  if [[ $visitors_enabled == "no" ]]; then
-    ynh_permission_update --permission "main" --add "visitors"
-  fi
-
   # Finalize the upgrade
   ynh_local_curl "/index.php"
   sleep 5
   ynh_local_curl "/index.php"
 
-  if [[ $visitors_enabled == "no" ]]; then
-    ynh_permission_update --permission "main" --remove "visitors"
-  fi
+#  if [[ $visitors_enabled == "no" ]]; then
+#    ynh_permission_update --permission "main" --remove "visitors"
+#  fi
 fi
 
 #=================================================
@@ -155,7 +149,7 @@ then
   ynh_script_progression --message="Upgrading source files..." --weight=5
 
   # Download, check integrity, uncompress and patch the source from app.src
-  ynh_setup_source --keep="config.local.user.php" --dest_dir="$final_path"
+  ynh_setup_source --keep="config.local.user.php"
 fi
 
 #=================================================

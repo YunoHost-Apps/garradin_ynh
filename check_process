@@ -16,7 +16,6 @@
 		setup_public=1
 		upgrade=1
 		upgrade=1	from_commit=7205455e0a806a49c48c6d2f005d80d1b74a3355
-		upgrade=1       from_commit=04e1730ff642a2e48dfb533b2136fe90f9eaf133
 		backup_restore=1
 		multi_instance=1
 		change_url=1
@@ -26,7 +25,4 @@ Notification=none
 ;;; Upgrade options
 	; commit=7205455e0a806a49c48c6d2f005d80d1b74a3355
 		name=Previous version
-		manifest_arg=domain=DOMAIN&path=PATH&admin=USER&language=fr&is_public=1&password=pass&port=666&
-	; commit=04e1730ff642a2e48dfb533b2136fe90f9eaf133
-		name=Version 1.0.6~ynh1
 		manifest_arg=domain=DOMAIN&path=PATH&admin=USER&language=fr&is_public=1&password=pass&port=666&
