@@ -20,6 +20,8 @@ domain=$(ynh_app_setting_get --app=$app --key=domain)
 final_path=$(ynh_app_setting_get --app=$app --key=final_path)
 
 #=================================================
+# STANDARD REMOVE
+#=================================================
 # REMOVE APP MAIN DIR
 #=================================================
 ynh_script_progression --message="Removing app main directory..." --weight=3
@@ -41,15 +43,12 @@ ynh_remove_nginx_config
 ynh_script_progression --message="Removing PHP-FPM configuration..." --weight=2
 
 # Remove the dedicated PHP-FPM config
-# NB: If there is a warning because it cannot locate the garradin-ynh-deps package, ignore
-#     It's just it has been removed before.
-#     https://github.com/YunoHost/yunohost/blob/509ba1e8a28e0be598aa0617eda06669b7b0f1d8/data/helpers.d/php#L284-L287
 ynh_remove_fpm_config
 
 #=================================================
 # REMOVE DEPENDENCIES
 #=================================================
-ynh_script_progression --message="Removing dependencies..."
+ynh_script_progression --message="Removing dependencies..." --weight=1
 
 # Remove metapackage and its dependencies
 ynh_remove_app_dependencies
