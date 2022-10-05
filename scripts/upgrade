@@ -52,8 +52,8 @@ ynh_script_progression --message="Ensuring downward compatibility..." --weight=1
 
 # If final_path doesn't exist, create it
 if [ -z "$final_path" ]; then
-  final_path=/var/www/$app
-  ynh_app_setting_set --app=$app --key=final_path --value=$final_path
+	final_path=/var/www/$app
+	ynh_app_setting_set --app=$app --key=final_path --value=$final_path
 fi
 
 # Cleaning legacy permissions
@@ -65,27 +65,27 @@ fi
 
 if ynh_compare_current_package_version --comparison lt --version 1.1.0~ynh1
 then
-  ynh_script_progression --message="Upgrading to 1.1.0" --weight=5
-  # Download, check integrity, uncompress and patch the source from 0.9.8.src
-  ynh_setup_source --keep="association.sqlite squelettes/ data/ skel-dist/ config.local.user.php config.local.php" --dest_dir="$final_path" --source_id="1.1.0"
-  # Set permissions on app files
-  ynh_system_user_create --username=$app
-  ynh_add_nginx_config
-  ynh_install_app_dependencies "$extra_php_dependencies"
-  ynh_add_fpm_config
-  phpversion=$(ynh_app_setting_get --app=$app --key=phpversion)
+	ynh_script_progression --message="Upgrading to 1.1.0" --weight=5
+	# Download, check integrity, uncompress and patch the source from 0.9.8.src
+	ynh_setup_source --keep="association.sqlite squelettes/ data/ skel-dist/ config.local.user.php config.local.php" --dest_dir="$final_path" --source_id="1.1.0"
+	# Set permissions on app files
+	ynh_system_user_create --username=$app
+	ynh_add_nginx_config
+	ynh_install_app_dependencies $pkg_dependencies
+	ynh_add_fpm_config
+	phpversion=$(ynh_app_setting_get --app=$app --key=phpversion)
 
-  chown -R $app:$app $final_path
-  chmod 755 $final_path
+	chown -R $app:$app $final_path
+	chmod 755 $final_path
 
-  # Finalize the upgrade
-  ynh_local_curl "/index.php"
-  sleep 5
-  ynh_local_curl "/index.php"
+	# Finalize the upgrade
+	ynh_local_curl "/index.php"
+	sleep 5
+	ynh_local_curl "/index.php"
 
-#  if [[ $visitors_enabled == "no" ]]; then
-#    ynh_permission_update --permission "main" --remove "visitors"
-#  fi
+#	if [[ $visitors_enabled == "no" ]]; then
+#		ynh_permission_update --permission "main" --remove "visitors"
+#	fi
 fi
 
 #=================================================
@@ -143,7 +143,7 @@ ynh_add_nginx_config
 ynh_script_progression --message="Updating a configuration file..." --weight=5
 
 if ynh_compare_current_package_version --comparison lt --version 1.1.15~ynh1; then
-  ynh_add_config --template="config.local.user.php" --destination="$final_path/config.local.user.php"
+	ynh_add_config --template="config.local.user.php" --destination="$final_path/config.local.user.php"
 fi
 
 ynh_add_config --template="config.local.php" --destination="$final_path/config.local.php"
