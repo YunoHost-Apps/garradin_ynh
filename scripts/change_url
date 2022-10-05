@@ -103,6 +103,8 @@ fi
 #=================================================
 ynh_script_progression --message="Updating a configuration file..." --weight=1
 
+domain=$new_domain
+path=$new_path
 ynh_add_config --template="config.local.yunohost.php" --destination="$final_path/config.local.yunohost.php"
 
 #=================================================
