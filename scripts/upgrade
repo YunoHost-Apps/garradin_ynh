@@ -18,14 +18,14 @@ app=$YNH_APP_INSTANCE_NAME
 
 domain=$(ynh_app_setting_get --app=$app --key=domain)
 path_url=$(ynh_app_setting_get --app=$app --key=path)
-final_path=$(ynh_app_setting_get --app=$app --key=final_path) || ynh_die --message="This path already contains a folder"
+final_path=$(ynh_app_setting_get --app=$app --key=final_path)
 phpversion=$(ynh_app_setting_get --app=$app --key=phpversion)
-secret_key=$(ynh_string_random --length=50)
+secret_key=$(ynh_app_setting_get --app=$app --key=secret_key)
 
 #=================================================
 # CHECK VERSION
 #=================================================
-ynh_script_progression --message="Checking version..."
+ynh_script_progression --message="Checking version..." --weight=1
 
 upgrade_type=$(ynh_check_app_version_changed)
 
@@ -37,8 +37,8 @@ ynh_script_progression --message="Backing up the app before upgrading (may take 
 # Backup the current version of the app
 ynh_backup_before_upgrade
 ynh_clean_setup () {
-  # Restore it if the upgrade fails
-  ynh_restore_upgradebackup
+	# Restore it if the upgrade fails
+	ynh_restore_upgradebackup
 }
 # Exit if an error occurs during the execution of the script
 ynh_abort_if_errors
@@ -52,84 +52,40 @@ ynh_script_progression --message="Ensuring downward compatibility..." --weight=1
 
 # If final_path doesn't exist, create it
 if [ -z "$final_path" ]; then
-  final_path=/var/www/$app
-  ynh_app_setting_set --app=$app --key=final_path --value=$final_path
+	final_path=/var/www/$app
+	ynh_app_setting_set --app=$app --key=final_path --value=$final_path
 fi
 
 # Cleaning legacy permissions
 if ynh_legacy_permissions_exists; then
-  ynh_legacy_permissions_delete_all
+	ynh_legacy_permissions_delete_all
 
-  ynh_app_setting_delete --app=$app --key=is_public
+	ynh_app_setting_delete --app=$app --key=is_public
 fi
-
-#=================================================
-# Backup Data
-#=================================================
-ynh_script_progression --message="Backing up the data before upgrading (may take a while)..." --weight=30
-
-bdd=$final_path/association.sqlite
-squelettes=$final_path/www/squelettes
-data=$final_path/data
-skel_dist=$final_path/www/skel-dist
-
-if  [ -d "$squelettes" ]; then
-  cp -a "$squelettes" /tmp/squelettes
-fi
-
-if [ -e "$bdd" ]; then
-  cp -a "$bdd" /tmp/association.sqlite
-fi
-
-if  [ -d "$data" ]; then
-  cp -a "$data" /tmp/data
-fi
-
-if [ -d "$skel_dist" ]; then
-  cp -a "$skel_dist" /tmp/skel-dist
-fi
-
-#=================================================
-# UPGRADE TO 1.1.0 if necessary
-#=================================================
 
 if ynh_compare_current_package_version --comparison lt --version 1.1.0~ynh1
 then
-  ynh_script_progression --message="Upgrading to 1.1.0" --weight=5
-  # Download, check integrity, uncompress and patch the source from 0.9.8.src
-  ynh_setup_source --keep="config.local.php" --dest_dir="$final_path" --source_id="1.1.0"
-  # Set permissions on app files
-  ynh_system_user_create --username=$app
-  ynh_add_nginx_config
-  ynh_install_app_dependencies "$extra_php_dependencies"
-  ynh_add_fpm_config
-  phpversion=$(ynh_app_setting_get --app=$app --key=phpversion)
-  ynh_script_progression --message="restore data..." --weight=10
+	ynh_script_progression --message="Upgrading to 1.1.0" --weight=5
+	# Download, check integrity, uncompress and patch the source from 0.9.8.src
+	ynh_setup_source --keep="association.sqlite squelettes/ data/ skel-dist/ config.local.user.php config.local.php" --dest_dir="$final_path" --source_id="1.1.0"
+	# Set permissions on app files
+	ynh_system_user_create --username=$app
+	ynh_add_nginx_config
+	ynh_install_app_dependencies $pkg_dependencies
+	ynh_add_fpm_config
+	phpversion=$(ynh_app_setting_get --app=$app --key=phpversion)
 
-  backup_bdd=/tmp/association.sqlite
-  backup_squelettes=/tmp/squelettes
+	chown -R $app:$app $final_path
+	chmod 755 $final_path
 
-  if  [ -d "$backup_squelettes" ]
-  then
-    cp -a "$backup_squelettes" $final_path/www/squelettes
-  fi
+	# Finalize the upgrade
+	ynh_local_curl "/index.php"
+	sleep 5
+	ynh_local_curl "/index.php"
 
-  if [ -e "$backup_bdd" ]
-  then
-    cp -a "$backup_bdd" $final_path/association.sqlite
-  fi
-
-  chown -R $app:$app $final_path
-  chmod 755 $final_path
-
-  # Finalize the upgrade
-  ynh_local_curl "/index.php"
-  sleep 5
-  ynh_local_curl "/index.php"
-
-#  if [[ $visitors_enabled == "no" ]]; then
-#    ynh_permission_update --permission "main" --remove "visitors"
-#  fi
+#	if [[ $visitors_enabled == "no" ]]; then
+#		ynh_permission_update --permission "main" --remove "visitors"
+#	fi
 fi
 
 #=================================================
@@ -146,11 +102,30 @@ ynh_system_user_create --username=$app --home_dir="$final_path"
 
 if [ "$upgrade_type" == "UPGRADE_APP" ]
 then
-  ynh_script_progression --message="Upgrading source files..." --weight=5
+	ynh_script_progression --message="Upgrading source files..." --weight=5
 
-  # Download, check integrity, uncompress and patch the source from app.src
-  ynh_setup_source --keep="config.local.user.php" --dest_dir="$final_path"
+	# Download, check integrity, uncompress and patch the source from app.src
+	ynh_setup_source --dest_dir="$final_path" --keep="association.sqlite squelettes/ data/ skel-dist/ config.local.user.php"
 fi
+
+chmod 750 "$final_path"
+chmod -R o-rwx "$final_path"
+chown -R $app:www-data "$final_path"
+
+#=================================================
+# UPGRADE DEPENDENCIES
+#=================================================
+ynh_script_progression --message="Upgrading dependencies..." --weight=1
+
+ynh_install_app_dependencies $pkg_dependencies
+
+#=================================================
+# PHP-FPM CONFIGURATION
+#=================================================
+ynh_script_progression --message="Upgrading PHP-FPM configuration..." --weight=2
+
+# Create a dedicated PHP-FPM config
+ynh_add_fpm_config
 
 #=================================================
 # NGINX CONFIGURATION
@@ -161,55 +136,14 @@ ynh_script_progression --message="Upgrading NGINX web server configuration..." -
 ynh_add_nginx_config
 
 #=================================================
-# PHP-FPM CONFIGURATION
+# SPECIFIC UPGRADE
 #=================================================
-ynh_script_progression --message="Upgrading PHP-FPM configuration..." --weight=2
-
-# Create a dedicated PHP-FPM config
-ynh_install_app_dependencies "$extra_php_dependencies"
-ynh_add_fpm_config
-
-#=======================================================
-# backup bdd, squelettes directory and config.local.php
-#=======================================================
-ynh_script_progression --message="restore data..." --weight=10
-
-backup_bdd=/tmp/association.sqlite
-backup_squelettes=/tmp/squelettes
-backup_data=/tmp/data
-backup_skel_dist=/tmp/skel-dist
-
-if  [ -d "$backup_squelettes" ]
-then
-  cp -a "$backup_squelettes" $final_path/www/squelettes
-  ynh_secure_remove  $backup_squelettes
-fi
-
-if [ -e "$backup_bdd" ]
-then
-  cp -a "$backup_bdd" $final_path/association.sqlite
-  ynh_secure_remove $backup_bdd
-fi
-
-if  [ -d "$backup_data" ]
-then
-  cp -a "$backup_data" $final_path/data
-  ynh_secure_remove  $backup_data
-fi
-
-if  [ -d "$backup_skel_dist" ]
-then
-  cp -a "$backup_skel_dist" $final_path/www/skel-dist
-  ynh_secure_remove  $backup_skel_dist
-fi
-
+# UPDATE A CONFIG FILE
 #=================================================
-# ADD A CONFIGURATION
-#=================================================
-ynh_script_progression --message="Adding a configuration file..." --weight=5
+ynh_script_progression --message="Updating a configuration file..." --weight=5
 
 if ynh_compare_current_package_version --comparison lt --version 1.1.15~ynh1; then
-  ynh_add_config --template="config.local.user.php" --destination="$final_path/config.local.user.php"
+	ynh_add_config --template="config.local.user.php" --destination="$final_path/config.local.user.php"
 fi
 
 ynh_add_config --template="config.local.php" --destination="$final_path/config.local.php"
@@ -228,6 +162,13 @@ chmod 440 "$final_path/config.local.yunohost.php"
 chmod 660 "$final_path/config.local.user.php"
 
 #=================================================
+# FINALISE UPGRADE
+#=================================================
+ynh_script_progression --message="Finalise upgrade" --weight=1
+
+ynh_local_curl "/admin/index.php"
+
+#=================================================
 # GENERIC FINALIZATION
 #=================================================
 # RELOAD NGINX
@@ -235,13 +176,6 @@ chmod 660 "$final_path/config.local.user.php"
 ynh_script_progression --message="Reloading NGINX web server..." --weight=1
 
 ynh_systemd_action --service_name=nginx --action=reload
-
-#=================================================
-# Finalise Upgrade
-#=================================================
-ynh_script_progression --message="Finalise upgrade" --weight=1
-
-ynh_local_curl "/admin/index.php"
 
 #=================================================
 # END OF SCRIPT
