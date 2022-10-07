@@ -17,8 +17,7 @@ If you don't have YunoHost, please consult [the guide](https://yunohost.org/#/in
 
 Garradin (word meaning money in an aboriginal dialect of northern Australia, pronounced "gar-a-dine" em) is software for associative management. It is the tool of choice for managing an association, a sports club, an NGO, etc. It is designed to meet the needs of a small to medium-sized structure: management of members, accounting, website, note-taking in meetings, archiving and sharing of the association's operating documents, discussion between members, etc. etc. . 
 
-**Shipped version:** 1.1.30~ynh1
-
+**Shipped version:** 1.1.30~ynh2
 
 **Demo:** https://garradin.eu/essai/
 
