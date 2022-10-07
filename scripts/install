@@ -46,6 +46,15 @@ ynh_app_setting_set --app=$app --key=domain --value=$domain
 ynh_app_setting_set --app=$app --key=path --value=$path_url
 
 #=================================================
+# STANDARD MODIFICATIONS
+#=================================================
+# INSTALL DEPENDENCIES
+#=================================================
+ynh_script_progression --message="Installing dependencies..." --weight=1
+
+ynh_install_app_dependencies $pkg_dependencies
+
+#=================================================
 # CREATE DEDICATED USER
 #=================================================
 ynh_script_progression --message="Configuring system user..." --weight=3
@@ -62,6 +71,18 @@ ynh_app_setting_set --app=$app --key=final_path --value=$final_path
 # Download, check integrity, uncompress and patch the source from app.src
 ynh_setup_source --dest_dir="$final_path"
 
+chmod 750 "$final_path"
+chmod -R o-rwx "$final_path"
+chown -R $app:www-data "$final_path"
+
+#=================================================
+# PHP-FPM CONFIGURATION
+#=================================================
+ynh_script_progression --message="Configuring PHP-FPM..." --weight=5
+
+# Create a dedicated PHP-FPM config
+ynh_add_fpm_config
+
 #=================================================
 # NGINX CONFIGURATION
 #=================================================
@@ -71,14 +92,7 @@ ynh_script_progression --message="Configuring NGINX web server..." --weight=2
 ynh_add_nginx_config
 
 #=================================================
-# PHP-FPM CONFIGURATION
-#=================================================
-ynh_script_progression --message="Configuring PHP-FPM..." --weight=5
-
-# Create a dedicated PHP-FPM config
-ynh_install_app_dependencies "$extra_php_dependencies"
-ynh_add_fpm_config
-
+# SPECIFIC SETUP
 #=================================================
 # ADD A CONFIGURATION
 #=================================================
@@ -104,6 +118,8 @@ chmod 440 "$final_path/config.local.yunohost.php"
 chmod 660 "$final_path/config.local.user.php"
 
 #=================================================
+# GENERIC FINALIZATION
+#=================================================
 # SETUP SSOWAT
 #=================================================
 ynh_script_progression --message="Configuring permissions..." --weight=8
@@ -111,6 +127,8 @@ ynh_script_progression --message="Configuring permissions..." --weight=8
 # Make app public if necessary
 if [ $is_public -eq 1 ]
 then
+	# Everyone can access the app.
+	# The "main" permission is automatically created before the install script.
 	ynh_permission_update --permission="main" --add="visitors"
 fi
 
@@ -125,4 +143,4 @@ ynh_systemd_action --service_name=nginx --action=reload
 # END OF SCRIPT
 #=================================================
 
-ynh_script_progression --message="Installation of Garradin completed" --last
+ynh_script_progression --message="Installation of $app completed" --last
