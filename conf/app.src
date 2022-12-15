@@ -1,5 +1,5 @@
-SOURCE_URL=https://fossil.kd2.org/garradin/uv/garradin-1.2.2.tar.gz
-SOURCE_SUM=e50e6ed55ca8fe30166f20e4c12c0c0daa68b4d1b71504cf463fd7a60301fc5d
+SOURCE_URL=https://fossil.kd2.org/garradin/uv/garradin-1.2.3.tar.gz
+SOURCE_SUM=23a4ca4127a1dbf532d76b2f9c12f8eb80cb3a591def9207788213f327da32be
 SOURCE_SUM_PRG=sha256sum
 SOURCE_FORMAT=tar.gz
 SOURCE_IN_SUBDIR=true
