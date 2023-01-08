@@ -167,6 +167,8 @@ chmod 660 "$final_path/config.local.user.php"
 ynh_script_progression --message="Finalise upgrade" --weight=1
 
 ynh_local_curl "/admin/index.php"
+sleep 5
+ynh_local_curl "/index.php"
 
 #=================================================
 # GENERIC FINALIZATION
