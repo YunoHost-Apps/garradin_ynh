@@ -19,7 +19,7 @@ Garradin (mot signifiant argent dans un dialecte aborigène du nord de l'Austral
 
 **Version incluse :** 1.2.4~ynh1
 
-**Démo :** https://garradin.eu/essai/
+**Démo :** https://paheko.cloud/essai/
 
 ## Captures d'écran
 
@@ -27,9 +27,9 @@ Garradin (mot signifiant argent dans un dialecte aborigène du nord de l'Austral
 
 ## Documentations et ressources
 
-* Site officiel de l'app : <http://garradin.eu>
-* Documentation officielle de l'admin : <https://fossil.kd2.org/garradin/wiki?name=Documentation>
-* Dépôt de code officiel de l'app : <https://fossil.kd2.org/garradin/dir?ci=tip>
+* Site officiel de l'app : <https://paheko.cloud>
+* Documentation officielle de l'admin : <https://fossil.kd2.org/paheko/wiki?name=Documentation>
+* Dépôt de code officiel de l'app : <https://fossil.kd2.org/paheko/dir?ci=tip>
 * Documentation YunoHost pour cette app : <https://yunohost.org/app_garradin>
 * Signaler un bug : <https://github.com/YunoHost-Apps/garradin_ynh/issues>
 
