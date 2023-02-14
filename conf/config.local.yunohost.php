@@ -53,3 +53,13 @@ const WWW_URI = '__PATH__/';
 
 const ENABLE_UPGRADES = false;
 
+/**
+ * Since 1.2.4, I downgraded the default SQLite journal mode to TRUNCATE instead of WAL because 
+ * it might have been a cause of corruption on some hosting providers using NFS.
+ *
+ * I don't think that Yunohost can use NFS, so you should set it back to WAL 
+ * by adding the following line to config.local.php when installing:
+*/
+
+const SQLITE_JOURNAL_MODE = 'WAL';
+

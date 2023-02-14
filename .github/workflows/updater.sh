@@ -16,8 +16,8 @@
 # Fetching information
 current_version=$(cat manifest.json | jq -j '.version|split("~")[0]')
 # Some jq magic is needed, because the latest upstream release is not always the latest version (e.g. security patches for older versions)
-file=$(curl --silent "https://fossil.kd2.org/garradin/juvlist" | jq -r '.[] | select( .name | contains("garradin") and contains(".tar.gz") ) | select( .name | contains(".deb") or contains(".asc") or contains("beta") or contains("alpha") | not ) | .name' | sort -V | tail -1)
-assets="https://fossil.kd2.org/garradin/uv/$file"
+file=$(curl --silent "https://fossil.kd2.org/paheko/juvlist" | jq -r '.[] | select( .name | contains("paheko") and contains(".tar.gz") ) | select( .name | contains(".deb") or contains(".asc") or contains("beta") or contains("alpha") | not ) | .name' | sort -V | tail -1)
+assets="https://fossil.kd2.org/paheko/uv/$file"
 
 version=$(echo ${file/.tar.gz} | cut -d "-" -f2)
 

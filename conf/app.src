@@ -1,5 +1,5 @@
-SOURCE_URL=https://fossil.kd2.org/garradin/uv/garradin-1.2.3.tar.gz
-SOURCE_SUM=23a4ca4127a1dbf532d76b2f9c12f8eb80cb3a591def9207788213f327da32be
+SOURCE_URL=https://fossil.kd2.org/paheko/uv/paheko-1.2.4.tar.gz
+SOURCE_SUM=50f0bfe9c05d2ee1664cbb0440602bdca576f23144e85fa5f9e27feeff36494c
 SOURCE_SUM_PRG=sha256sum
 SOURCE_FORMAT=tar.gz
 SOURCE_IN_SUBDIR=true

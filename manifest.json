@@ -6,14 +6,14 @@
         "en": "Software to manage association",
         "fr": "Logiciel libre de gestion d'association"
     },
-    "version": "1.2.3~ynh1",
-    "url": "http://garradin.eu",
+    "version": "1.2.4~ynh1",
+    "url": "https://paheko.cloud",
     "upstream": {
         "license": "GPL-3.0-or-later",
-        "website": "http://garradin.eu",
-        "demo": "https://garradin.eu/essai/",
-        "admindoc": "https://fossil.kd2.org/garradin/wiki?name=Documentation",
-        "code": "https://fossil.kd2.org/garradin/dir?ci=tip"
+        "website": "https://paheko.cloud",
+        "demo": "https://paheko.cloud/essai/",
+        "admindoc": "https://fossil.kd2.org/paheko/wiki?name=Documentation",
+        "code": "https://fossil.kd2.org/paheko/dir?ci=tip"
     },
     "license": "GPL-3.0-or-later",
     "maintainer": {
