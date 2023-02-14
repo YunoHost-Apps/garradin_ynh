@@ -5,15 +5,16 @@ It shall NOT be edited by hand.
 
 # Garradin pour YunoHost
 
-[![Niveau d'intégration](https://dash.yunohost.org/integration/garradin.svg)](https://dash.yunohost.org/appci/app/garradin) ![Statut du fonctionnement](https://ci-apps.yunohost.org/ci/badges/garradin.status.svg) ![Statut de maintenance](https://ci-apps.yunohost.org/ci/badges/garradin.maintain.svg)  
+[![Niveau d’intégration](https://dash.yunohost.org/integration/garradin.svg)](https://dash.yunohost.org/appci/app/garradin) ![Statut du fonctionnement](https://ci-apps.yunohost.org/ci/badges/garradin.status.svg) ![Statut de maintenance](https://ci-apps.yunohost.org/ci/badges/garradin.maintain.svg)
+
 [![Installer Garradin avec YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=garradin)
 
 *[Read this readme in english.](./README.md)*
 
-> *Ce package vous permet d'installer Garradin rapidement et simplement sur un serveur YunoHost.
-Si vous n'avez pas YunoHost, regardez [ici](https://yunohost.org/#/install) pour savoir comment l'installer et en profiter.*
+> *Ce package vous permet d’installer Garradin rapidement et simplement sur un serveur YunoHost.
+Si vous n’avez pas YunoHost, regardez [ici](https://yunohost.org/#/install) pour savoir comment l’installer et en profiter.*
 
-## Vue d'ensemble
+## Vue d’ensemble
 
 Garradin (mot signifiant argent dans un dialecte aborigène du nord de l'Australie, prononcé « gar-a-dine »em) est un logiciel de gestion associative. Il est l'outil de prédilection pour gérer une association, un club sportif, une ONG, etc. Il est conçu pour répondre aux besoins d'une structure de petite à moyenne taille : gestion des adhérents, comptabilité, site web, prise de notes en réunion, archivage et partage des documents de fonctionnement de l'association, discussion entre adhérents, etc etc.
 
@@ -21,15 +22,15 @@ Garradin (mot signifiant argent dans un dialecte aborigène du nord de l'Austral
 
 **Démo :** https://garradin.eu/essai/
 
-## Captures d'écran
+## Captures d’écran
 
-![Capture d'écran de Garradin](./doc/screenshots/screenshot.png)
+![Capture d’écran de Garradin](./doc/screenshots/screenshot.png)
 
 ## Documentations et ressources
 
-* Site officiel de l'app : <http://garradin.eu>
-* Documentation officielle de l'admin : <https://fossil.kd2.org/garradin/wiki?name=Documentation>
-* Dépôt de code officiel de l'app : <https://fossil.kd2.org/garradin/dir?ci=tip>
+* Site officiel de l’app : <http://garradin.eu>
+* Documentation officielle de l’admin : <https://fossil.kd2.org/garradin/wiki?name=Documentation>
+* Dépôt de code officiel de l’app : <https://fossil.kd2.org/garradin/dir?ci=tip>
 * Documentation YunoHost pour cette app : <https://yunohost.org/app_garradin>
 * Signaler un bug : <https://github.com/YunoHost-Apps/garradin_ynh/issues>
 
@@ -45,4 +46,4 @@ ou
 sudo yunohost app upgrade garradin -u https://github.com/YunoHost-Apps/garradin_ynh/tree/testing --debug
 ```
 
-**Plus d'infos sur le packaging d'applications :** <https://yunohost.org/packaging_apps>
+**Plus d’infos sur le packaging d’applications :** <https://yunohost.org/packaging_apps>
