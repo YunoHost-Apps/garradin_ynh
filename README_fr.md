@@ -18,7 +18,7 @@ Si vous n’avez pas YunoHost, regardez [ici](https://yunohost.org/#/install) po
 
 Garradin (mot signifiant argent dans un dialecte aborigène du nord de l'Australie, prononcé « gar-a-dine »em) est un logiciel de gestion associative. Il est l'outil de prédilection pour gérer une association, un club sportif, une ONG, etc. Il est conçu pour répondre aux besoins d'une structure de petite à moyenne taille : gestion des adhérents, comptabilité, site web, prise de notes en réunion, archivage et partage des documents de fonctionnement de l'association, discussion entre adhérents, etc etc.
 
-**Version incluse :** 1.2.3~ynh1
+**Version incluse :** 1.2.6~ynh1
 
 **Démo :** https://garradin.eu/essai/
 
