@@ -192,7 +192,7 @@ https://github.com/YunoHost-Apps/paheko_ynh/
 This can only be done from the command-line interface - e.g. through SSH. Once you're connected, you simply have to execute the following:
 `sudo yunohost app upgrade garradin -u https://github.com/YunoHost-Apps/paheko_ynh --debug`
 The --debug option will let you see the full output. If you encounter any issue, please report it aand paste the logs.
-Important: After the migration, you'll have to wait a couple of minutes (at most 3 minutes) before you can start using Paheko.
+Important: After the migration, you'll have to wait a couple of minutes (at most 3 minutes) before you can start using Paheko."
 
 ynh_send_readme_to_admin "$message"
 
