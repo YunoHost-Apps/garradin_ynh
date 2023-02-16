@@ -184,7 +184,14 @@ ynh_systemd_action --service_name=nginx --action=reload
 #=================================================
 ynh_script_progression --message="Sending a readme for the admin..." --weight=1
 
-message="Garradin was successfully upgraded :)\nGarradin becomes Paheko. You can now upgrade Garradin with Paheko ! Don't stay with this repository, it will be no more supported.\n\nTake a Look at the Paheko repository and read the instructions how to migrate your application Garradin to Paheko:\nhttps:\/\/github.com\/YunoHost-Apps\/paheko_ynh\n\nThis can only be done from the command-line interface - e.g. through SSH. Once you're connected, you simply have to execute the following:\nyunohost app upgrade garradin -u https:\/\/github.com\/YunoHost-Apps\/paheko_ynh --debug\nThe --debug option will let you see the full output. If you encounter any issue, please report it aand paste the logs.\n\nImportant: After the migration, you'll have to wait a couple of minutes (at most 3 minutes) before you can start using Paheko."
+message="Garradin was successfully upgraded :)
+Garradin becomes Paheko. You can now upgrade Garradin with Paheko ! Don't stay with this repository, it will be no more supported.
+Take a Look at the Paheko repository and read the instructions how to migrate your application Garradin to Paheko:
+https://github.com/YunoHost-Apps/paheko_ynh/
+This can only be done from the command-line interface - e.g. through SSH. Once you're connected, you simply have to execute the following:
+'yunohost app upgrade garradin -u https://github.com/YunoHost-Apps/paheko_ynh --debug'
+The --debug option will let you see the full output. If you encounter any issue, please report it aand paste the logs.
+Important: After the migration, you'll have to wait a couple of minutes (at most 3 minutes) before you can start using Paheko."
 
 ynh_send_readme_to_admin "$message"
 
