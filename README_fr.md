@@ -32,7 +32,7 @@ Nous avons choisi le nom Paheko, un mot de la langue Māori qui signifie « coop
 ![Logo Paheko](https://master.garradin.eu/garradin-devient-paheko/logo_v3_small-fs8.png)
 
 
-**Version incluse :** 1.2.4~ynh1
+**Version incluse :** 1.2.4~ynh2
 
 **Démo :** https://paheko.cloud/essai/
 
