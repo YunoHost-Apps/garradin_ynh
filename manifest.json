@@ -6,7 +6,7 @@
         "en": "Software to manage association",
         "fr": "Logiciel libre de gestion d'association"
     },
-    "version": "1.2.6~ynh1",
+    "version": "1.2.7~ynh1",
     "url": "https://paheko.cloud",
     "upstream": {
         "license": "GPL-3.0-or-later",
