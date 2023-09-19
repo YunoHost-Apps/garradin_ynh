@@ -18,6 +18,19 @@ Si vous n’avez pas YunoHost, regardez [ici](https://yunohost.org/#/install) po
 
 Garradin (mot signifiant argent dans un dialecte aborigène du nord de l'Australie, prononcé « gar-a-dine »em) est un logiciel de gestion associative. Il est l'outil de prédilection pour gérer une association, un club sportif, une ONG, etc. Il est conçu pour répondre aux besoins d'une structure de petite à moyenne taille : gestion des adhérents, comptabilité, site web, prise de notes en réunion, archivage et partage des documents de fonctionnement de l'association, discussion entre adhérents, etc etc.
 
+## Garradin devient Paheko !
+### Pourquoi changer de nom ?
+
+  Il est apparu que la prononciation de "Garradin" en français est parfois un peu compliquée, de même que son orthographe.
+
+  Il existe déjà un logiciel commercial nommé "Garradin" en Australie, qui fait de la finance pour de grands groupes. Pour le moment cela ne posait pas de problème car notre solution de gestion d'association n'était disponible qu'en français et jusque là n'avait pas beaucoup de portée. Mais on aimerait bien pouvoir proposer le logiciel dans d'autres langues dans les années à venir, et comme Garradin (le projet français) commence à être assez connu, il semble nécessaire de limiter les risques de confusion à l'avenir avec cette solution commerciale.
+
+### Quel sera le nouveau nom ?
+
+Nous avons choisi le nom Paheko, un mot de la langue Māori qui signifie « coopérer », illustrant le but du logiciel : améliorer ensemble le quotidien de la gestion d'une association :)
+
+![Logo Paheko](https://master.garradin.eu/garradin-devient-paheko/logo_v3_small-fs8.png).
+
 **Version incluse :** 1.2.6~ynh1
 
 **Démo :** https://garradin.eu/essai/
@@ -36,10 +49,24 @@ Il existe déjà un logiciel commercial appelé « Garradin » en Australie, qui
 
 Vous pouvez dès maintenant mettre à niveau Garradin avec Paheko ! 
 
-Ne continuez pas avec ce dépôt, il ne sera plus maintenu. Rendez-vous sur le dépôt Paheko et lisez les instructions pour migrer votre application Garradin vers Paheko :
+Ne continuez pas avec ce dépôt, il ne sera plus maintenu. Lisez ces instructions pour migrer votre application Garradin vers Paheko :
 
-https://github.com/YunoHost-Apps/paheko_ynh/
+### Migrer depuis Garradin
 
+Ce paquet supporte la migration de Garradin vers Paheko. Pour ce faire, vous allez devoir mettre à jour l'application Garradin à l'aide de ce dépôt. Cette opération ne peut se faire seulement depuis une interface en ligne de commande, autrement dit en SSH. Une fois connecté/e, vous devez simplement lancer la commande suivante :
+
+```bash
+sudo yunohost app upgrade garradin -u https://github.com/YunoHost-Apps/paheko_ynh/tree/garradin-migration --debug
+```
+
+L'option debug vous permet de voir l'entièreté du journal d'installation. Si vous rencontrez des difficultés, merci de créer un ticket en collant le journal d'erreur.
+
+**Important** : Après la migration, veuillez attendre quelques instants (maximum 3 minutes) avant de commencer à utiliser Paheko.
+
+Une fois la migration terminée, vous pourrez mettre à jour avec la dernière version stable de Paheko
+
+```
+sudo yunohost app upgrade paheko
 ## Documentations et ressources
 
 * Site officiel de l’app : <http://garradin.eu>
