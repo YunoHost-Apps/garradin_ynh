@@ -61,7 +61,7 @@ https://github.com/YunoHost-Apps/paheko_ynh/
 * Official app website: <https://paheko.cloud>
 * Official admin documentation: <https://fossil.kd2.org/paheko/wiki?name=Documentation>
 * Upstream app code repository: <https://fossil.kd2.org/paheko/dir?ci=tip>
-* YunoHost documentation for this app: <https://yunohost.org/app_garradin>
+* YunoHost Store: <https://apps.yunohost.org/app/garradin>
 * Report a bug: <https://github.com/YunoHost-Apps/garradin_ynh/issues>
 
 ## Developer info
