@@ -31,7 +31,7 @@ Nous avons choisi le nom Paheko, un mot de la langue Māori qui signifie « coop
 
 ![Logo Paheko](https://master.garradin.eu/garradin-devient-paheko/logo_v3_small-fs8.png).
 
-**Version incluse :** 1.2.6~ynh1
+**Version incluse :** 1.3.4~ynh1
 
 **Démo :** https://garradin.eu/essai/
 
@@ -72,7 +72,7 @@ sudo yunohost app upgrade paheko
 * Site officiel de l’app : <http://garradin.eu>
 * Documentation officielle de l’admin : <https://fossil.kd2.org/garradin/wiki?name=Documentation>
 * Dépôt de code officiel de l’app : <https://fossil.kd2.org/garradin/dir?ci=tip>
-* Documentation YunoHost pour cette app : <https://yunohost.org/app_garradin>
+* YunoHost Store: <https://apps.yunohost.org/app/garradin>
 * Signaler un bug : <https://github.com/YunoHost-Apps/garradin_ynh/issues>
 
 ## Informations pour les développeurs
