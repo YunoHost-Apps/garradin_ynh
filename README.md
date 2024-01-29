@@ -32,7 +32,7 @@ We chose the name Paheko, a word from the Māori language meaning "to cooperate"
 ![Logo Paheko](https://master.garradin.eu/garradin-devient-paheko/logo_v3_small-fs8.png)
 
 
-**Shipped version:** 1.2.4~ynh1
+**Shipped version:** 1.2.6~ynh1
 
 **Demo:** https://paheko.cloud/essai/
 
@@ -52,9 +52,31 @@ There is already a commercial software called "Garradin" in Australia, which doe
 You can now upgrade Garradin with Paheko ! 
 Don't stay with this repository, it will be no more supported.
 
-Take a Look at the Paheko repository and read the instructions how to migrate your application Garradin to Paheko: 
+Read the instructions how to migrate your application Garradin to Paheko: 
 
-https://github.com/YunoHost-Apps/paheko_ynh/tree/garradin-migration
+### Migrate from Garradin
+
+Process the migration from Garradin to Paheko. For that, you will have to upgrade your Garradin application with this repository. This can only be done from the command-line interface - e.g. through SSH. Once you're connected, you simply have to execute the following:
+
+```bash
+sudo yunohost app upgrade garradin -u https://github.com/YunoHost-Apps/paheko_ynh/tree/garradin-migration --debug
+```
+
+The --debug option will let you see the full output. If you encounter any issue, please report it aand paste the logs.
+
+**Important**: After the migration, you'll have to wait a couple of minutes (at most 3 minutes) before you can start using Paheko.
+
+Once the migration is done, you should then upgrade to new release of Paheko.
+
+```bash
+sudo yunohost app upgrade paheko
+```
+
+## :red_circle: Antifeatures
+
+- **Upstream not maintained**: This software is not maintained anymore. Expect it to break down over time, be exposed to unfixed security breaches, etc.
+
+- **Replaced by another app**: Was replaced by another app. Please refer to the README.
 
 ## Documentation and resources
 
